@@ -172,7 +172,6 @@ p { margin: .45rem 0; }
 .moldura::after {
   content: "";
   position: absolute;
-  //inset: 14px -14px -14px 14px;
   border-radius: 50%;
   background: var(--bege);
   z-index: 0;
