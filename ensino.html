@@ -9,7 +9,7 @@
 <body>
 <header class="topo">
   <div class="wrap">
-    <a class="nome" href="index.html">Prof. Rafael</a>
+    <a class="nome" href="index.html"><img src="assets/logo.svg" alt="Prof. Rafael"></a>
     <nav>
       <ul>
         <li><a href="index.html">Início</a></li>
@@ -22,38 +22,48 @@
 </header>
 
 <main>
-  <h1>Ensino</h1>
+  <section class="hero compacto">
+    <div>
+      <span class="rotulo">Sala de aula</span>
+      <h1>Ensino</h1>
+      <p>Disciplinas de graduação e pós-graduação, com materiais e links de apoio.</p>
+    </div>
+  </section>
 
   <h2>Graduação</h2>
+  <div class="grade">
+    <article class="card elevado">
+      <span class="numero">I</span>
+      <h3>Estrutura de Dados I</h3>
+      <p class="muted">Listas, pilhas, filas e noções básicas de complexidade de algoritmos.</p>
+      <p class="muted"><em>Materiais em breve.</em></p>
+    </article>
 
-  <div class="card">
-    <h3>Estrutura de Dados I</h3>
-    <p>Listas, pilhas, filas e noções básicas de complexidade de algoritmos.</p>
-    <p class="muted">Materiais da disciplina serão publicados aqui.</p>
-  </div>
-
-  <div class="card">
-    <h3>Estrutura de Dados II</h3>
-    <p>Árvores balanceadas e tabelas de dispersão. Use os simuladores abaixo para visualizar as operações passo a passo.</p>
-    <div class="links">
-      <a href="https://exemplo.com/simulador-red-black" target="_blank" rel="noopener">Simulador de Árvores Red-Black</a>
-      <a href="simuladores/avl.html">Simulador de Árvores AVL</a>
-    </div>
+    <article class="card elevado">
+      <span class="numero">II</span>
+      <h3>Estrutura de Dados II</h3>
+      <p class="muted">Árvores balanceadas e tabelas de dispersão.</p>
+      <div class="links">
+        <a href="URL_RED_BLACK" target="_blank" rel="noopener">Árvores Red-Black ↗</a>
+        <a href="URL_AVL" target="_blank" rel="noopener">Árvores AVL ↗</a>
+      </div>
+    </article>
   </div>
 
   <h2>Pós-graduação</h2>
+  <div class="grade">
+    <article class="card elevado">
+      <h3>Nome da disciplina</h3>
+      <p class="muted">Ementa resumida e programa de pós-graduação ao qual está vinculada.</p>
+    </article>
 
-  <div class="card">
-    <h3>Nome da disciplina</h3>
-    <p>Ementa resumida da disciplina, programa do semestre e programa de pós-graduação ao qual está vinculada.</p>
-  </div>
-
-  <div class="card">
-    <h3>Nome da disciplina</h3>
-    <p>Ementa resumida da disciplina, programa do semestre e programa de pós-graduação ao qual está vinculada.</p>
+    <article class="card elevado">
+      <h3>Nome da disciplina</h3>
+      <p class="muted">Ementa resumida e programa de pós-graduação ao qual está vinculada.</p>
+    </article>
   </div>
 </main>
 
-<footer>© Prof. Rafael</footer>
+<footer>© Prof. Rafael · Universidade Federal do Tocantins</footer>
 </body>
 </html>

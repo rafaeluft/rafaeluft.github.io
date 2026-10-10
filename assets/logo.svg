@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   id="svg94"
+   version="1.1"
+   viewBox="0 0 77.254617 71.511804"
+   height="71.511803mm"
+   width="77.254616mm">
+  <defs
+     id="defs88" />
+  <metadata
+     id="metadata91">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-106.20279,-32.126714)"
+     id="layer1">
+    <g
+       id="g1110"
+       transform="matrix(5.2207502,0,0,5.5142802,-415.55795,-241.29286)">
+      <g
+         id="g1096">
+        <rect
+           style="opacity:1;fill:none;fill-opacity:1;stroke:#f8b501;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect1072"
+           width="14.144373"
+           height="9.2533283"
+           x="100.26642"
+           y="52.976517" />
+        <path
+           style="opacity:1;fill:#fc3a3c;fill-opacity:1;stroke:none;stroke-width:0.252031;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           clip-path="none"
+           d="m 113.32917,54.430444 c 0,2.644513 -1.89604,4.788315 -4.23493,4.788315 -2.33889,0 -4.23493,-2.143801 -4.23493,-4.788315 0,-2.644514 0.91497,-4.572959 3.25386,-4.572959 2.33889,1e-6 5.216,1.928446 5.216,4.572959 z"
+           id="path4526-7-5" />
+        <g
+           id="text864-4"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.3862px;line-height:1.25;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#393d45;fill-opacity:1;stroke:none;stroke-width:0.814979"
+           aria-label="R"
+           transform="translate(83.104302,-17.223005)">
+          <path
+             id="path895-7"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:17.3863px;font-family:Broadway;-inkscape-font-specification:'Broadway, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#393d45;fill-opacity:1;stroke-width:0.814979"
+             d="m 25.622714,76.548886 q 0.814983,0.5603 1.757307,0.959302 0.950813,0.390513 2.037457,0.611238 0.263172,0.05094 0.263172,0.254682 0,0.28015 -0.390513,0.28015 -0.891388,0 -2.504374,-0.781025 -1.341326,-0.653684 -3.073165,-2.020479 v 0.348066 l 0.0085,1.443199 v 0.823472 H 18.55104 v -0.382023 l 0.01698,-2.767546 0.02547,-3.310868 -0.01698,-5.1276 h 3.412741 q 2.292139,0 3.463677,0.127341 1.171538,0.127341 1.99501,0.475406 1.341326,0.560301 2.122351,1.842201 0.7216,1.188517 0.7216,2.495885 0,1.392263 -0.806494,2.623226 -1.298879,1.978032 -3.862679,2.105373 z m -0.806493,-0.526343 0.407491,0.0085 q 1.748817,0 2.954313,-0.976282 0.764046,-0.611237 1.171538,-1.528092 0.382023,-0.840452 0.382023,-1.71486 0,-1.485646 -0.967792,-2.657184 -0.738578,-0.908366 -1.85069,-1.2819 -1.112112,-0.373534 -3.132591,-0.399002 l -0.0764,5.687901 v 1.536582 l 0.0085,0.399002 q 0.517854,0.500875 1.103623,0.925346 z" />
+        </g>
+        <g
+           transform="translate(83.104302,-17.223005)"
+           aria-label="R"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.3862px;line-height:1.25;font-family:'Berlin Sans FB Demi';-inkscape-font-specification:'Berlin Sans FB Demi, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#393d45;fill-opacity:1;stroke:none;stroke-width:0.814979"
+           id="g1068" />
+      </g>
+    </g>
+  </g>
+</svg>

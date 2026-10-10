@@ -9,7 +9,7 @@
 <body>
 <header class="topo">
   <div class="wrap">
-    <a class="nome" href="index.html">Prof. Rafael</a>
+    <a class="nome" href="index.html"><img src="assets/logo.svg" alt="Prof. Rafael"></a>
     <nav>
       <ul>
         <li><a href="index.html">Início</a></li>
@@ -22,34 +22,47 @@
 </header>
 
 <main>
-  <h1>Currículo</h1>
+  <section class="hero compacto">
+    <div>
+      <span class="rotulo">Trajetória</span>
+      <h1>Currículo</h1>
+      <p>Formação acadêmica, atuação profissional e produção.</p>
+    </div>
+  </section>
 
   <h2>Formação</h2>
-  <div class="card">
-    <h3>Doutorado · Instituição</h3>
-    <p class="muted">Ano · Área de pesquisa</p>
-  </div>
-  <div class="card">
-    <h3>Mestrado · Instituição</h3>
-    <p class="muted">Ano · Título da dissertação</p>
+  <div class="linha">
+    <div class="item">
+      <span class="periodo">Ano · Ano</span>
+      <h3>Doutorado · Instituição</h3>
+      <p class="muted">Área de pesquisa e orientador.</p>
+    </div>
+    <div class="item">
+      <span class="periodo">Ano · Ano</span>
+      <h3>Mestrado · Instituição</h3>
+      <p class="muted">Título da dissertação.</p>
+    </div>
   </div>
 
   <h2>Atuação profissional</h2>
-  <div class="card">
-    <h3>Universidade Federal do Tocantins (UFT)</h3>
-    <p class="muted">Cargo · Período</p>
-    <ul class="lista">
-      <li>Atividade ou responsabilidade principal.</li>
-      <li>Atividade ou responsabilidade principal.</li>
-    </ul>
+  <div class="linha">
+    <div class="item">
+      <span class="periodo">Período</span>
+      <h3>Universidade Federal do Tocantins (UFT)</h3>
+      <p class="muted">Cargo e unidade de lotação.</p>
+      <ul class="lista">
+        <li>Atividade ou responsabilidade principal.</li>
+        <li>Atividade ou responsabilidade principal.</li>
+      </ul>
+    </div>
   </div>
 
   <h2>Publicações</h2>
   <div class="card">
-    <p>Adicione aqui artigos, capítulos e trabalhos apresentados em eventos.</p>
+    <p class="muted">Liste aqui artigos, capítulos e trabalhos apresentados em eventos.</p>
   </div>
 </main>
 
-<footer>© Prof. Rafael</footer>
+<footer>© Prof. Rafael · Universidade Federal do Tocantins</footer>
 </body>
 </html>
