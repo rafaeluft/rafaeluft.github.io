@@ -18,84 +18,206 @@
       --error: #c9545a;
     }
 
-    main { gap: 0; }
-
-    .tool { display: flex; flex-direction: column; gap: .8rem; padding: 1.5rem 1.6rem; margin-top: 1.5rem; }
-    .tool:first-of-type { margin-top: 0; }
-
-    .tool label, .code-panel label {
-      font-size: .95rem;
-      font-weight: 600;
-      color: var(--cinza);
-    }
-
-    textarea {
-      width: 100%;
-      resize: vertical;
-      min-height: 72px;
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: .95rem;
-      color: var(--texto);
-      background: var(--fundo);
-      border: 1.5px solid var(--linha);
-      border-radius: 10px;
-      padding: .75rem .9rem;
+    /* ----- Tela cheia: cabeçalho e rodapé mínimos, o miolo ocupa todo o resto ----- */
+    html, body { height: 100%; }
+    body {
+      font-size: 15px;
       line-height: 1.5;
-    }
-
-    textarea:focus, button:focus-visible {
-      outline: 2px solid var(--coral);
-      outline-offset: 2px;
-    }
-
-    .botoes-linha { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
-
-    button.btn {
-      font-family: inherit;
-      font-size: 1rem;
-      cursor: pointer;
-      border: 1.5px solid transparent;
-      transition: background .2s, color .2s, opacity .2s, transform .15s;
-    }
-    button.btn:active { transform: translateY(1px); }
-    button.btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
-    button.btn-primario:hover:not(:disabled) { background: var(--pessego); }
-    button.btn-secundario:hover:not(:disabled) { border-color: var(--cinza); color: var(--texto); }
-
-    .error-msg {
-      color: var(--error);
-      font-size: .95rem;
-      font-family: ui-monospace, Menlo, monospace;
-    }
-
-    .canvas-panel { padding: 0; overflow: hidden; }
-
-    .canvas-toolbar {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: .8rem 1.2rem;
-      border-bottom: 1px solid var(--linha);
-      gap: .8rem;
-      flex-wrap: wrap;
+      flex-direction: column;
+      overflow: hidden;
     }
 
-    .canvas-toolbar .hint { font-size: .95rem; color: var(--muted); }
+    header.topo {
+      position: static;
+      flex: 0 0 auto;
+      box-shadow: none;
+    }
+    .topo .wrap {
+      max-width: none;
+      padding: .35rem 1rem;
+      gap: .8rem;
+      flex-wrap: nowrap;
+    }
+    .topo .nome img { height: 26px; }
 
-    .toolbar-actions { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; }
-
-    .switch-row {
+    .crumb {
       display: flex;
       align-items: center;
       gap: .4rem;
-      font-size: .95rem;
+      font-size: .82rem;
       color: var(--muted);
-      cursor: pointer;
-      user-select: none;
+      white-space: nowrap;
+      overflow: hidden;
+      min-width: 0;
     }
-    .switch-row input { accent-color: var(--coral); width: 16px; height: 16px; cursor: pointer; }
+    .crumb a { color: var(--muted); text-decoration: none; }
+    .crumb a:hover { color: var(--texto); text-decoration: underline; }
+    .crumb .atual { color: var(--texto); font-weight: 600; }
+    .crumb .sep { opacity: .5; }
 
-    .canvas-scroll {
+    .topo .wrap > nav { margin-left: auto; }
+    .topo .wrap > nav a { font-size: .8rem; padding: .25rem .6rem; }
+
+    footer.rodape {
+      flex: 0 0 auto;
+      margin: 0;
+      padding: .3rem 1rem;
+      font-size: .72rem;
+      border-top: 3px solid var(--areia);
+      text-align: center;
+    }
+
+    /* ----- Miolo em três colunas: 20% / 30% / 50% ----- */
+    /* Sobrescreve o max-width/padding global do site: o miolo usa a largura inteira */
+    main.miolo {
+      max-width: none;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      flex: 1 1 auto;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 20% 30% 50%;
+    }
+
+    .col {
+      min-height: 0;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--papel);
+      border-right: 1px solid var(--linha);
+    }
+    .col:last-child { border-right: 0; }
+
+    .col-cabeca {
+      flex: 0 0 auto;
+      padding: .6rem .9rem;
+      border-bottom: 1px solid var(--linha);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: .6rem;
+    }
+    .col-cabeca h2 {
+      margin: 0;
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--vermelho-escuro, var(--coral));
+    }
+    .col-cabeca small { color: var(--muted); font-size: .78rem; }
+    .col-cabeca .direita { display: flex; align-items: center; gap: .8rem; }
+
+    /* Coluna de ações */
+    .acoes { padding: .9rem; display: flex; flex-direction: column; gap: .8rem; border-bottom: 1px solid var(--linha); }
+    .campo-valor { display: flex; flex-direction: column; gap: .3rem; }
+    .campo-valor label { font-size: .8rem; font-weight: 600; color: var(--cinza); }
+    textarea#input {
+      width: 100%;
+      resize: vertical;
+      min-height: 110px;
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: .85rem;
+      line-height: 1.5;
+      padding: .5rem .7rem;
+      border: 1.5px solid var(--linha);
+      border-radius: 9px;
+      background: var(--fundo);
+      color: var(--texto);
+    }
+    textarea#input:focus, button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
+
+    button { font-family: inherit; cursor: pointer; }
+    button:disabled { opacity: .4; cursor: not-allowed; }
+
+    .btn-desenhar {
+      font-size: .92rem;
+      font-weight: 600;
+      padding: .6rem .8rem;
+      border-radius: 9px;
+      background: var(--coral);
+      color: #2a2d2d;
+      border: 1.5px solid transparent;
+    }
+    .btn-desenhar:hover:not(:disabled) { background: var(--pessego); }
+
+    .btn-contorno {
+      font-size: .88rem;
+      font-weight: 600;
+      padding: .5rem .8rem;
+      border-radius: 9px;
+      background: var(--papel);
+      color: var(--cinza);
+      border: 1.5px solid var(--bege);
+      transition: border-color .2s, color .2s;
+    }
+    .btn-contorno:hover:not(:disabled) { border-color: var(--cinza); color: var(--texto); }
+
+    .msg { margin: 0; font-size: .8rem; color: var(--muted); min-height: 1.2em; }
+    .msg.erro { color: var(--error); }
+
+    .painel { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: .9rem; display: flex; flex-direction: column; gap: 1.1rem; }
+    .bloco h3 {
+      margin: 0 0 .4rem;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .explica {
+      border-left: 3px solid var(--ambar);
+      background: var(--fundo);
+      border-radius: 8px;
+      padding: .6rem .75rem;
+      font-size: .88rem;
+    }
+    .explica code {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: .88em;
+      background: var(--papel);
+      border: 1px solid var(--linha);
+      border-radius: 6px;
+      padding: 0 4px;
+      word-break: break-all;
+    }
+
+    /* Coluna de código TikZ */
+    .col-codigo .corpo-col {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: auto;
+      padding: .9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      background: var(--fundo);
+    }
+    .col-codigo textarea {
+      width: 100%;
+      resize: vertical;
+      min-height: 220px;
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: .8rem;
+      line-height: 1.45;
+      padding: .6rem .7rem;
+      border: 1.5px solid var(--linha);
+      border-radius: 9px;
+      background: var(--papel);
+      color: var(--texto);
+    }
+    .col-codigo textarea#stylesOutput { min-height: 140px; }
+    .linha-copia { display: flex; align-items: center; gap: .7rem; margin-top: .4rem; }
+    .copy-status { font-size: .78rem; color: var(--muted); }
+
+    /* Coluna do desenho */
+    .col-canvas .corpo-col {
+      flex: 1 1 auto;
+      min-height: 0;
       overflow: auto;
       background-color: var(--panel);
       background-image: radial-gradient(var(--grid) 1px, transparent 1px);
@@ -103,46 +225,50 @@
       display: flex;
       justify-content: center;
       padding: 24px;
-      min-height: 200px;
     }
-    .canvas-scroll.no-grid { background-image: none; }
-    .canvas-scroll svg { display: block; }
+    .col-canvas .corpo-col.no-grid { background-image: none; }
+    .col-canvas .corpo-col svg { display: block; }
 
     .empty-state {
       color: var(--muted);
-      font-size: 1rem;
+      font-size: .95rem;
       padding: 40px 20px;
       text-align: center;
     }
 
-    .code-panel { display: none; flex-direction: column; gap: .7rem; padding: 1.5rem 1.6rem; margin-top: 1.5rem; }
-    .code-panel.open { display: flex; }
-    .code-panel textarea { min-height: 240px; font-size: .88rem; }
-
-    .copy-status { font-size: .95rem; color: var(--muted); }
-
-    code {
-      font-family: ui-monospace, Menlo, monospace;
-      background: var(--fundo);
-      border: 1px solid var(--linha);
-      padding: 1px 6px;
-      border-radius: 6px;
-      font-size: .9em;
-      word-break: break-all;
+    .switch-row {
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      font-size: .8rem;
+      color: var(--muted);
+      cursor: pointer;
+      user-select: none;
     }
+    .switch-row input { accent-color: var(--coral); width: 14px; height: 14px; cursor: pointer; }
 
-    .hero code { background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .25); color: inherit; }
-
-    @media (max-width: 760px) {
-      .tool, .code-panel { padding: 1.2rem; }
-      .canvas-scroll { padding: 14px; }
+    /* Telas menores: colunas empilhadas, sem rolagem da página inteira */
+    @media (max-width: 960px) {
+      body { overflow: auto; }
+      .miolo { grid-template-columns: 1fr; grid-template-rows: auto auto 70vh; }
+      .col { border-right: 0; border-bottom: 1px solid var(--linha); }
+      .painel { overflow: visible; }
+      .col-codigo .corpo-col { max-height: 50vh; }
+      .col-codigo textarea { min-height: 140px; }
+      .crumb .opcional { display: none; }
     }
   </style>
 </head>
 <body>
+
 <header class="topo">
   <div class="wrap">
     <a class="nome" href="../../index.html"><img src="../../assets/logo.svg" alt="Prof. Rafael"></a>
+    <div class="crumb" aria-label="Trilha de navegação">
+      <a href="../../ensino.html">Ensino</a><span class="sep">›</span>
+      <a href="../../ensino.html" class="opcional">Estrutura de Dados II</a><span class="sep opcional">›</span>
+      <span class="atual">Árvore parentizada</span>
+    </div>
     <nav>
       <ul>
         <li><a href="../../index.html">Início</a></li>
@@ -154,61 +280,77 @@
   </div>
 </header>
 
-<main>
-  <section class="hero compacto">
-    <div>
-      <span class="rotulo">Estrutura de Dados II</span>
-      <h1>Árvore parentizada</h1>
-      <p>Cole uma notação como <code>(20|-1(6|0(3|0(2|0)(5|0))(10|-1(7|0)()))(28|0(25|0)(30|0)))</code>. Cada nó é <code>chave|bal</code>; o fator de balanceamento aparece num selo a sudeste do nó, em âmbar quando positivo, cinza quando zero e coral quando negativo.</p>
+<main class="miolo">
+
+  <!-- Coluna 1 (20%): ações -->
+  <aside class="col col-acoes">
+    <div class="col-cabeca"><h2>Ações</h2></div>
+
+    <div class="acoes">
+      <div class="campo-valor">
+        <label for="input">Notação parentizada</label>
+        <textarea id="input" spellcheck="false">(20|-1(6|0(3|0(2|0)(5|0))(10|-1(7|0)()))(28|0(25|0)(30|0)))</textarea>
+      </div>
+      <button class="btn-desenhar" id="drawBtn">Desenhar árvore</button>
+      <button class="btn-contorno" id="exportBtn" disabled>Exportar SVG</button>
+      <p class="msg erro" id="errorMsg"></p>
+    </div>
+
+    <div class="painel">
+      <div class="bloco">
+        <h3>Formato</h3>
+        <div class="explica">
+          Cada nó é <code>chave|bal</code>; os filhos ficam entre parênteses após o nó. O fator de
+          balanceamento aparece num selo a sudeste do nó, em âmbar quando positivo, cinza quando
+          zero e coral quando negativo. <em>Ctrl+Enter</em> também desenha.
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Coluna 2 (30%): código TikZ gerado -->
+  <section class="col col-codigo">
+    <div class="col-cabeca"><h2>Código</h2><small>TikZ gerado da árvore</small></div>
+    <div class="corpo-col">
+      <div class="bloco">
+        <h3>Árvore</h3>
+        <textarea id="tikzOutput" readonly spellcheck="false"></textarea>
+        <div class="linha-copia">
+          <button class="btn-contorno" id="copyTikzBtn" disabled>Copiar código</button>
+          <span class="copy-status" id="copyStatus"></span>
+        </div>
+      </div>
+      <div class="bloco">
+        <h3>Preâmbulo · cores e estilos</h3>
+        <textarea id="stylesOutput" readonly spellcheck="false"></textarea>
+        <div class="linha-copia">
+          <button class="btn-contorno" id="copyStylesBtn">Copiar estilos</button>
+          <span class="copy-status" id="copyStylesStatus"></span>
+        </div>
+      </div>
     </div>
   </section>
 
-  <div class="card tool">
-    <label for="input">Notação</label>
-    <textarea id="input" spellcheck="false">(20|-1(6|0(3|0(2|0)(5|0))(10|-1(7|0)()))(28|0(25|0)(30|0)))</textarea>
-    <div class="botoes-linha">
-      <button class="btn btn-primario" id="drawBtn">Desenhar árvore</button>
-      <span class="error-msg" id="errorMsg"></span>
-    </div>
-  </div>
-
-  <div class="card canvas-panel">
-    <div class="canvas-toolbar">
-      <span class="hint" id="toolbarHint">&nbsp;</span>
-      <div class="toolbar-actions">
+  <!-- Coluna 3 (50%): desenho -->
+  <section class="col col-canvas">
+    <div class="col-cabeca">
+      <h2>Desenho</h2>
+      <span class="direita">
+        <small id="toolbarHint">&nbsp;</small>
         <label class="switch-row">
           <input type="checkbox" id="gridToggle" checked>
-          Grade pontilhada
+          Grade
         </label>
-        <button class="btn btn-secundario" id="tikzBtn">Exportar TikZ</button>
-        <button class="btn btn-secundario" id="exportBtn" disabled>Exportar SVG</button>
-      </div>
+      </span>
     </div>
-    <div class="canvas-scroll" id="canvasScroll">
+    <div class="corpo-col" id="canvasScroll">
       <div class="empty-state" id="emptyState">A árvore aparecerá aqui.</div>
     </div>
-  </div>
+  </section>
 
-  <div class="card code-panel" id="tikzPanel">
-    <label for="tikzOutput">Código TikZ</label>
-    <textarea id="tikzOutput" readonly spellcheck="false"></textarea>
-    <div class="botoes-linha">
-      <button class="btn btn-primario" id="copyTikzBtn">Copiar código</button>
-      <span class="copy-status" id="copyStatus"></span>
-    </div>
-  </div>
-
-  <div class="card code-panel" id="stylesPanel">
-    <label for="stylesOutput">Cores e estilos necessários (preâmbulo)</label>
-    <textarea id="stylesOutput" readonly spellcheck="false"></textarea>
-    <div class="botoes-linha">
-      <button class="btn btn-primario" id="copyStylesBtn">Copiar estilos</button>
-      <span class="copy-status" id="copyStylesStatus"></span>
-    </div>
-  </div>
 </main>
 
-<footer>© Prof. Rafael · Universidade Federal do Tocantins</footer>
+<footer class="rodape">© Prof. Rafael · Universidade Federal do Tocantins</footer>
 
 <script>
 (function () {
@@ -219,13 +361,10 @@
   const emptyEl = document.getElementById('emptyState');
   const exportBtn = document.getElementById('exportBtn');
   const toolbarHint = document.getElementById('toolbarHint');
-  const tikzBtn = document.getElementById('tikzBtn');
-  const tikzPanel = document.getElementById('tikzPanel');
   const tikzOutput = document.getElementById('tikzOutput');
   const copyTikzBtn = document.getElementById('copyTikzBtn');
   const copyStatus = document.getElementById('copyStatus');
   const gridToggle = document.getElementById('gridToggle');
-  const stylesPanel = document.getElementById('stylesPanel');
   const stylesOutput = document.getElementById('stylesOutput');
   const copyStylesBtn = document.getElementById('copyStylesBtn');
   const copyStylesStatus = document.getElementById('copyStylesStatus');
@@ -248,14 +387,6 @@
   gridToggle.addEventListener('change', function () {
     scrollEl.classList.toggle('no-grid', !gridToggle.checked);
   });
-
-  function closeTikzPanel() {
-    tikzPanel.classList.remove('open');
-    stylesPanel.classList.remove('open');
-    tikzBtn.textContent = 'Exportar TikZ';
-    copyStatus.textContent = '';
-    copyStylesStatus.textContent = '';
-  }
 
   let currentSvgString = null;
   let currentRoot = null;
@@ -436,7 +567,7 @@
       emptyEl.textContent = 'Corrija a notação para ver a árvore.';
       currentSvgString = null;
       currentRoot = null;
-      closeTikzPanel();
+      tikzOutput.value = '';
       updateExportState();
       return;
     }
@@ -447,7 +578,7 @@
       emptyEl.textContent = 'Árvore vazia — nada para desenhar.';
       currentSvgString = null;
       currentRoot = null;
-      closeTikzPanel();
+      tikzOutput.value = '';
       updateExportState();
       return;
     }
@@ -457,10 +588,8 @@
     currentSvgString = svg;
     currentRoot = root;
     toolbarHint.textContent = count + (count === 1 ? ' nó' : ' nós');
+    tikzOutput.value = buildTikzSource(currentRoot);
     updateExportState();
-    if (tikzPanel.classList.contains('open')) {
-      tikzOutput.value = buildTikzSource(currentRoot);
-    }
   }
 
   // ---------- Exportação TikZ ----------
@@ -569,8 +698,8 @@
 
   function updateExportState() {
     const hasTree = !!currentSvgString;
-    tikzBtn.disabled = !hasTree;
     exportBtn.disabled = !hasTree;
+    copyTikzBtn.disabled = !hasTree;
   }
 
   async function initDownloads() {
@@ -591,7 +720,7 @@
     if (!currentSvgString) return;
     exportBtn.disabled = true;
     const original = exportBtn.textContent;
-    exportBtn.textContent = 'Exportando…';
+    exportBtn.textContent = 'Exportando...';
     const blob = new Blob([currentSvgString], { type: 'image/svg+xml' });
     try {
       if (downloadsCap) {
@@ -615,23 +744,6 @@
   drawBtn.addEventListener('click', render);
   inputEl.addEventListener('keydown', function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') render();
-  });
-
-  tikzBtn.addEventListener('click', function () {
-    if (!currentRoot) return;
-    const isOpen = tikzPanel.classList.contains('open');
-    if (isOpen) {
-      closeTikzPanel();
-      return;
-    }
-    tikzOutput.value = buildTikzSource(currentRoot);
-    tikzPanel.classList.add('open');
-    stylesPanel.classList.add('open');
-    tikzBtn.textContent = 'Ocultar código TikZ';
-    copyStatus.textContent = '';
-    copyStylesStatus.textContent = '';
-    tikzOutput.focus();
-    tikzOutput.select();
   });
 
   copyTikzBtn.addEventListener('click', async function () {

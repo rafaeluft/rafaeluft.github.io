@@ -65,8 +65,9 @@
       padding: 0;
       flex: 1 1 auto;
       min-height: 0;
+      position: relative;
       display: grid;
-      grid-template-columns: 20% 30% 50%;
+      grid-template-columns: var(--c1, 20%) var(--c2, 30%) 1fr;
     }
 
     .col {
@@ -78,6 +79,38 @@
       border-right: 1px solid var(--linha);
     }
     .col:last-child { border-right: 0; }
+
+    /* ----- Alças para redimensionar as colunas com clique e arrastar ----- */
+    .alca {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 13px;
+      margin-left: -7px;
+      cursor: col-resize;
+      z-index: 10;
+      touch-action: none;
+    }
+    .alca::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 3px;
+      transform: translateX(-50%);
+      border-radius: 2px;
+      background: transparent;
+      transition: background .15s;
+    }
+    .alca:hover::after,
+    .alca:focus-visible::after,
+    body.redimensionando .alca::after { background: rgba(224, 111, 114, .5); }
+    .alca:focus-visible { outline: none; }
+    #alca1 { left: var(--c1, 20%); }
+    #alca2 { left: calc(var(--c1, 20%) + var(--c2, 30%)); }
+
+    body.redimensionando { cursor: col-resize; user-select: none; -webkit-user-select: none; }
 
     .col-cabeca {
       flex: 0 0 auto;
@@ -287,6 +320,7 @@
       .col-codigo .corpo-col { max-height: 50vh; }
       .linha-novo { padding-left: 0; }
       .crumb .opcional { display: none; }
+      .alca { display: none; }
     }
   </style>
 </head>
@@ -376,6 +410,10 @@
       </div>
     </div>
   </section>
+
+  <!-- Alças de redimensionamento entre as colunas -->
+  <div class="alca" id="alca1" role="separator" aria-orientation="vertical" tabindex="0" title="Arraste para redimensionar · duplo clique restaura · setas ajustam" aria-label="Redimensionar o painel de ações"></div>
+  <div class="alca" id="alca2" role="separator" aria-orientation="vertical" tabindex="0" title="Arraste para redimensionar · duplo clique restaura · setas ajustam" aria-label="Redimensionar o painel de código"></div>
 
 </main>
 
@@ -692,6 +730,84 @@
       svg.appendChild(p);
     });
   }
+
+  // ---------- Redimensionar colunas com clique e arrastar ----------
+  const COLUNAS_PADRAO = [20, 30];   // % iniciais das duas primeiras colunas
+  const COLUNAS_MIN = [10, 10, 22];  // % mínimas de cada coluna
+  const mioloEl = document.querySelector('main.miolo');
+  let col1 = COLUNAS_PADRAO[0];
+  let col2 = COLUNAS_PADRAO[1];
+  let alcaRaf = null;
+
+  function limitesAlca(indice) {
+    return indice === 0
+      ? [COLUNAS_MIN[0], 100 - COLUNAS_MIN[1] - COLUNAS_MIN[2]]
+      : [COLUNAS_MIN[1], 100 - col1 - COLUNAS_MIN[2]];
+  }
+
+  function fixarColunas() {
+    mioloEl.style.setProperty('--c1', col1 + '%');
+    mioloEl.style.setProperty('--c2', col2 + '%');
+    if (!alcaRaf) {
+      alcaRaf = requestAnimationFrame(() => { alcaRaf = null; desenharSetas(); });
+    }
+  }
+
+  function ligarAlca(alca, indice) {
+    let arrastando = false;
+    let xInicial = 0, valorInicial = 0, larguraMiolo = 0;
+
+    alca.addEventListener('pointerdown', e => {
+      arrastando = true;
+      xInicial = e.clientX;
+      valorInicial = indice === 0 ? col1 : col2;
+      larguraMiolo = mioloEl.clientWidth;
+      alca.setPointerCapture(e.pointerId);
+      document.body.classList.add('redimensionando');
+      e.preventDefault();
+    });
+
+    alca.addEventListener('pointermove', e => {
+      if (!arrastando) return;
+      const delta = (e.clientX - xInicial) * 100 / larguraMiolo;
+      const [min, max] = limitesAlca(indice);
+      const v = Math.min(Math.max(valorInicial + delta, min), max);
+      if (indice === 0) col1 = v; else col2 = v;
+      fixarColunas();
+    });
+
+    const soltar = () => {
+      if (!arrastando) return;
+      arrastando = false;
+      document.body.classList.remove('redimensionando');
+    };
+    alca.addEventListener('pointerup', soltar);
+    alca.addEventListener('pointercancel', soltar);
+
+    // Duplo clique restaura o layout padrão
+    alca.addEventListener('dblclick', () => {
+      col1 = COLUNAS_PADRAO[0];
+      col2 = COLUNAS_PADRAO[1];
+      fixarColunas();
+    });
+
+    // Ajuste fino pelo teclado (Shift acelera)
+    alca.addEventListener('keydown', e => {
+      const passo = e.shiftKey ? 5 : 1;
+      let d = 0;
+      if (e.key === 'ArrowLeft') d = -passo;
+      else if (e.key === 'ArrowRight') d = passo;
+      else return;
+      e.preventDefault();
+      const [min, max] = limitesAlca(indice);
+      const v = Math.min(Math.max((indice === 0 ? col1 : col2) + d, min), max);
+      if (indice === 0) col1 = v; else col2 = v;
+      fixarColunas();
+    });
+  }
+
+  ligarAlca(document.getElementById('alca1'), 0);
+  ligarAlca(document.getElementById('alca2'), 1);
 
   // ---------- Controles ----------
   document.getElementById('inserirBtn').addEventListener('click', () => {
