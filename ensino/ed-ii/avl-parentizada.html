@@ -77,9 +77,13 @@
       padding: 0;
       flex: 1 1 auto;
       min-height: 0;
+      position: relative;
       display: grid;
-      grid-template-columns: 20% 30% 50%;
+      grid-template-columns: var(--c1, 20%) var(--c2, 30%) 1fr;
     }
+    main.miolo.sem-codigo { grid-template-columns: var(--c1, 20%) 1fr; }
+    main.miolo.sem-codigo .col-codigo,
+    main.miolo.sem-codigo #alca2 { display: none; }
 
     .col {
       min-height: 0;
@@ -90,6 +94,38 @@
       border-right: 1px solid var(--linha);
     }
     .col:last-child { border-right: 0; }
+
+    /* ----- Alças para redimensionar as colunas com clique e arrastar ----- */
+    .alca {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 13px;
+      margin-left: -7px;
+      cursor: col-resize;
+      z-index: 10;
+      touch-action: none;
+    }
+    .alca::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 3px;
+      transform: translateX(-50%);
+      border-radius: 2px;
+      background: transparent;
+      transition: background .15s;
+    }
+    .alca:hover::after,
+    .alca:focus-visible::after,
+    body.redimensionando .alca::after { background: rgba(224, 111, 114, .5); }
+    .alca:focus-visible { outline: none; }
+    #alca1 { left: var(--c1, 20%); }
+    #alca2 { left: calc(var(--c1, 20%) + var(--c2, 30%)); }
+
+    body.redimensionando { cursor: col-resize; user-select: none; -webkit-user-select: none; }
 
     .col-cabeca {
       flex: 0 0 auto;
@@ -223,11 +259,27 @@
       background-image: radial-gradient(var(--grid) 1px, transparent 1px);
       background-size: 22px 22px;
       display: flex;
-      justify-content: center;
       padding: 24px;
     }
     .col-canvas .corpo-col.no-grid { background-image: none; }
-    .col-canvas .corpo-col svg { display: block; }
+    .col-canvas .corpo-col svg { display: block; flex: 0 0 auto; margin: 0 auto; }
+    .col-canvas .corpo-col .empty-state { margin: 0 auto; }
+
+    .zoom { display: inline-flex; align-items: center; gap: 2px; }
+    .zoom button {
+      min-width: 26px;
+      height: 24px;
+      padding: 0 .4rem;
+      border: 1.5px solid var(--bege);
+      border-radius: 7px;
+      background: var(--papel);
+      color: var(--cinza);
+      font-size: .82rem;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .zoom button:hover:not(:disabled) { border-color: var(--cinza); color: var(--texto); }
+    .zoom .zoom-valor { min-width: 3.4em; font-size: .78rem; }
 
     .empty-state {
       color: var(--muted);
@@ -256,6 +308,8 @@
       .col-codigo .corpo-col { max-height: 50vh; }
       .col-codigo textarea { min-height: 140px; }
       .crumb .opcional { display: none; }
+      .alca { display: none; }
+      .miolo.sem-codigo { grid-template-rows: auto 70vh; }
     }
   </style>
 </head>
@@ -293,6 +347,10 @@
       </div>
       <button class="btn-desenhar" id="drawBtn">Desenhar árvore</button>
       <button class="btn-contorno" id="exportBtn" disabled>Exportar SVG</button>
+      <label class="switch-row">
+        <input type="checkbox" id="codigoToggle" checked>
+        Mostrar painel de código
+      </label>
       <p class="msg erro" id="errorMsg"></p>
     </div>
 
@@ -337,6 +395,12 @@
       <h2>Desenho</h2>
       <span class="direita">
         <small id="toolbarHint">&nbsp;</small>
+        <span class="zoom" role="group" aria-label="Zoom do desenho">
+          <button type="button" id="zoomOutBtn" title="Diminuir (Ctrl + roda do mouse)" aria-label="Diminuir o zoom">&minus;</button>
+          <button type="button" id="zoomValor" class="zoom-valor" title="Voltar a 100%" aria-label="Zoom atual; clique para voltar a 100%">100%</button>
+          <button type="button" id="zoomInBtn" title="Aumentar (Ctrl + roda do mouse)" aria-label="Aumentar o zoom">+</button>
+          <button type="button" id="zoomFitBtn" title="Ajustar ao painel" aria-label="Ajustar ao painel">Ajustar</button>
+        </span>
         <label class="switch-row">
           <input type="checkbox" id="gridToggle" checked>
           Grade
@@ -347,6 +411,9 @@
       <div class="empty-state" id="emptyState">A árvore aparecerá aqui.</div>
     </div>
   </section>
+
+  <div class="alca" id="alca1" role="separator" aria-orientation="vertical" tabindex="0" title="Arraste para redimensionar · duplo clique restaura · setas ajustam" aria-label="Redimensionar o painel de ações"></div>
+  <div class="alca" id="alca2" role="separator" aria-orientation="vertical" tabindex="0" title="Arraste para redimensionar · duplo clique restaura · setas ajustam" aria-label="Redimensionar o painel de código"></div>
 
 </main>
 
@@ -387,6 +454,53 @@
   gridToggle.addEventListener('change', function () {
     scrollEl.classList.toggle('no-grid', !gridToggle.checked);
   });
+
+  const ZOOM_MIN = 0.25, ZOOM_MAX = 4, ZOOM_PASSO = 1.2;
+  const zoomValorEl = document.getElementById('zoomValor');
+  let zoom = 1;
+  let baseW = 0, baseH = 0;
+
+  function aplicarZoom() {
+    zoomValorEl.textContent = Math.round(zoom * 100) + '%';
+    const svgEl = scrollEl.querySelector('svg');
+    if (!svgEl || !baseW) return;
+    svgEl.setAttribute('width', baseW * zoom);
+    svgEl.setAttribute('height', baseH * zoom);
+  }
+
+  function definirZoom(novo, cx, cy) {
+    novo = Math.min(Math.max(novo, ZOOM_MIN), ZOOM_MAX);
+    if (novo === zoom) return;
+    const razao = novo / zoom;
+    const r = scrollEl.getBoundingClientRect();
+    const px = (cx === undefined ? r.width / 2 : cx - r.left);
+    const py = (cy === undefined ? r.height / 2 : cy - r.top);
+    const x = scrollEl.scrollLeft + px, y = scrollEl.scrollTop + py;
+    zoom = novo;
+    aplicarZoom();
+    scrollEl.scrollLeft = x * razao - px;
+    scrollEl.scrollTop = y * razao - py;
+  }
+
+  function ajustarZoom() {
+    if (!baseW) return;
+    const cs = getComputedStyle(scrollEl);
+    const w = scrollEl.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    const h = scrollEl.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+    zoom = 1;
+    definirZoom(Math.min(w / baseW, h / baseH));
+    aplicarZoom();
+  }
+
+  document.getElementById('zoomInBtn').addEventListener('click', function () { definirZoom(zoom * ZOOM_PASSO); });
+  document.getElementById('zoomOutBtn').addEventListener('click', function () { definirZoom(zoom / ZOOM_PASSO); });
+  zoomValorEl.addEventListener('click', function () { definirZoom(1); });
+  document.getElementById('zoomFitBtn').addEventListener('click', ajustarZoom);
+  scrollEl.addEventListener('wheel', function (e) {
+    if (!e.ctrlKey && !e.metaKey) return;
+    e.preventDefault();
+    definirZoom(zoom * (e.deltaY < 0 ? ZOOM_PASSO : 1 / ZOOM_PASSO), e.clientX, e.clientY);
+  }, { passive: false });
 
   let currentSvgString = null;
   let currentRoot = null;
@@ -583,8 +697,10 @@
       return;
     }
 
-    const { svg, count } = buildSvg(root);
+    const { svg, count, width, height } = buildSvg(root);
     scrollEl.innerHTML = svg;
+    baseW = width; baseH = height;
+    aplicarZoom();
     currentSvgString = svg;
     currentRoot = root;
     toolbarHint.textContent = count + (count === 1 ? ' nó' : ' nós');
@@ -788,6 +904,80 @@
         copyStylesStatus.textContent = 'Selecionado — use Ctrl+C para copiar.';
       }
     }
+  });
+
+  // ---------- Redimensionar colunas com clique e arrastar ----------
+  const COLUNAS_PADRAO = [20, 30];
+  const COLUNAS_MIN = [10, 10, 22];
+  const mioloEl = document.querySelector('main.miolo');
+  const codigoToggle = document.getElementById('codigoToggle');
+  let col1 = COLUNAS_PADRAO[0];
+  let col2 = COLUNAS_PADRAO[1];
+
+  const codigoVisivel = () => codigoToggle.checked;
+
+  function limitesAlca(indice) {
+    if (indice === 0) {
+      const outras = codigoVisivel() ? COLUNAS_MIN[1] + COLUNAS_MIN[2] : COLUNAS_MIN[2];
+      return [COLUNAS_MIN[0], 100 - outras];
+    }
+    return [COLUNAS_MIN[1], 100 - col1 - COLUNAS_MIN[2]];
+  }
+
+  function fixarColunas() {
+    mioloEl.style.setProperty('--c1', col1 + '%');
+    mioloEl.style.setProperty('--c2', col2 + '%');
+  }
+
+  function ligarAlca(alca, indice) {
+    let arrastando = false;
+    let xInicial = 0, valorInicial = 0, larguraMiolo = 0;
+    const get = () => (indice === 0 ? col1 : col2);
+    const set = v => { if (indice === 0) col1 = v; else col2 = v; fixarColunas(); };
+    const limitar = v => { const [min, max] = limitesAlca(indice); return Math.min(Math.max(v, min), max); };
+
+    alca.addEventListener('pointerdown', e => {
+      arrastando = true;
+      xInicial = e.clientX;
+      valorInicial = get();
+      larguraMiolo = mioloEl.clientWidth;
+      alca.setPointerCapture(e.pointerId);
+      document.body.classList.add('redimensionando');
+      e.preventDefault();
+    });
+    alca.addEventListener('pointermove', e => {
+      if (!arrastando) return;
+      set(limitar(valorInicial + (e.clientX - xInicial) * 100 / larguraMiolo));
+    });
+    const soltar = () => {
+      if (!arrastando) return;
+      arrastando = false;
+      document.body.classList.remove('redimensionando');
+    };
+    alca.addEventListener('pointerup', soltar);
+    alca.addEventListener('pointercancel', soltar);
+    alca.addEventListener('dblclick', () => {
+      col1 = COLUNAS_PADRAO[0];
+      col2 = COLUNAS_PADRAO[1];
+      fixarColunas();
+    });
+    alca.addEventListener('keydown', e => {
+      const passo = e.shiftKey ? 5 : 1;
+      if (e.key === 'ArrowLeft') set(limitar(get() - passo));
+      else if (e.key === 'ArrowRight') set(limitar(get() + passo));
+      else return;
+      e.preventDefault();
+    });
+  }
+
+  ligarAlca(document.getElementById('alca1'), 0);
+  ligarAlca(document.getElementById('alca2'), 1);
+
+  codigoToggle.addEventListener('change', () => {
+    mioloEl.classList.toggle('sem-codigo', !codigoVisivel());
+    const [min, max] = limitesAlca(0);
+    col1 = Math.min(Math.max(col1, min), max);
+    fixarColunas();
   });
 
   render();
