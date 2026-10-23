@@ -1,0 +1,337 @@
+/* ---------- Simulador: shell da página (tela cheia, sem rolagem) ---------- */
+body.sim-pagina {
+  height: 100vh;
+  font-size: 15px;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+body.sim-pagina header.topo {
+  position: static;
+  flex: 0 0 auto;
+  box-shadow: none;
+}
+body.sim-pagina .topo .wrap {
+  max-width: none;
+  padding: .35rem 1rem;
+  gap: .8rem;
+  flex-wrap: nowrap;
+}
+body.sim-pagina .topo .nome img { height: 26px; }
+
+body.sim-pagina .crumb {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .82rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  min-width: 0;
+}
+body.sim-pagina .crumb a { color: var(--muted); text-decoration: none; }
+body.sim-pagina .crumb a:hover { color: var(--texto); text-decoration: underline; }
+body.sim-pagina .crumb .atual { color: var(--texto); font-weight: 600; }
+body.sim-pagina .crumb .sep { opacity: .5; }
+
+body.sim-pagina .topo .wrap > nav { margin-left: auto; }
+body.sim-pagina .topo .wrap > nav a { font-size: .8rem; padding: .25rem .6rem; }
+
+body.sim-pagina footer.rodape {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: .3rem 1rem;
+  font-size: .72rem;
+  border-top: 3px solid var(--areia);
+  text-align: center;
+}
+
+body.sim-pagina main {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Barra de ações ---------- */
+.sim-barra {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .55rem .9rem;
+  padding: .5rem .9rem;
+  background: var(--papel);
+  border-bottom: 1px solid var(--linha);
+  font-size: .95rem;
+  z-index: 5;
+}
+
+.sim-grupo { display: flex; align-items: center; gap: .45rem; min-height: 36px; }
+.sim-grupo + .sim-grupo { border-left: 1px solid var(--linha); padding-left: .9rem; }
+.sim-grupo.sim-msg { flex: 1 1 auto; min-width: 14rem; }
+
+.sim-barra label { font-size: .82rem; font-weight: 600; color: var(--cinza); white-space: nowrap; }
+.sim-barra input#valor {
+  width: 6rem;
+  font: inherit;
+  font-size: .95rem;
+  padding: .4rem .55rem;
+  border: 1.5px solid var(--linha);
+  border-radius: 9px;
+  background: var(--fundo);
+  color: var(--texto);
+}
+
+.sim-barra button { font-family: inherit; cursor: pointer; }
+.sim-barra button:disabled { opacity: .4; cursor: not-allowed; }
+.sim-barra input:focus, .sim-barra button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
+
+.btn-inserir {
+  font-size: .92rem;
+  font-weight: 600;
+  padding: .5rem .8rem;
+  border-radius: 9px;
+  background: var(--coral);
+  color: #2a2d2d;
+  border: 1.5px solid transparent;
+}
+.btn-inserir:hover:not(:disabled) { background: var(--pessego); }
+
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 9px;
+  background: var(--papel);
+  color: var(--cinza);
+  border: 1.5px solid var(--bege);
+  transition: border-color .2s, color .2s, background .2s;
+}
+.icon-btn:hover:not(:disabled) { border-color: var(--cinza); color: var(--texto); }
+.icon-btn svg { width: 19px; height: 19px; }
+.icon-btn.perigo:hover:not(:disabled) { border-color: var(--coral); color: var(--vermelho-escuro, #c9545a); }
+
+.icon-btn.com-texto {
+  display: inline-flex;
+  gap: .45rem;
+  width: auto;
+  padding: 0 .8rem;
+  font-size: .92rem;
+  font-weight: 600;
+}
+.icon-btn.com-texto svg { width: 20px; height: 20px; }
+
+.zoom-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 8px;
+  background: var(--papel);
+  color: var(--cinza);
+  border: 1.5px solid var(--bege);
+  font-size: 1rem;
+  line-height: 1;
+  transition: border-color .2s, color .2s;
+}
+.zoom-btn:hover:not(:disabled) { border-color: var(--cinza); color: var(--texto); }
+#zoomValor {
+  min-width: 3.4rem;
+  text-align: center;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: .82rem;
+  color: var(--cinza);
+  background: var(--fundo);
+  border: 1px solid var(--linha);
+  border-radius: 7px;
+  padding: .28rem .3rem;
+  cursor: pointer;
+  user-select: none;
+}
+#zoomValor:hover { border-color: var(--cinza); color: var(--texto); }
+
+#msg {
+  margin: 0;
+  font-size: .86rem;
+  color: var(--muted);
+  line-height: 1.35;
+  min-width: 0;
+}
+#msg.erro { color: #c9545a; }
+
+/* ---------- Palco de memória ---------- */
+.sim-palco {
+  flex: 1 1 auto;
+  min-height: 0;
+  position: relative;
+}
+
+.sim-viewport {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  background-image: radial-gradient(var(--linha) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.sim-molde { position: relative; }
+
+.sim-camada {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+
+.sim-setas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+.sim-seta {
+  fill: none;
+  stroke: var(--cinza);
+  stroke-width: 1.8;
+}
+
+/* ---------- Nós ---------- */
+.sim-no {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: var(--sim-fonte-no, .9rem);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+  transition: left .35s ease, top .35s ease;
+}
+.sim-no.arrastando { cursor: grabbing; transition: none; }
+
+.sim-rotulos { display: flex; gap: 4px; margin-bottom: 1px; }
+.sim-rotulo {
+  font-size: .72em;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--coral);
+  border-radius: 999px;
+  padding: .1rem .55rem;
+}
+
+.sim-end {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: .84em;
+  color: var(--muted);
+}
+.sim-end b { color: var(--texto); font-weight: 700; }
+
+.sim-caixa {
+  border: 1.8px solid var(--cinza);
+  border-radius: 10px;
+  background: var(--papel);
+  box-shadow: var(--sombra);
+  overflow: hidden;
+}
+
+.sim-campo {
+  display: flex;
+  align-items: stretch;
+}
+.sim-campo + .sim-campo { border-top: 1px solid var(--linha); }
+
+.sim-nome {
+  display: flex;
+  align-items: center;
+  padding: .42rem .6rem;
+  font-size: .78em;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--cinza);
+  background: var(--fundo);
+  border-right: 1px solid var(--linha);
+  white-space: nowrap;
+}
+
+.sim-valor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 108px;
+  padding: .42rem .65rem;
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 1.02em;
+  text-align: center;
+}
+.sim-para { color: var(--muted); font-style: italic; }
+.sim-lixo { color: var(--muted); }
+
+.sim-campo.destaque .sim-nome,
+.sim-campo.destaque .sim-valor { background: rgba(224, 111, 114, .18); }
+
+.sim-no.novo .sim-caixa { border-style: dashed; border-color: var(--coral); }
+.sim-no.desc .sim-caixa { border-color: var(--coral); }
+.sim-no.destaque .sim-caixa { box-shadow: 0 0 0 4px rgba(224, 111, 114, .28), var(--sombra); }
+
+/* ---------- Telas estreitas ---------- */
+@media (max-width: 760px) {
+  .sim-barra { padding: .5rem .7rem; gap: .5rem .7rem; }
+  .sim-grupo + .sim-grupo { border-left: 0; padding-left: 0; }
+  .sim-grupo.sim-msg { flex-basis: 100%; min-width: 0; border-top: 1px solid var(--linha); padding-top: .45rem; }
+}
+
+/* ---------- Modo apresentação ---------- */
+body.sim-apresentacao header.topo,
+body.sim-apresentacao footer.rodape { display: none; }
+
+body.sim-apresentacao {
+  --sim-fonte-no: 1.38rem;
+}
+
+body.sim-apresentacao .sim-barra {
+  font-size: 1.35rem;
+  padding: .7rem 1.3rem;
+  gap: .6rem 1.2rem;
+}
+body.sim-apresentacao .sim-barra label { font-size: 1.1rem; }
+body.sim-apresentacao .sim-barra input#valor {
+  height: 56px;
+  font-size: 1.25rem;
+  width: 8rem;
+  padding: 0 .8rem;
+}
+body.sim-apresentacao .btn-inserir {
+  height: 56px;
+  font-size: 1.15rem;
+  padding: 0 1.6rem;
+}
+body.sim-apresentacao .icon-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+}
+body.sim-apresentacao .icon-btn.com-texto { width: auto; padding: 0 1.4rem; font-size: 1.15rem; }
+body.sim-apresentacao .icon-btn svg { width: 27px; height: 27px; }
+body.sim-apresentacao .zoom-btn { width: 42px; height: 42px; font-size: 1.35rem; }
+body.sim-apresentacao #zoomValor { font-size: 1.1rem; padding: .4rem .5rem; }
+body.sim-apresentacao #msg { font-size: 1.15rem; }
+
+body.sim-apresentacao .sim-seta { stroke-width: 2.6; }
+body.sim-apresentacao .sim-caixa { border-width: 2.6px; border-radius: 14px; }
+body.sim-apresentacao .sim-campo + .sim-campo { border-top-width: 1.5px; }

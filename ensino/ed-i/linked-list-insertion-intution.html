@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prof. Rafael · Lista encadeada · Inserção (intuição)</title>
+  <link rel="stylesheet" href="../../assets/style.css">
+  <link rel="stylesheet" href="../../assets/sim/simulador.css">
+  <script src="../../assets/sim/simulador.js"></script>
+  <style>
+    /* página: botões de inserção não quebram a palavra */
+    .sim-barra .btn-inserir { white-space: nowrap; }
+  </style>
+</head>
+<body class="sim-pagina">
+
+<header class="topo">
+  <div class="wrap">
+    <a class="nome" href="../../index.html"><img src="../../assets/logo.svg" alt="Prof. Rafael"></a>
+    <div class="crumb" aria-label="Trilha de navegação">
+      <a href="../../ensino.html">Ensino</a><span class="sep">›</span>
+      <a href="../../ensino.html">Estruturas de Dados I</a><span class="sep">›</span>
+      <span>Lista Encadeada</span><span class="sep">›</span>
+      <span class="atual">Inserção (intuição)</span>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="../../index.html">Início</a></li>
+        <li><a href="../../projetos.html">Projetos</a></li>
+        <li><a href="../../curriculo.html">Currículo</a></li>
+        <li><a href="../../ensino.html" class="ativo">Ensino</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="sim-barra">
+
+    <div class="sim-grupo">
+      <label for="valor">Valor (info)</label>
+      <input type="number" id="valor" value="10" step="1">
+    </div>
+
+    <div class="sim-grupo">
+      <button class="btn-inserir" id="inserirInicioBtn">Inserir no início</button>
+      <button class="btn-inserir" id="inserirFimBtn">Inserir no fim</button>
+    </div>
+
+    <div class="sim-grupo">
+      <button class="icon-btn" id="proximoBtn" disabled title="Próximo passo" aria-label="Próximo passo">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 5.5v13l10-6.5zM17 5h2.2v14H17z"/></svg>
+      </button>
+      <button class="icon-btn" id="concluirBtn" disabled title="Concluir" aria-label="Concluir">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg>
+      </button>
+      <button class="icon-btn perigo" id="limparBtn" title="Limpar a lista" aria-label="Limpar a lista">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v6M14 11v6"/></svg>
+      </button>
+    </div>
+
+    <div class="sim-grupo">
+      <button class="zoom-btn" id="zoomOutBtn" title="Reduzir zoom" aria-label="Reduzir zoom">−</button>
+      <div id="zoomValor" role="button" tabindex="0" title="Clique para voltar a 100%">100%</div>
+      <button class="zoom-btn" id="zoomInBtn" title="Aumentar zoom" aria-label="Aumentar zoom">+</button>
+      <button class="icon-btn com-texto" id="reorganizarBtn" title="Reorganizar nós no layout automático" aria-label="Reorganizar nós no layout automático">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
+        Reorganizar
+      </button>
+    </div>
+
+    <div class="sim-grupo">
+      <button class="icon-btn com-texto" id="apresentacaoBtn" title="Modo apresentação (Esc para sair)" aria-label="Modo apresentação (Esc para sair)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4" width="19" height="12" rx="2"/><path d="M12 16v3.5"/><path d="M8.5 20.5h7"/></svg>
+        <span id="apresentacaoTexto">Apresentação</span>
+      </button>
+    </div>
+
+    <div class="sim-grupo sim-msg">
+      <p id="msg">Digite um valor e escolha "Inserir no início" ou "Inserir no fim".</p>
+    </div>
+
+  </div>
+
+  <div class="sim-palco" id="palco"></div>
+
+</main>
+
+<footer class="rodape">© Prof. Rafael · Universidade Federal do Tocantins</footer>
+
+<script>
+(function () {
+  // ---------- Endereços e estado ----------
+  var fmtEnd = SimLista.fmtEnd;
+  var DESC = 0x100;
+  var BASE = 0x110;
+  var heapCount = 0;
+  var estado = { inicio: null, nos: {} };
+  var op = null;
+  var msgManual = null;
+
+  function novoNo() {
+    var end = BASE + (heapCount++) * 0x10;
+    estado.nos[end] = { info: undefined, prox: undefined };
+    return end;
+  }
+
+  // ---------- Passos ----------
+  function passoAloca() {
+    return {
+      texto: function () { return 'Aloca um novo nó em ' + fmtEnd(op.novo) + '. Seus campos ainda contêm lixo.'; },
+      aplicar: function () {
+        op.novo = novoNo();
+        op.destaqueNo = op.novo;
+        op.campoDestaque = null;
+      }
+    };
+  }
+  function passoInfo(valor) {
+    return {
+      texto: function () { return 'novo->info recebe ' + valor + '.'; },
+      aplicar: function () {
+        estado.nos[op.novo].info = valor;
+        op.campoDestaque = { no: op.novo, campo: 'info' };
+      }
+    };
+  }
+  function passoProxNovo() {
+    return {
+      texto: function () {
+        return estado.inicio === null
+          ? 'lista->inicio é NULL, então novo->prox recebe NULL.'
+          : 'novo->prox aponta para o mesmo nó que lista->inicio (' + fmtEnd(estado.inicio) + ').';
+      },
+      aplicar: function () {
+        estado.nos[op.novo].prox = estado.inicio;
+        op.campoDestaque = { no: op.novo, campo: 'prox' };
+      }
+    };
+  }
+
+  function montarPassosInicio(valor) {
+    var p = [
+      passoAloca(),
+      passoInfo(valor),
+      passoProxNovo(),
+      {
+        texto: function () { return 'lista->inicio passa a apontar para o novo nó. Ele agora é o primeiro da lista.'; },
+        aplicar: function () {
+          estado.inicio = op.novo;
+          op.campoDestaque = { no: DESC, campo: 'inicio' };
+          op.destaqueNo = null;
+        }
+      },
+      { texto: function () { return 'Inserção no início concluída.'; }, aplicar: function () { op.concluida = true; op.campoDestaque = null; } }
+    ];
+    return p;
+  }
+
+  function montarPassosFim(valor) {
+    var p = [
+      passoAloca(),
+      passoInfo(valor),
+      {
+        texto: function () { return 'novo->prox recebe NULL, pois ele será o último nó.'; },
+        aplicar: function () {
+          estado.nos[op.novo].prox = null;
+          op.campoDestaque = { no: op.novo, campo: 'prox' };
+        }
+      }
+    ];
+    if (estado.inicio === null) {
+      p.push({
+        texto: function () { return 'A lista está vazia: lista->inicio passa a apontar para o novo nó.'; },
+        aplicar: function () {
+          estado.inicio = op.novo;
+          op.campoDestaque = { no: DESC, campo: 'inicio' };
+          op.destaqueNo = null;
+        }
+      });
+    } else {
+      p.push({
+        texto: function () { return 'aux começa no primeiro nó (' + fmtEnd(estado.inicio) + ').'; },
+        aplicar: function () {
+          op.aux = estado.inicio;
+          op.destaqueNo = op.aux;
+          op.campoDestaque = null;
+        }
+      });
+      var atual = estado.inicio;
+      while (estado.nos[atual].prox !== null) {
+        (function (para) {
+          p.push({
+            texto: function () { return 'aux->prox não é NULL: aux avança para ' + fmtEnd(para) + '.'; },
+            aplicar: function () { op.aux = para; op.destaqueNo = para; }
+          });
+        })(estado.nos[atual].prox);
+        atual = estado.nos[atual].prox;
+      }
+      (function (ultimo) {
+        p.push({
+          texto: function () { return 'aux->prox é NULL: aux é o último nó. aux->prox passa a apontar para o novo nó.'; },
+          aplicar: function () {
+            estado.nos[ultimo].prox = op.novo;
+            op.campoDestaque = { no: ultimo, campo: 'prox' };
+            op.destaqueNo = null;
+          }
+        });
+      })(atual);
+    }
+    p.push({ texto: function () { return 'Inserção no fim concluída.'; }, aplicar: function () { op.concluida = true; op.campoDestaque = null; } });
+    return p;
+  }
+
+  // ---------- Operações ----------
+  function iniciarOperacao(tipo) {
+    var box = document.getElementById('valor');
+    var v = box.value.trim();
+    if (v === '' || !Number.isInteger(Number(v))) {
+      setMsg('Digite um número inteiro.', true);
+      return;
+    }
+    if (op && !op.concluida) {
+      setMsg('Conclua a inserção atual antes de iniciar outra.', true);
+      return;
+    }
+    op = { tipo: tipo, valor: Number(v), novo: null, aux: null, passos: [], i: 0, concluida: false, texto: '', destaqueNo: null, campoDestaque: null };
+    op.passos = tipo === 'inicio' ? montarPassosInicio(op.valor) : montarPassosFim(op.valor);
+    setMsg('');
+    render();
+  }
+
+  function avancar() {
+    if (!op || op.concluida) return;
+    var passo = op.passos[op.i];
+    passo.aplicar();
+    op.i++;
+    op.texto = passo.texto();
+    if (passo.concluida) op.concluida = true;
+    render();
+  }
+
+  function concluirTudo() {
+    while (op && !op.concluida) avancar();
+  }
+
+  // ---------- Renderização ----------
+  function montarModelo() {
+    var emAndamento = op && !op.concluida;
+    var nos = [];
+    var ordem = ['desc'];
+
+    nos.push({
+      id: 'desc',
+      titulo: 'TLinkedList',
+      endereco: DESC,
+      classes: ['desc'],
+      rotulos: ['lista'],
+      campos: [{
+        nome: 'inicio',
+        ptr: estado.inicio === null ? null : fmtEnd(estado.inicio),
+        destaque: op && op.campoDestaque && op.campoDestaque.no === DESC && op.campoDestaque.campo === 'inicio'
+      }]
+    });
+
+    var cadeia = [];
+    var vistos = {};
+    var cur = estado.inicio;
+    while (cur !== null && cur !== undefined && estado.nos[cur] && !vistos[cur]) {
+      vistos[cur] = true;
+      cadeia.push(cur);
+      cur = estado.nos[cur].prox;
+    }
+
+    function camposDe(id) {
+      var n = estado.nos[id];
+      var destaque = op && op.campoDestaque && op.campoDestaque.no === id;
+      var prox = n.prox === undefined ? undefined : (n.prox === null ? null : fmtEnd(n.prox));
+      return [
+        { nome: 'info', valor: n.info, destaque: destaque && op.campoDestaque.campo === 'info' },
+        { nome: 'prox', ptr: prox, destaque: destaque && op.campoDestaque.campo === 'prox' }
+      ];
+    }
+    function noCom(id) {
+      var cl = [];
+      var rot = [];
+      if (emAndamento) {
+        if (op.novo !== null && op.novo === id) {
+          cl.push('novo');
+          rot.push('novo');
+        }
+        if (op.aux !== null && op.aux === id) rot.push('aux');
+        if (op.destaqueNo !== null && op.destaqueNo === id) cl.push('destaque');
+      }
+      return {
+        id: fmtEnd(id),
+        endereco: id,
+        classes: cl,
+        rotulos: rot,
+        campos: camposDe(id)
+      };
+    }
+
+    cadeia.forEach(function (id) { nos.push(noCom(id)); });
+
+    var extras = [];
+    if (op && op.novo !== null && !vistos[op.novo]) extras.push(op.novo);
+    extras.forEach(function (id) { nos.push(noCom(id)); });
+
+    return { nos: nos, ordem: ordem, extras: extras.map(fmtEnd) };
+  }
+
+  function renderBotoes() {
+    var emAndamento = op && !op.concluida;
+    document.getElementById('proximoBtn').disabled = !emAndamento;
+    document.getElementById('concluirBtn').disabled = !emAndamento;
+  }
+
+  function renderMsg() {
+    if (msgManual) return;
+    var m = document.getElementById('msg');
+    if (!op) {
+      m.textContent = 'Digite um valor e escolha "Inserir no início" ou "Inserir no fim".';
+    } else if (op.concluida) {
+      m.textContent = op.texto;
+    } else if (op.i === 0) {
+      m.textContent = 'Operação preparada. Use Próximo passo ou Concluir.';
+    } else {
+      var contador = op.tipo === 'inicio' ? 'Passo ' + op.i + ' de 5' : 'Passo ' + op.i;
+      m.textContent = contador + ' — ' + op.texto;
+    }
+  }
+
+  function setMsg(t, erro) {
+    msgManual = t === '' ? null : { t: t, erro: !!erro };
+    var m = document.getElementById('msg');
+    m.textContent = t;
+    m.classList.toggle('erro', !!erro);
+  }
+
+  function render() {
+    palco.render(montarModelo());
+    renderBotoes();
+    renderMsg();
+  }
+
+  // ---------- Palco e zoom ----------
+  var zoomValor = document.getElementById('zoomValor');
+  var palco = new SimLista.Palco(document.getElementById('palco'), {
+    onZoom: function (z) { zoomValor.textContent = Math.round(z * 100) + '%'; }
+  });
+
+  document.getElementById('zoomOutBtn').addEventListener('click', function () { palco.zoomOut(); });
+  document.getElementById('zoomInBtn').addEventListener('click', function () { palco.zoomIn(); });
+  zoomValor.addEventListener('click', function () { palco.setZoom(1); });
+  document.getElementById('reorganizarBtn').addEventListener('click', function () { palco.reorganizar(); });
+
+  // ---------- Controles ----------
+  document.getElementById('inserirInicioBtn').addEventListener('click', function () { iniciarOperacao('inicio'); });
+  document.getElementById('inserirFimBtn').addEventListener('click', function () { iniciarOperacao('fim'); });
+  document.getElementById('proximoBtn').addEventListener('click', avancar);
+  document.getElementById('concluirBtn').addEventListener('click', concluirTudo);
+
+  document.getElementById('limparBtn').addEventListener('click', function () {
+    estado = { inicio: null, nos: {} };
+    op = null;
+    heapCount = 0;
+    palco.reorganizar();
+    setMsg('Lista esvaziada.');
+    render();
+  });
+
+  document.getElementById('valor').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      iniciarOperacao('inicio');
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.target && e.target.tagName === 'INPUT') return;
+    if (e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault();
+      avancar();
+    }
+  });
+
+  // ---------- Modo apresentação ----------
+  new SimLista.ModoApresentacao({
+    botao: document.getElementById('apresentacaoBtn'),
+    onMudar: function (ativo) {
+      document.getElementById('apresentacaoTexto').textContent = ativo ? 'Sair (Esc)' : 'Apresentação';
+      palco.atualizar();
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
