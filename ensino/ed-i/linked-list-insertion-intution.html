@@ -8,8 +8,107 @@
   <link rel="stylesheet" href="../../assets/sim/simulador.css">
   <script src="../../assets/sim/simulador.js"></script>
   <style>
-    /* página: botões de inserção não quebram a palavra */
     .sim-barra .btn-inserir { white-space: nowrap; }
+
+    body.sim-pagina { --sim-fonte-no: 1.15rem; }
+    body.sim-apresentacao { --sim-fonte-no: 1.5rem; }
+
+    #palco { --ll-dur: 800ms; --ll-flash: 1800ms; }
+
+    #velocidade { width: 8rem; accent-color: var(--coral); cursor: pointer; }
+    #velocidadeValor {
+      min-width: 3.2rem;
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: .9rem;
+      color: var(--cinza);
+    }
+    body.sim-apresentacao #velocidade { width: 11rem; height: 28px; }
+    body.sim-apresentacao #velocidadeValor { font-size: 1.15rem; }
+
+    .ll-no, .ll-desc {
+      cursor: default;
+      z-index: 2;
+      transition: left var(--ll-dur) ease-in-out, top var(--ll-dur) ease-in-out, opacity var(--ll-dur) ease;
+    }
+    .ll-desc { align-items: flex-start; }
+    .ll-desc .sim-end { white-space: nowrap; }
+    .ll-desc .sim-end b { font-size: 1.2em; }
+
+    .ll-badges {
+      min-height: 1.9em;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .ll-badge {
+      visibility: hidden;
+      font-size: 1.15em;
+      font-weight: 800;
+      letter-spacing: .06em;
+      line-height: 1.4;
+      color: #fff;
+      background: var(--coral);
+      border-radius: 999px;
+      padding: .05em .7em;
+    }
+    .ll-no.novo .ll-badge { visibility: visible; }
+
+    .ll-moldura, .ll-aux {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      pointer-events: none;
+      font-size: var(--sim-fonte-no, .9rem);
+      transition: left var(--ll-dur) ease-in-out, top var(--ll-dur) ease-in-out,
+                  width var(--ll-dur) ease-in-out, height var(--ll-dur) ease-in-out, opacity var(--ll-dur) ease;
+    }
+    .ll-moldura {
+      z-index: 1;
+      border: 4px solid var(--coral);
+      border-radius: 18px;
+      background: rgba(224, 111, 114, .10);
+    }
+    .ll-moldura-rotulo {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-bottom: .1em;
+      line-height: 1.1;
+      font-size: 1.6em;
+      font-weight: 800;
+      letter-spacing: .04em;
+      color: var(--coral);
+      white-space: nowrap;
+    }
+    .ll-aux {
+      z-index: 3;
+      border: 4px solid #2f6fb5;
+      border-radius: 14px;
+      background: rgba(47, 111, 181, .22);
+    }
+    .ll-aux-rotulo {
+      position: absolute;
+      top: .1em;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.5em;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #fff;
+      background: #2f6fb5;
+      border-radius: 999px;
+      padding: 0 .6em;
+    }
+
+    .ll-sem-transicao { transition: none !important; }
+
+    .sim-valor.ll-flash { animation: llFlash var(--ll-flash) ease-out; }
+    @keyframes llFlash {
+      0%, 20% { background: #e06f72; color: #fff; }
+      100% { background: transparent; }
+    }
   </style>
 </head>
 <body class="sim-pagina">
@@ -49,6 +148,10 @@
     </div>
 
     <div class="sim-grupo">
+      <button class="icon-btn" id="voltarBtn" disabled title="Passo anterior" aria-label="Passo anterior">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 5.5v13L9 12zM7 5H4.8v14H7z"/></svg>
+      </button>
+      <button class="icon-btn" id="playBtn" disabled title="Reproduzir" aria-label="Reproduzir"></button>
       <button class="icon-btn" id="proximoBtn" disabled title="Próximo passo" aria-label="Próximo passo">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 5.5v13l10-6.5zM17 5h2.2v14H17z"/></svg>
       </button>
@@ -61,13 +164,15 @@
     </div>
 
     <div class="sim-grupo">
+      <label for="velocidade">Velocidade</label>
+      <input type="range" id="velocidade" min="1" max="2.5" step="0.25" value="1">
+      <span id="velocidadeValor">1x</span>
+    </div>
+
+    <div class="sim-grupo">
       <button class="zoom-btn" id="zoomOutBtn" title="Reduzir zoom" aria-label="Reduzir zoom">−</button>
       <div id="zoomValor" role="button" tabindex="0" title="Clique para voltar a 100%">100%</div>
       <button class="zoom-btn" id="zoomInBtn" title="Aumentar zoom" aria-label="Aumentar zoom">+</button>
-      <button class="icon-btn com-texto" id="reorganizarBtn" title="Reorganizar nós no layout automático" aria-label="Reorganizar nós no layout automático">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>
-        Reorganizar
-      </button>
     </div>
 
     <div class="sim-grupo">
@@ -91,244 +196,423 @@
 
 <script>
 (function () {
-  // ---------- Endereços e estado ----------
+  // ---------- Constantes e estado ----------
   var fmtEnd = SimLista.fmtEnd;
+  var SVG_NS = 'http://www.w3.org/2000/svg';
   var DESC = 0x100;
   var BASE = 0x110;
+  var TOPO = 10;
+  var ESQ = 10;
+  var FP = 16;
+  var AP = 6;
+  var GAP = 90;
+  var MOVER_MS = 800;
+  var FLASH_MS = 1800;
+  var PASSO_MS = 1900;
+
   var heapCount = 0;
-  var estado = { inicio: null, nos: {} };
+  var base = vazio();
+  var atual = base;
   var op = null;
+  var tocando = false;
+  var timer = null;
+  var velocidade = 1;
+  var zoom = 1;
   var msgManual = null;
 
-  function novoNo() {
-    var end = BASE + (heapCount++) * 0x10;
-    estado.nos[end] = { info: undefined, prox: undefined };
-    return end;
+  function vazio() {
+    return { inicio: null, nos: {}, pos: {}, frame: null, aux: null, novo: null, texto: '' };
+  }
+  function clonar(s) { return JSON.parse(JSON.stringify(s)); }
+
+  function cadeiaDe(s) {
+    var c = [];
+    var vistos = {};
+    var cur = s.inicio;
+    while (typeof cur === 'number' && s.nos[cur] && !vistos[cur]) {
+      vistos[cur] = true;
+      c.push(cur);
+      cur = s.nos[cur].prox;
+    }
+    return c;
   }
 
-  // ---------- Passos ----------
-  function passoAloca() {
-    return {
-      texto: function () { return 'Aloca um novo nó em ' + fmtEnd(op.novo) + '. Seus campos ainda contêm lixo.'; },
-      aplicar: function () {
-        op.novo = novoNo();
-        op.destaqueNo = op.novo;
-        op.campoDestaque = null;
-      }
-    };
-  }
-  function passoInfo(valor) {
-    return {
-      texto: function () { return 'novo->info recebe ' + valor + '.'; },
-      aplicar: function () {
-        estado.nos[op.novo].info = valor;
-        op.campoDestaque = { no: op.novo, campo: 'info' };
-      }
-    };
-  }
-  function passoProxNovo() {
-    return {
-      texto: function () {
-        return estado.inicio === null
-          ? 'lista->inicio é NULL, então novo->prox recebe NULL.'
-          : 'novo->prox aponta para o mesmo nó que lista->inicio (' + fmtEnd(estado.inicio) + ').';
-      },
-      aplicar: function () {
-        estado.nos[op.novo].prox = estado.inicio;
-        op.campoDestaque = { no: op.novo, campo: 'prox' };
-      }
-    };
-  }
+  // ---------- Geração dos passos (cada passo é um retrato completo do estado) ----------
+  function gerarPassos(tipo, valor) {
+    var snaps = [clonar(base)];
+    snaps[0].texto = 'Operação preparada: inserir ' + valor + (tipo === 'inicio' ? ' no início.' : ' no fim.');
+    function passo(texto, fn) {
+      var s = clonar(snaps[snaps.length - 1]);
+      fn(s);
+      s.texto = texto;
+      snaps.push(s);
+    }
+    var a = BASE + (heapCount++) * 0x10;
+    var cadeia = cadeiaDe(base);
+    var n = cadeia.length;
 
-  function montarPassosInicio(valor) {
-    var p = [
-      passoAloca(),
-      passoInfo(valor),
-      passoProxNovo(),
-      {
-        texto: function () { return 'lista->inicio passa a apontar para o novo nó. Ele agora é o primeiro da lista.'; },
-        aplicar: function () {
-          estado.inicio = op.novo;
-          op.campoDestaque = { no: DESC, campo: 'inicio' };
-          op.destaqueNo = null;
-        }
-      },
-      { texto: function () { return 'Inserção no início concluída.'; }, aplicar: function () { op.concluida = true; op.campoDestaque = null; } }
-    ];
-    return p;
-  }
+    passo('Aloca um novo nó em ' + fmtEnd(a) + ' (novo). Seus campos ainda contêm lixo.', function (s) {
+      s.nos[a] = { info: '?', prox: '?' };
+      s.pos[a] = 'f';
+      s.novo = a;
+    });
+    passo('novo->info recebe ' + valor + '.', function (s) { s.nos[a].info = valor; });
 
-  function montarPassosFim(valor) {
-    var p = [
-      passoAloca(),
-      passoInfo(valor),
-      {
-        texto: function () { return 'novo->prox recebe NULL, pois ele será o último nó.'; },
-        aplicar: function () {
-          estado.nos[op.novo].prox = null;
-          op.campoDestaque = { no: op.novo, campo: 'prox' };
-        }
-      }
-    ];
-    if (estado.inicio === null) {
-      p.push({
-        texto: function () { return 'A lista está vazia: lista->inicio passa a apontar para o novo nó.'; },
-        aplicar: function () {
-          estado.inicio = op.novo;
-          op.campoDestaque = { no: DESC, campo: 'inicio' };
-          op.destaqueNo = null;
-        }
+    if (tipo === 'inicio') {
+      passo(n === 0
+        ? 'lista->inicio é NULL, então novo->prox recebe NULL.'
+        : 'novo->prox recebe lista->inicio (' + fmtEnd(base.inicio) + '): o novo nó aponta para o atual primeiro nó.',
+        function (s) { s.nos[a].prox = base.inicio; });
+      passo(n === 0
+        ? 'O novo nó vai para a primeira posição da lista.'
+        : 'Abre espaço: todos os nós são empurrados para a direita e o novo nó ocupa a primeira posição.',
+        function (s) {
+          cadeia.forEach(function (id) { s.pos[id] += 1; });
+          s.pos[a] = 0;
+          if (s.frame !== null) s.frame += 1;
+        });
+      passo('lista->inicio passa a apontar para o novo nó (' + fmtEnd(a) + '). Ele agora é o início da lista.', function (s) {
+        s.inicio = a;
+        s.frame = 0;
       });
     } else {
-      p.push({
-        texto: function () { return 'aux começa no primeiro nó (' + fmtEnd(estado.inicio) + ').'; },
-        aplicar: function () {
-          op.aux = estado.inicio;
-          op.destaqueNo = op.aux;
-          op.campoDestaque = null;
-        }
-      });
-      var atual = estado.inicio;
-      while (estado.nos[atual].prox !== null) {
-        (function (para) {
-          p.push({
-            texto: function () { return 'aux->prox não é NULL: aux avança para ' + fmtEnd(para) + '.'; },
-            aplicar: function () { op.aux = para; op.destaqueNo = para; }
-          });
-        })(estado.nos[atual].prox);
-        atual = estado.nos[atual].prox;
-      }
-      (function (ultimo) {
-        p.push({
-          texto: function () { return 'aux->prox é NULL: aux é o último nó. aux->prox passa a apontar para o novo nó.'; },
-          aplicar: function () {
-            estado.nos[ultimo].prox = op.novo;
-            op.campoDestaque = { no: ultimo, campo: 'prox' };
-            op.destaqueNo = null;
-          }
+      passo('novo->prox recebe NULL, pois ele será o último nó.', function (s) { s.nos[a].prox = null; });
+      if (n === 0) {
+        passo('A lista está vazia: o novo nó vai para a primeira posição.', function (s) { s.pos[a] = 0; });
+        passo('lista->inicio passa a apontar para o novo nó (' + fmtEnd(a) + ').', function (s) {
+          s.inicio = a;
+          s.frame = 0;
         });
-      })(atual);
+      } else {
+        passo('aux recebe lista->inicio: começa no primeiro nó (' + fmtEnd(cadeia[0]) + ').', function (s) { s.aux = 0; });
+        cadeia.slice(1).forEach(function (id, k) {
+          passo('aux->prox não é NULL: aux = aux->prox (' + fmtEnd(id) + ').', function (s) { s.aux = k + 1; });
+        });
+        passo('aux->prox é NULL: aux está no último nó da lista.', function () {});
+        passo('aux->prox recebe novo: o último nó passa a apontar para o novo nó, que vai para o fim da lista.', function (s) {
+          s.nos[cadeia[n - 1]].prox = a;
+          s.pos[a] = n;
+        });
+      }
     }
-    p.push({ texto: function () { return 'Inserção no fim concluída.'; }, aplicar: function () { op.concluida = true; op.campoDestaque = null; } });
-    return p;
+    passo('Inserção no ' + (tipo === 'inicio' ? 'início' : 'fim') + ' concluída.', function (s) {
+      s.novo = null;
+      s.aux = null;
+    });
+    return snaps;
   }
 
-  // ---------- Operações ----------
+  // ---------- Palco ----------
+  var palcoEl = document.getElementById('palco');
+  var viewport = document.createElement('div');
+  viewport.className = 'sim-viewport';
+  var molde = document.createElement('div');
+  molde.className = 'sim-molde';
+  var camada = document.createElement('div');
+  camada.className = 'sim-camada';
+  camada.style.transform = 'scale(1)';
+  var svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('class', 'sim-setas');
+  svg.innerHTML = '<defs><marker id="ll-marcador" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto">' +
+    '<path d="M0,0 L10,5 L0,10 z" style="fill:var(--cinza)"/></marker></defs><g></g>';
+  var setasG = svg.querySelector('g');
+  camada.appendChild(svg);
+  molde.appendChild(camada);
+  viewport.appendChild(molde);
+  palcoEl.appendChild(viewport);
+
+  var descEl = document.createElement('div');
+  descEl.className = 'sim-no desc ll-desc';
+  descEl.innerHTML = '<div class="sim-end"><b>lista</b> · TLinkedList · ' + fmtEnd(DESC) + '</div>' +
+    '<div class="sim-caixa"><div class="sim-campo"><span class="sim-nome">inicio</span>' +
+    '<span class="sim-valor sim-para" data-campo="inicio">NULL</span></div></div>';
+  camada.appendChild(descEl);
+  var descValor = descEl.querySelector('[data-campo=inicio]');
+
+  var frameEl = document.createElement('div');
+  frameEl.className = 'll-moldura';
+  frameEl.innerHTML = '<span class="ll-moldura-rotulo">início</span>';
+  camada.appendChild(frameEl);
+
+  var auxEl = document.createElement('div');
+  auxEl.className = 'll-aux';
+  auxEl.innerHTML = '<span class="ll-aux-rotulo">aux</span>';
+  camada.appendChild(auxEl);
+
+  var els = {};
+
+  function duracao() { return MOVER_MS / velocidade; }
+
+  function criarNo(addr) {
+    var el = document.createElement('div');
+    el.className = 'sim-no ll-no';
+    el.innerHTML = '<div class="ll-badges"><span class="ll-badge">novo</span></div>' +
+      '<div class="sim-end">' + fmtEnd(addr) + '</div>' +
+      '<div class="sim-caixa">' +
+      '<div class="sim-campo"><span class="sim-nome">info</span><span class="sim-valor" data-campo="info"></span></div>' +
+      '<div class="sim-campo"><span class="sim-nome">prox</span><span class="sim-valor" data-campo="prox"></span></div>' +
+      '</div>';
+    camada.appendChild(el);
+    return el;
+  }
+
+  function setValor(span, texto, lixo, flash) {
+    if (span.textContent === texto) return;
+    span.textContent = texto;
+    span.classList.toggle('sim-lixo', lixo);
+    span.classList.toggle('sim-para', texto === 'NULL');
+    if (flash) {
+      span.classList.remove('ll-flash');
+      void span.offsetWidth;
+      span.classList.add('ll-flash');
+    }
+  }
+
+  function renderizar(s) {
+    var novos = [];
+    Object.keys(els).forEach(function (k) {
+      if (s.nos[k]) return;
+      var el = els[k];
+      delete els[k];
+      el.style.opacity = '0';
+      setTimeout(function () { el.remove(); }, duracao());
+    });
+    Object.keys(s.nos).forEach(function (k) {
+      var el = els[k];
+      var criado = !el;
+      if (criado) {
+        el = els[k] = criarNo(Number(k));
+        novos.push(el);
+      }
+      var n = s.nos[k];
+      setValor(el.querySelector('[data-campo=info]'), n.info === '?' ? '?' : String(n.info), n.info === '?', !criado);
+      setValor(el.querySelector('[data-campo=prox]'), n.prox === '?' ? '?' : fmtEnd(n.prox), n.prox === '?', !criado);
+      el.classList.toggle('novo', s.novo !== null && Number(k) === s.novo);
+    });
+    setValor(descValor, fmtEnd(s.inicio), false, true);
+    atual = s;
+    posicionar(novos);
+  }
+
+  function medidas() {
+    var m = { descW: descEl.offsetWidth, descH: descEl.offsetHeight, W: 0, H: 0 };
+    Object.keys(els).forEach(function (k) {
+      m.W = Math.max(m.W, els[k].offsetWidth);
+      m.H = Math.max(m.H, els[k].offsetHeight);
+    });
+    if (!m.W) { m.W = 180; m.H = 140; }
+    return m;
+  }
+
+  function posicionarCaixa(el, slot, xSlot, y, m, pad) {
+    if (slot === null || slot === undefined) {
+      el.style.opacity = '0';
+      return;
+    }
+    var visivel = el.style.opacity === '1';
+    if (!visivel) el.classList.add('ll-sem-transicao');
+    el.style.left = (xSlot(slot) - pad) + 'px';
+    el.style.top = (y - pad) + 'px';
+    el.style.width = (m.W + 2 * pad) + 'px';
+    el.style.height = (m.H + 2 * pad) + 'px';
+    if (!visivel) {
+      void el.offsetWidth;
+      el.classList.remove('ll-sem-transicao');
+    }
+    el.style.opacity = '1';
+  }
+
+  function posicionar(novos) {
+    var s = atual;
+    var m = medidas();
+    descEl.style.left = ESQ + 'px';
+    descEl.style.top = TOPO + 'px';
+    var linhaY = TOPO + Math.max(m.descH, m.H) + 70 + FP;
+    var xSlot = function (i) { return ESQ + FP + i * (m.W + GAP); };
+    var xFlut = ESQ + m.descW + GAP;
+    var maxX = ESQ + m.descW;
+    var maxY = TOPO + m.descH;
+
+    Object.keys(s.nos).forEach(function (k) {
+      var el = els[k];
+      var p = s.pos[k];
+      var x = p === 'f' ? xFlut : xSlot(p);
+      var y = p === 'f' ? TOPO : linhaY;
+      if (novos.indexOf(el) !== -1) {
+        el.classList.add('ll-sem-transicao');
+        el.style.opacity = '0';
+      }
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      maxX = Math.max(maxX, x + m.W);
+      maxY = Math.max(maxY, y + m.H + FP + 70);
+    });
+    novos.forEach(function (el) {
+      void el.offsetWidth;
+      el.classList.remove('ll-sem-transicao');
+      el.style.opacity = '1';
+    });
+
+    posicionarCaixa(frameEl, s.frame, xSlot, linhaY, m, FP);
+    posicionarCaixa(auxEl, s.aux, xSlot, linhaY, m, AP);
+
+    var w = maxX + 60;
+    var h = maxY + 20;
+    molde.style.width = w * zoom + 'px';
+    molde.style.height = h * zoom + 'px';
+    svg.setAttribute('width', String(w));
+    svg.setAttribute('height', String(h));
+    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+    animarSetas(duracao() + 150);
+  }
+
+  // ---------- Setas (ponteiros prox) ----------
+  function desenharSetas() {
+    while (setasG.firstChild) setasG.removeChild(setasG.firstChild);
+    var c = camada.getBoundingClientRect();
+    var z = zoom;
+    Object.keys(atual.nos).forEach(function (k) {
+      var alvo = atual.nos[k].prox;
+      if (typeof alvo !== 'number' || !els[k] || !els[alvo]) return;
+      var cr = els[k].querySelector('[data-campo=prox]').getBoundingClientRect();
+      var dr = els[alvo].querySelector('.sim-caixa').getBoundingClientRect();
+      var sx = (cr.right - c.left) / z;
+      var sy = (cr.top - c.top) / z + (cr.height / z) / 2;
+      var dx = (dr.left - c.left) / z;
+      var dy = (dr.top - c.top) / z;
+      var ex, ey, c1x, c1y, c2x, c2y;
+      if (dx - sx > 6) {
+        ex = dx;
+        ey = dy + (dr.height / z) / 2;
+        c1x = (sx + ex) / 2; c1y = sy;
+        c2x = (sx + ex) / 2; c2y = ey;
+      } else {
+        ex = dx + (dr.width / z) / 2;
+        ey = dy;
+        c1x = sx + 60; c1y = sy;
+        c2x = ex; c2y = dy - 80;
+      }
+      var p = document.createElementNS(SVG_NS, 'path');
+      p.setAttribute('d', 'M' + sx + ' ' + sy + ' C' + c1x + ' ' + c1y + ' ' + c2x + ' ' + c2y + ' ' + ex + ' ' + ey);
+      p.setAttribute('class', 'sim-seta');
+      p.setAttribute('marker-end', 'url(#ll-marcador)');
+      setasG.appendChild(p);
+    });
+  }
+
+  var fimSetas = 0;
+  var rafSetas = null;
+  function animarSetas(ms) {
+    fimSetas = Math.max(fimSetas, performance.now() + ms);
+    if (rafSetas) return;
+    var tick = function () {
+      desenharSetas();
+      rafSetas = performance.now() < fimSetas ? requestAnimationFrame(tick) : null;
+    };
+    rafSetas = requestAnimationFrame(tick);
+  }
+
+  // ---------- Reprodução ----------
+  var ICONE_PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5v14l12-7z"/></svg>';
+  var ICONE_PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>';
+
+  function ultimoIdx() { return op ? op.snaps.length - 1 : 0; }
+
+  function irPara(i) {
+    op.i = i;
+    renderizar(op.snaps[i]);
+    renderUI();
+  }
+
+  function agendar() {
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      if (!tocando || !op) return;
+      if (op.i < ultimoIdx()) irPara(op.i + 1);
+      if (op.i >= ultimoIdx()) pausar();
+      else agendar();
+    }, PASSO_MS / velocidade);
+  }
+
+  function tocar() {
+    if (!op || op.i >= ultimoIdx()) return;
+    tocando = true;
+    agendar();
+    renderUI();
+  }
+
+  function pausar() {
+    tocando = false;
+    clearTimeout(timer);
+    renderUI();
+  }
+
+  function proximo() {
+    if (!op) return;
+    pausar();
+    if (op.i < ultimoIdx()) irPara(op.i + 1);
+  }
+
+  function voltar() {
+    if (!op) return;
+    pausar();
+    if (op.i > 0) irPara(op.i - 1);
+  }
+
+  function concluirTudo() {
+    if (!op) return;
+    pausar();
+    if (op.i < ultimoIdx()) irPara(ultimoIdx());
+  }
+
   function iniciarOperacao(tipo) {
-    var box = document.getElementById('valor');
-    var v = box.value.trim();
+    var v = document.getElementById('valor').value.trim();
     if (v === '' || !Number.isInteger(Number(v))) {
       setMsg('Digite um número inteiro.', true);
       return;
     }
-    if (op && !op.concluida) {
-      setMsg('Conclua a inserção atual antes de iniciar outra.', true);
-      return;
+    if (op) {
+      pausar();
+      if (op.i < ultimoIdx()) irPara(ultimoIdx());
+      base = clonar(op.snaps[ultimoIdx()]);
+      base.novo = null;
+      base.aux = null;
     }
-    op = { tipo: tipo, valor: Number(v), novo: null, aux: null, passos: [], i: 0, concluida: false, texto: '', destaqueNo: null, campoDestaque: null };
-    op.passos = tipo === 'inicio' ? montarPassosInicio(op.valor) : montarPassosFim(op.valor);
+    op = { tipo: tipo, snaps: null, i: 0 };
+    op.snaps = gerarPassos(tipo, Number(v));
     setMsg('');
-    render();
+    irPara(0);
+    tocar();
   }
 
-  function avancar() {
-    if (!op || op.concluida) return;
-    var passo = op.passos[op.i];
-    passo.aplicar();
-    op.i++;
-    op.texto = passo.texto();
-    if (passo.concluida) op.concluida = true;
-    render();
-  }
-
-  function concluirTudo() {
-    while (op && !op.concluida) avancar();
-  }
-
-  // ---------- Renderização ----------
-  function montarModelo() {
-    var emAndamento = op && !op.concluida;
-    var nos = [];
-    var ordem = ['desc'];
-
-    nos.push({
-      id: 'desc',
-      titulo: 'TLinkedList',
-      endereco: DESC,
-      classes: ['desc'],
-      rotulos: ['lista'],
-      campos: [{
-        nome: 'inicio',
-        ptr: estado.inicio === null ? null : fmtEnd(estado.inicio),
-        destaque: op && op.campoDestaque && op.campoDestaque.no === DESC && op.campoDestaque.campo === 'inicio'
-      }]
-    });
-
-    var cadeia = [];
-    var vistos = {};
-    var cur = estado.inicio;
-    while (cur !== null && cur !== undefined && estado.nos[cur] && !vistos[cur]) {
-      vistos[cur] = true;
-      cadeia.push(cur);
-      cur = estado.nos[cur].prox;
+  // ---------- Interface ----------
+  function renderUI() {
+    var fim = !op || op.i >= ultimoIdx();
+    document.getElementById('voltarBtn').disabled = !op || op.i === 0;
+    document.getElementById('proximoBtn').disabled = fim;
+    document.getElementById('concluirBtn').disabled = fim;
+    var play = document.getElementById('playBtn');
+    play.disabled = fim;
+    var rotulo = tocando ? 'Pausar' : 'Reproduzir';
+    if (play.getAttribute('data-estado') !== rotulo) {
+      play.innerHTML = tocando ? ICONE_PAUSE : ICONE_PLAY;
+      play.setAttribute('data-estado', rotulo);
+      play.title = rotulo;
+      play.setAttribute('aria-label', rotulo);
     }
-
-    function camposDe(id) {
-      var n = estado.nos[id];
-      var destaque = op && op.campoDestaque && op.campoDestaque.no === id;
-      var prox = n.prox === undefined ? undefined : (n.prox === null ? null : fmtEnd(n.prox));
-      return [
-        { nome: 'info', valor: n.info, destaque: destaque && op.campoDestaque.campo === 'info' },
-        { nome: 'prox', ptr: prox, destaque: destaque && op.campoDestaque.campo === 'prox' }
-      ];
-    }
-    function noCom(id) {
-      var cl = [];
-      var rot = [];
-      if (emAndamento) {
-        if (op.novo !== null && op.novo === id) {
-          cl.push('novo');
-          rot.push('novo');
-        }
-        if (op.aux !== null && op.aux === id) rot.push('aux');
-        if (op.destaqueNo !== null && op.destaqueNo === id) cl.push('destaque');
-      }
-      return {
-        id: fmtEnd(id),
-        endereco: id,
-        classes: cl,
-        rotulos: rot,
-        campos: camposDe(id)
-      };
-    }
-
-    cadeia.forEach(function (id) { nos.push(noCom(id)); });
-
-    var extras = [];
-    if (op && op.novo !== null && !vistos[op.novo]) extras.push(op.novo);
-    extras.forEach(function (id) { nos.push(noCom(id)); });
-
-    return { nos: nos, ordem: ordem, extras: extras.map(fmtEnd) };
-  }
-
-  function renderBotoes() {
-    var emAndamento = op && !op.concluida;
-    document.getElementById('proximoBtn').disabled = !emAndamento;
-    document.getElementById('concluirBtn').disabled = !emAndamento;
+    renderMsg();
   }
 
   function renderMsg() {
     if (msgManual) return;
     var m = document.getElementById('msg');
+    m.classList.remove('erro');
     if (!op) {
       m.textContent = 'Digite um valor e escolha "Inserir no início" ou "Inserir no fim".';
-    } else if (op.concluida) {
-      m.textContent = op.texto;
-    } else if (op.i === 0) {
-      m.textContent = 'Operação preparada. Use Próximo passo ou Concluir.';
+    } else if (op.i === 0 || op.i >= ultimoIdx()) {
+      m.textContent = op.snaps[op.i].texto;
     } else {
-      var contador = op.tipo === 'inicio' ? 'Passo ' + op.i + ' de 5' : 'Passo ' + op.i;
-      m.textContent = contador + ' — ' + op.texto;
+      m.textContent = 'Passo ' + op.i + ' de ' + (ultimoIdx() - 1) + ' — ' + op.snaps[op.i].texto;
     }
   }
 
@@ -337,38 +621,61 @@
     var m = document.getElementById('msg');
     m.textContent = t;
     m.classList.toggle('erro', !!erro);
+    if (!msgManual) renderMsg();
   }
 
-  function render() {
-    palco.render(montarModelo());
-    renderBotoes();
-    renderMsg();
+  // ---------- Velocidade ----------
+  var velInput = document.getElementById('velocidade');
+  function aplicarVelocidade() {
+    velocidade = Number(velInput.value) || 1;
+    palcoEl.style.setProperty('--ll-dur', duracao() + 'ms');
+    palcoEl.style.setProperty('--ll-flash', (FLASH_MS / velocidade) + 'ms');
+    document.getElementById('velocidadeValor').textContent = String(velocidade).replace('.', ',') + 'x';
   }
+  velInput.addEventListener('input', aplicarVelocidade);
 
-  // ---------- Palco e zoom ----------
+  // ---------- Zoom ----------
   var zoomValor = document.getElementById('zoomValor');
-  var palco = new SimLista.Palco(document.getElementById('palco'), {
-    onZoom: function (z) { zoomValor.textContent = Math.round(z * 100) + '%'; }
-  });
+  function setZoom(z) {
+    zoom = Math.min(3, Math.max(0.4, Math.round(z * 10) / 10));
+    camada.style.transform = 'scale(' + zoom + ')';
+    zoomValor.textContent = Math.round(zoom * 100) + '%';
+    posicionar([]);
+  }
+  document.getElementById('zoomOutBtn').addEventListener('click', function () { setZoom(zoom - 0.1); });
+  document.getElementById('zoomInBtn').addEventListener('click', function () { setZoom(zoom + 0.1); });
+  zoomValor.addEventListener('click', function () { setZoom(1); });
+  viewport.addEventListener('wheel', function (ev) {
+    if (!ev.ctrlKey) return;
+    ev.preventDefault();
+    setZoom(zoom + (ev.deltaY < 0 ? 0.1 : -0.1));
+  }, { passive: false });
 
-  document.getElementById('zoomOutBtn').addEventListener('click', function () { palco.zoomOut(); });
-  document.getElementById('zoomInBtn').addEventListener('click', function () { palco.zoomIn(); });
-  zoomValor.addEventListener('click', function () { palco.setZoom(1); });
-  document.getElementById('reorganizarBtn').addEventListener('click', function () { palco.reorganizar(); });
+  var redim = null;
+  window.addEventListener('resize', function () {
+    cancelAnimationFrame(redim);
+    redim = requestAnimationFrame(function () { posicionar([]); });
+  });
 
   // ---------- Controles ----------
   document.getElementById('inserirInicioBtn').addEventListener('click', function () { iniciarOperacao('inicio'); });
   document.getElementById('inserirFimBtn').addEventListener('click', function () { iniciarOperacao('fim'); });
-  document.getElementById('proximoBtn').addEventListener('click', avancar);
+  document.getElementById('voltarBtn').addEventListener('click', voltar);
+  document.getElementById('proximoBtn').addEventListener('click', proximo);
   document.getElementById('concluirBtn').addEventListener('click', concluirTudo);
+  document.getElementById('playBtn').addEventListener('click', function () {
+    if (tocando) pausar();
+    else tocar();
+  });
 
   document.getElementById('limparBtn').addEventListener('click', function () {
-    estado = { inicio: null, nos: {} };
+    pausar();
     op = null;
     heapCount = 0;
-    palco.reorganizar();
+    base = vazio();
+    renderizar(base);
+    renderUI();
     setMsg('Lista esvaziada.');
-    render();
   });
 
   document.getElementById('valor').addEventListener('keydown', function (e) {
@@ -380,9 +687,16 @@
 
   document.addEventListener('keydown', function (e) {
     if (e.target && e.target.tagName === 'INPUT') return;
-    if (e.key === 'ArrowRight' || e.key === ' ') {
+    if (e.key === 'ArrowRight') {
       e.preventDefault();
-      avancar();
+      proximo();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      voltar();
+    } else if (e.key === ' ') {
+      e.preventDefault();
+      if (tocando) pausar();
+      else tocar();
     }
   });
 
@@ -391,11 +705,13 @@
     botao: document.getElementById('apresentacaoBtn'),
     onMudar: function (ativo) {
       document.getElementById('apresentacaoTexto').textContent = ativo ? 'Sair (Esc)' : 'Apresentação';
-      palco.atualizar();
+      requestAnimationFrame(function () { posicionar([]); });
     }
   });
 
-  render();
+  aplicarVelocidade();
+  renderizar(base);
+  renderUI();
 })();
 </script>
 </body>
