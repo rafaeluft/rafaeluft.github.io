@@ -1,0 +1,1240 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prof. Rafael · Lista circular · Inserção (código)</title>
+  <link rel="stylesheet" href="../../assets/style.css">
+  <link rel="stylesheet" href="../../assets/sim/simulador.css">
+  <script src="../../assets/sim/simulador.js"></script>
+  <style>
+    .sim-barra .btn-inserir { white-space: nowrap; }
+
+    body.sim-pagina { --sim-fonte-no: 1.15rem; }
+    body.sim-apresentacao { --sim-fonte-no: 1.5rem; }
+
+    #palco { --ll-dur: 800ms; --ll-flash: 1800ms; }
+
+    #velocidade { width: 8rem; accent-color: var(--coral); cursor: pointer; }
+    #velocidadeValor {
+      min-width: 3.2rem;
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: .9rem;
+      color: var(--cinza);
+    }
+    body.sim-apresentacao #velocidade { width: 11rem; height: 28px; }
+    body.sim-apresentacao #velocidadeValor { font-size: 1.15rem; }
+
+    .ll-no, .ll-desc {
+      cursor: default;
+      z-index: 2;
+      transition: left var(--ll-dur) ease-in-out, top var(--ll-dur) ease-in-out, opacity var(--ll-dur) ease;
+    }
+    .ll-desc { align-items: flex-start; }
+    .ll-desc .sim-end { white-space: nowrap; }
+    .ll-desc .sim-end b { font-size: 1.2em; }
+
+    .ll-badges {
+      min-height: 1.9em;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .ll-badge {
+      visibility: hidden;
+      font-size: 1.15em;
+      font-weight: 800;
+      letter-spacing: .06em;
+      line-height: 1.4;
+      color: #fff;
+      background: var(--coral);
+      border-radius: 999px;
+      padding: .05em .7em;
+    }
+    .ll-no.novo .ll-badge { visibility: visible; }
+
+    .ll-moldura, .ll-aux {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      pointer-events: none;
+      font-size: var(--sim-fonte-no, .9rem);
+      transition: left var(--ll-dur) ease-in-out, top var(--ll-dur) ease-in-out,
+                  width var(--ll-dur) ease-in-out, height var(--ll-dur) ease-in-out, opacity var(--ll-dur) ease;
+    }
+    .ll-moldura {
+      z-index: 1;
+      border: 4px solid var(--coral);
+      border-radius: 18px;
+      background: rgba(224, 111, 114, .10);
+    }
+    .ll-moldura-rotulo {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-bottom: .1em;
+      line-height: 1.1;
+      font-size: 1.6em;
+      font-weight: 800;
+      letter-spacing: .04em;
+      color: var(--coral);
+      white-space: nowrap;
+    }
+    .ll-aux {
+      z-index: 3;
+      border: 4px solid #2f6fb5;
+      border-radius: 14px;
+      background: rgba(47, 111, 181, .22);
+    }
+    .ll-aux-rotulo {
+      position: absolute;
+      top: .1em;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.5em;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #fff;
+      background: #2f6fb5;
+      border-radius: 999px;
+      padding: 0 .6em;
+    }
+
+    .ll-aux.nulo { border-style: dashed; background: rgba(47, 111, 181, .08); }
+    .ll-aux.nulo .ll-aux-rotulo::after { content: ' = NULL'; }
+
+    .btn-percorrer { background: #2f6fb5; color: #fff; }
+    .btn-percorrer:hover:not(:disabled) { background: #4a86c8; }
+    #saidaBtn[aria-pressed="true"] { border-color: #2f6fb5; color: #2f6fb5; }
+
+    .ll-saida {
+      position: absolute;
+      z-index: 10;
+      width: 280px;
+      height: 240px;
+      min-width: 160px;
+      min-height: 110px;
+      display: flex;
+      flex-direction: column;
+      background: var(--papel);
+      border: 2px solid #2f6fb5;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
+      resize: both;
+      overflow: hidden;
+    }
+    .ll-saida[hidden] { display: none; }
+    .ll-saida-topo {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 6px 4px 12px;
+      background: #2f6fb5;
+      color: #fff;
+      cursor: move;
+      touch-action: none;
+      user-select: none;
+    }
+    .ll-saida-titulo { flex: 1 1 auto; font-weight: 700; font-size: 1rem; letter-spacing: .04em; }
+    .ll-saida-topo button {
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: 0;
+      border-radius: 7px;
+      background: rgba(255, 255, 255, .18);
+      color: #fff;
+      font: 700 1.2rem/1 inherit;
+      cursor: pointer;
+    }
+    .ll-saida-topo button:hover { background: rgba(255, 255, 255, .35); }
+    .ll-saida-corpo {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: auto;
+      padding: .3em .6em 1.2em;
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: var(--saida-fonte, 1.8rem);
+      line-height: 1.3;
+      white-space: pre;
+    }
+    .ll-saida-corpo .ll-flash { animation: llFlash var(--ll-flash) ease-out; border-radius: 6px; }
+    body.sim-apresentacao .ll-saida-titulo { font-size: 1.3rem; }
+    body.sim-apresentacao .ll-saida-topo button { width: 40px; height: 40px; font-size: 1.5rem; }
+
+    .ll-area { flex: 1 1 auto; min-height: 0; display: flex; }
+    .ll-area > .sim-palco { flex: 1 1 auto; min-width: 0; }
+    .ll-codigo {
+      flex: 0 0 auto;
+      width: 36%;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--fundo);
+    }
+    .ll-codigo-topo {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px 4px 12px;
+      background: var(--papel);
+      border-bottom: 1px solid var(--linha);
+    }
+    .ll-codigo-titulo {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 700;
+      font-size: .95rem;
+      color: var(--cinza);
+    }
+    .ll-codigo-topo button {
+      flex: 0 0 auto;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: 1.5px solid var(--bege);
+      border-radius: 8px;
+      background: var(--papel);
+      color: var(--cinza);
+      font: 700 1.1rem/1 inherit;
+      cursor: pointer;
+    }
+    .ll-codigo-topo button:hover { border-color: var(--cinza); color: var(--texto); }
+    .ll-codigo-corpo {
+      position: relative;
+      flex: 1 1 auto;
+      min-height: 0;
+      margin: 0;
+      padding: .6rem 0;
+      overflow: auto;
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: var(--codigo-fonte, 1.1rem);
+      line-height: 1.45;
+    }
+    .ll-codigo-vazio { display: block; padding: 0 1rem; white-space: normal; font-family: inherit; color: var(--muted); font-size: .8em; }
+    .ll-cl {
+      display: flex;
+      gap: .9em;
+      width: max-content;
+      min-width: 100%;
+      padding: .1em 1em .1em .7em;
+      border-left: 4px solid transparent;
+      white-space: pre;
+      transition: background var(--ll-dur) ease;
+    }
+    .ll-cl .n { color: var(--muted); min-width: 1.6em; text-align: right; user-select: none; }
+    .ll-cl.ativa { background: rgba(224, 111, 114, .22); border-left-color: var(--coral); font-weight: 700; }
+    .ll-divisor {
+      flex: 0 0 8px;
+      cursor: col-resize;
+      background: var(--linha);
+      border-left: 1px solid var(--bege);
+      border-right: 1px solid var(--bege);
+      touch-action: none;
+    }
+    .ll-divisor:hover, .ll-divisor.ativo { background: var(--coral); }
+    body.sim-apresentacao .ll-codigo-titulo { font-size: 1.2rem; }
+    body.sim-apresentacao .ll-codigo-topo button { width: 42px; height: 42px; font-size: 1.4rem; }
+    body.sim-apresentacao .ll-codigo-corpo { font-size: var(--codigo-fonte, 1.5rem); }
+
+    .ll-moldura-fim { border: 4px dashed #3d8b5f; background: rgba(61, 139, 95, .08); }
+    .ll-moldura-fim .ll-moldura-rotulo { bottom: auto; top: 100%; margin: 12px 0 0; color: #3d8b5f; }
+
+    .ll-desc .sim-nome, .ll-no .sim-nome { min-width: 5.4em; }
+    .ll-aux-rotulo { white-space: nowrap; }
+
+    .ll-sem-transicao { transition: none !important; }
+
+    .sim-valor.ll-flash { animation: llFlash var(--ll-flash) ease-out; }
+    @keyframes llFlash {
+      0%, 20% { background: #e06f72; color: #fff; }
+      100% { background: transparent; }
+    }
+  </style>
+</head>
+<body class="sim-pagina">
+
+<header class="topo">
+  <div class="wrap">
+    <a class="nome" href="../../index.html"><img src="../../assets/logo.svg" alt="Prof. Rafael"></a>
+    <div class="crumb" aria-label="Trilha de navegação">
+      <a href="../../ensino.html">Ensino</a><span class="sep">›</span>
+      <a href="../../ensino.html">Estruturas de Dados I</a><span class="sep">›</span>
+      <span>Lista Circular</span><span class="sep">›</span>
+      <span class="atual">Inserção (código)</span>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="../../index.html">Início</a></li>
+        <li><a href="../../projetos.html">Projetos</a></li>
+        <li><a href="../../curriculo.html">Currículo</a></li>
+        <li><a href="../../ensino.html" class="ativo">Ensino</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="sim-barra">
+
+    <div class="sim-grupo">
+      <label for="valor">Valor (info)</label>
+      <input type="number" id="valor" value="10" step="1">
+    </div>
+
+    <div class="sim-grupo">
+      <button class="btn-inserir" id="inserirInicioBtn" data-op="inicio">Inserir no início</button>
+      <button class="btn-inserir" id="inserirFimBtn" data-op="fim">Inserir no fim</button>
+      <button class="btn-inserir btn-percorrer" id="percorrerBtn" data-op="percorrer">Percorrer</button>
+    </div>
+
+    <div class="sim-grupo">
+      <button class="icon-btn" id="voltarBtn" disabled title="Passo anterior" aria-label="Passo anterior">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 5.5v13L9 12zM7 5H4.8v14H7z"/></svg>
+      </button>
+      <button class="icon-btn" id="playBtn" disabled title="Reproduzir" aria-label="Reproduzir"></button>
+      <button class="icon-btn" id="proximoBtn" disabled title="Próximo passo" aria-label="Próximo passo">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 5.5v13l10-6.5zM17 5h2.2v14H17z"/></svg>
+      </button>
+      <button class="icon-btn" id="concluirBtn" disabled title="Concluir" aria-label="Concluir">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg>
+      </button>
+      <button class="icon-btn perigo" id="limparBtn" title="Limpar a lista" aria-label="Limpar a lista">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v6M14 11v6"/></svg>
+      </button>
+    </div>
+
+    <div class="sim-grupo">
+      <label for="velocidade">Velocidade</label>
+      <input type="range" id="velocidade" min="1" max="2.5" step="0.25" value="1">
+      <span id="velocidadeValor">1x</span>
+    </div>
+
+    <div class="sim-grupo">
+      <button class="zoom-btn" id="zoomOutBtn" title="Reduzir zoom" aria-label="Reduzir zoom">−</button>
+      <div id="zoomValor" role="button" tabindex="0" title="Clique para voltar a 100%">100%</div>
+      <button class="zoom-btn" id="zoomInBtn" title="Aumentar zoom" aria-label="Aumentar zoom">+</button>
+    </div>
+
+    <div class="sim-grupo">
+      <button class="icon-btn com-texto" id="saidaBtn" aria-pressed="false" title="Mostrar/ocultar o painel de saída" aria-label="Mostrar/ocultar o painel de saída">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M12 15h5"/></svg>
+        Saída
+      </button>
+      <button class="icon-btn com-texto" id="apresentacaoBtn" title="Modo apresentação (Esc para sair)" aria-label="Modo apresentação (Esc para sair)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4" width="19" height="12" rx="2"/><path d="M12 16v3.5"/><path d="M8.5 20.5h7"/></svg>
+        <span id="apresentacaoTexto">Apresentação</span>
+      </button>
+    </div>
+
+    <div class="sim-grupo sim-msg">
+      <p id="msg">Digite um valor e escolha "Inserir no início" ou "Inserir no fim".</p>
+    </div>
+
+  </div>
+
+  <div class="ll-area">
+  <section class="ll-codigo" id="codigoPainel">
+    <div class="ll-codigo-topo">
+      <span class="ll-codigo-titulo" id="codigoTitulo">Código</span>
+      <button type="button" id="codigoMais" title="Aumentar fonte do código" aria-label="Aumentar fonte do código">+</button>
+      <button type="button" id="codigoMenos" title="Diminuir fonte do código" aria-label="Diminuir fonte do código">−</button>
+    </div>
+    <pre class="ll-codigo-corpo" id="codigo"><span class="ll-codigo-vazio">Escolha uma operação para abrir o código.</span></pre>
+  </section>
+  <div class="ll-divisor" id="divisor" role="separator" aria-orientation="vertical" aria-label="Redimensionar painel de código" tabindex="0"></div>
+  <div class="sim-palco" id="palco">
+    <div class="ll-saida" id="saida" hidden>
+      <div class="ll-saida-topo" id="saidaTopo">
+        <span class="ll-saida-titulo">Saída</span>
+        <button type="button" id="saidaMais" title="Aumentar fonte" aria-label="Aumentar fonte">+</button>
+        <button type="button" id="saidaMenos" title="Diminuir fonte" aria-label="Diminuir fonte">−</button>
+        <button type="button" id="saidaFechar" title="Ocultar saída" aria-label="Ocultar saída">×</button>
+      </div>
+      <div class="ll-saida-corpo" id="saidaCorpo"></div>
+    </div>
+  </div>
+  </div>
+
+</main>
+
+<footer class="rodape">© Prof. Rafael · Universidade Federal do Tocantins</footer>
+
+<script>
+(function () {
+  // ---------- Constantes e estado ----------
+  var fmtEnd = SimLista.fmtEnd;
+  var DESC_NOME = 'TCircList';
+  var DESC_CAMPOS = ['inicio'];
+  var NO_CAMPOS = ['info', 'prox'];
+  var NO_PONTEIROS = ['prox'];
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+  var DESC = 0x100;
+  var BASE = 0x110;
+  var TOPO = 10;
+  var ESQ = 10;
+  var FP = 16;
+  var AP = 6;
+  var GAP = 90;
+  var MOVER_MS = 800;
+  var FLASH_MS = 1800;
+  var PASSO_MS = 1900;
+
+  var heapCount = 0;
+  var base = vazio();
+  var atual = base;
+  var op = null;
+  var tocando = false;
+  var timer = null;
+  var velocidade = 1;
+  var zoom = 1;
+  var msgManual = null;
+
+  function vazio() {
+    return { inicio: null, nos: {}, pos: {}, frame: null, fim: null, fimFrame: null, aux: null, auxNome: 'aux', auxNulo: false, novo: null, saida: [], texto: '' };
+  }
+  function clonar(s) { return JSON.parse(JSON.stringify(s)); }
+
+  function cadeiaDe(s) {
+    var c = [];
+    var vistos = {};
+    var cur = s.inicio;
+    while (typeof cur === 'number' && s.nos[cur] && !vistos[cur]) {
+      vistos[cur] = true;
+      c.push(cur);
+      cur = s.nos[cur].prox;
+    }
+    return c;
+  }
+
+  // ---------- Código-fonte das operações ----------
+  var CODIGOS = {
+    inicio: [
+      'void TCircList_inserir_inicio(TCircList* lista, int valor){',
+      '    TNo* novo = malloc(sizeof(TNo));',
+      '    novo->info = valor;',
+      '    if(lista->inicio == NULL){',
+      '        novo->prox = novo;',
+      '        lista->inicio = novo;',
+      '    }else{',
+      '        TNo* aux = lista->inicio;',
+      '        while(aux->prox != lista->inicio){',
+      '            aux = aux->prox;',
+      '        }',
+      '        novo->prox = lista->inicio;',
+      '        aux->prox = novo;',
+      '        lista->inicio = novo;',
+      '    }',
+      '}'
+    ],
+    fim: [
+      'void TCircList_inserir_fim(TCircList* lista, int valor){',
+      '    TNo* novo = malloc(sizeof(TNo));',
+      '    novo->info = valor;',
+      '    if(lista->inicio == NULL){',
+      '        novo->prox = novo;',
+      '        lista->inicio = novo;',
+      '    }else{',
+      '        TNo* aux = lista->inicio;',
+      '        while(aux->prox != lista->inicio){',
+      '            aux = aux->prox;',
+      '        }',
+      '        aux->prox = novo;',
+      '        novo->prox = lista->inicio;',
+      '    }',
+      '}'
+    ],
+    percorrer: [
+      'void TCircList_percorrer(TCircList* lista){',
+      '    if(lista->inicio == NULL) return;',
+      '    TNo* aux = lista->inicio;',
+      '    do{',
+      '        printf("%d\\n", aux->info);',
+      '        aux = aux->prox;',
+      '    }while(aux != lista->inicio);',
+      '}'
+    ]
+  };
+
+  // ---------- Geração dos passos (cada passo é um retrato completo do estado + linha do código) ----------
+  function criarGerador(texto0) {
+    var snaps = [clonar(base)];
+    snaps[0].texto = texto0;
+    snaps[0].linha = 1;
+    return {
+      snaps: snaps,
+      passo: function (linha, texto, fn) {
+        var s = clonar(snaps[snaps.length - 1]);
+        if (fn) fn(s);
+        s.texto = texto;
+        s.linha = linha;
+        snaps.push(s);
+      }
+    };
+  }
+
+  function alocar(passo, a) {
+    passo(2, 'malloc aloca um novo nó em ' + fmtEnd(a) + ' (novo). Seus campos ainda contêm lixo.', function (s) {
+      var no = {};
+      NO_CAMPOS.forEach(function (c) { no[c] = '?'; });
+      s.nos[a] = no;
+      s.pos[a] = 'f';
+      s.novo = a;
+    });
+  }
+
+  function empurrar(s, cadeia, desde, novoId, slot) {
+    cadeia.slice(desde).forEach(function (id) { s.pos[id] += 1; });
+    s.pos[novoId] = slot;
+    ['frame', 'fimFrame', 'aux'].forEach(function (c) {
+      if (typeof s[c] === 'number' && s[c] >= desde) s[c] += 1;
+    });
+  }
+
+  function gerarPercorrerLinear(nome, reverso) {
+    var g = criarGerador('Chamada de ' + nome + '(lista).');
+    var passo = g.passo;
+    var cadeia = cadeiaDe(base);
+    var n = cadeia.length;
+    var ordem = cadeia.map(function (id, i) { return i; });
+    if (reverso) ordem.reverse();
+    var campo = reverso ? 'ant' : 'prox';
+    passo(2, 'aux recebe ' + (reverso ? 'lista->fim' : 'lista->inicio') + (n === 0 ? ', que é NULL.'
+      : ': começa no ' + (reverso ? 'último' : 'primeiro') + ' nó (' + fmtEnd(cadeia[ordem[0]]) + ').'), function (s) {
+      s.saida = [];
+      s.aux = n === 0 ? 0 : ordem[0];
+      s.auxNome = 'aux';
+      s.auxNulo = n === 0;
+    });
+    ordem.forEach(function (i, k) {
+      var info = base.nos[cadeia[i]].info;
+      var proxIdx = k + 1 < n ? ordem[k + 1] : (reverso ? -1 : n);
+      var proxEnd = k + 1 < n ? cadeia[ordem[k + 1]] : null;
+      passo(3, 'aux != NULL? Sim: entra no laço.');
+      passo(4, 'printf imprime aux->info (' + info + ').', function (s) { s.saida.push(String(info)); });
+      passo(5, 'aux = aux->' + campo + ' (' + fmtEnd(proxEnd) + ').', function (s) {
+        s.aux = proxIdx;
+        s.auxNulo = proxEnd === null;
+      });
+    });
+    passo(3, 'aux != NULL? Não: aux é NULL, o laço termina.');
+    passo(7, 'Percurso concluído.', function (s) { s.aux = null; s.auxNulo = false; });
+    return g.snaps;
+  }
+
+  function gerarPercorrer() {
+    var g = criarGerador('Chamada de TCircList_percorrer(lista).');
+    var passo = g.passo;
+    var cadeia = cadeiaDe(base);
+    var n = cadeia.length;
+    if (n === 0) {
+      passo(2, 'lista->inicio == NULL? Sim: a lista está vazia, a função retorna.', function (s) { s.saida = []; });
+      passo(8, 'Percurso concluído (nada a imprimir).');
+      return g.snaps;
+    }
+    passo(2, 'lista->inicio == NULL? Não: a lista tem nós.', function (s) { s.saida = []; });
+    passo(3, 'aux recebe lista->inicio: começa no primeiro nó (' + fmtEnd(cadeia[0]) + ').', function (s) {
+      s.aux = 0;
+      s.auxNome = 'aux';
+      s.auxNulo = false;
+    });
+    cadeia.forEach(function (id, k) {
+      var info = base.nos[id].info;
+      var prox = (k + 1) % n;
+      if (k === 0) passo(4, 'do: entra no laço sem testar a condição.');
+      else passo(7, 'aux != lista->inicio? Sim: repete o laço.');
+      passo(5, 'printf imprime aux->info (' + info + ').', function (s) { s.saida.push(String(info)); });
+      passo(6, 'aux = aux->prox (' + fmtEnd(cadeia[prox]) + ')' +
+        (prox === 0 ? ': o último nó aponta de volta para o primeiro.' : '.'), function (s) { s.aux = prox; });
+    });
+    passo(7, 'aux != lista->inicio? Não: aux voltou ao início, o laço termina.');
+    passo(8, 'Percurso concluído.', function (s) { s.aux = null; });
+    return g.snaps;
+  }
+
+  function gerarPassos(tipo, valor) {
+    if (tipo === 'percorrer') return gerarPercorrer();
+    var g = criarGerador('Chamada de TCircList_inserir_' + tipo + '(lista, ' + valor + ').');
+    var passo = g.passo;
+    var a = BASE + (heapCount++) * 0x10;
+    var cadeia = cadeiaDe(base);
+    var n = cadeia.length;
+    var fimFuncao = tipo === 'inicio' ? 16 : 15;
+    var nomeOp = tipo === 'inicio' ? 'início' : 'fim';
+
+    alocar(passo, a);
+    passo(3, 'novo->info recebe ' + valor + '.', function (s) { s.nos[a].info = valor; });
+    if (n === 0) {
+      passo(4, 'lista->inicio == NULL? Sim: a lista está vazia.');
+      passo(5, 'novo->prox = novo: com um único nó, ele aponta para si mesmo.', function (s) { s.nos[a].prox = a; });
+      passo(6, 'O novo nó vai para a primeira posição da lista.', function (s) { s.pos[a] = 0; });
+      passo(6, 'lista->inicio = novo (' + fmtEnd(a) + ').', function (s) {
+        s.inicio = a;
+        s.frame = 0;
+      });
+      passo(fimFuncao, 'Inserção no ' + nomeOp + ' concluída.', function (s) { s.novo = null; });
+      return g.snaps;
+    }
+    passo(4, 'lista->inicio == NULL? Não: vai para o else.');
+    passo(8, 'aux recebe lista->inicio: começa no primeiro nó (' + fmtEnd(cadeia[0]) + ').', function (s) {
+      s.aux = 0;
+      s.auxNome = 'aux';
+      s.auxNulo = false;
+    });
+    cadeia.slice(1).forEach(function (id, k) {
+      passo(9, 'aux->prox != lista->inicio? Sim: entra no laço.');
+      passo(10, 'aux = aux->prox (' + fmtEnd(id) + ').', function (s) { s.aux = k + 1; });
+    });
+    passo(9, 'aux->prox != lista->inicio? Não: aux está no último nó (ele aponta de volta para o início).');
+    var ultimo = cadeia[n - 1];
+    if (tipo === 'inicio') {
+      passo(12, 'novo->prox recebe lista->inicio (' + fmtEnd(base.inicio) + '): o novo nó aponta para o atual primeiro nó.', function (s) {
+        s.nos[a].prox = base.inicio;
+      });
+      passo(13, 'aux->prox = novo: o último nó passa a apontar para o novo nó, fechando o círculo.', function (s) {
+        s.nos[ultimo].prox = a;
+      });
+      passo(14, 'Abre espaço: os nós são empurrados para a direita e o novo nó ocupa a primeira posição.', function (s) {
+        empurrar(s, cadeia, 0, a, 0);
+      });
+      passo(14, 'lista->inicio = novo (' + fmtEnd(a) + '). Ele agora é o início da lista.', function (s) {
+        s.inicio = a;
+        s.frame = 0;
+      });
+    } else {
+      passo(12, 'aux->prox = novo: o último nó passa a apontar para o novo nó, que vai para o fim da lista.', function (s) {
+        s.nos[ultimo].prox = a;
+        s.pos[a] = n;
+      });
+      passo(13, 'novo->prox recebe lista->inicio (' + fmtEnd(base.inicio) + '): o novo último nó aponta de volta para o início.', function (s) {
+        s.nos[a].prox = base.inicio;
+      });
+    }
+    passo(fimFuncao, 'Inserção no ' + nomeOp + ' concluída.', function (s) {
+      s.novo = null;
+      s.aux = null;
+    });
+    return g.snaps;
+  }
+
+  // ---------- Palco ----------
+  var palcoEl = document.getElementById('palco');
+  var viewport = document.createElement('div');
+  viewport.className = 'sim-viewport';
+  var molde = document.createElement('div');
+  molde.className = 'sim-molde';
+  var camada = document.createElement('div');
+  camada.className = 'sim-camada';
+  camada.style.transform = 'scale(1)';
+  var svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('class', 'sim-setas');
+  svg.innerHTML = '<defs><marker id="ll-marcador" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto">' +
+    '<path d="M0,0 L10,5 L0,10 z" style="fill:var(--cinza)"/></marker></defs><g></g>';
+  var setasG = svg.querySelector('g');
+  camada.appendChild(svg);
+  molde.appendChild(camada);
+  viewport.appendChild(molde);
+  palcoEl.appendChild(viewport);
+
+  var descEl = document.createElement('div');
+  descEl.className = 'sim-no desc ll-desc';
+  descEl.innerHTML = '<div class="sim-end"><b>lista</b> · ' + DESC_NOME + ' · ' + fmtEnd(DESC) + '</div>' +
+    '<div class="sim-caixa">' + DESC_CAMPOS.map(function (c) {
+      return '<div class="sim-campo"><span class="sim-nome">' + c + '</span><span class="sim-valor sim-para" data-campo="' + c + '">NULL</span></div>';
+    }).join('') + '</div>';
+  camada.appendChild(descEl);
+
+  var frameEl = document.createElement('div');
+  frameEl.className = 'll-moldura';
+  frameEl.innerHTML = '<span class="ll-moldura-rotulo">início</span>';
+  camada.appendChild(frameEl);
+
+  var fimEl = document.createElement('div');
+  fimEl.className = 'll-moldura ll-moldura-fim';
+  fimEl.innerHTML = '<span class="ll-moldura-rotulo">fim</span>';
+  camada.appendChild(fimEl);
+
+  var auxEl = document.createElement('div');
+  auxEl.className = 'll-aux';
+  auxEl.innerHTML = '<span class="ll-aux-rotulo">aux</span>';
+  var auxRotulo = auxEl.querySelector('.ll-aux-rotulo');
+  camada.appendChild(auxEl);
+
+  var els = {};
+
+  function duracao() { return MOVER_MS / velocidade; }
+
+  function criarNo(addr) {
+    var el = document.createElement('div');
+    el.className = 'sim-no ll-no';
+    el.innerHTML = '<div class="ll-badges"><span class="ll-badge">novo</span></div>' +
+      '<div class="sim-end">' + fmtEnd(addr) + '</div>' +
+      '<div class="sim-caixa">' + NO_CAMPOS.map(function (c) {
+        return '<div class="sim-campo"><span class="sim-nome">' + c + '</span><span class="sim-valor" data-campo="' + c + '"></span></div>';
+      }).join('') + '</div>';
+    camada.appendChild(el);
+    return el;
+  }
+
+  function setValor(span, texto, lixo, flash) {
+    if (span.textContent === texto) return;
+    span.textContent = texto;
+    span.classList.toggle('sim-lixo', lixo);
+    span.classList.toggle('sim-para', texto === 'NULL');
+    if (flash) {
+      span.classList.remove('ll-flash');
+      void span.offsetWidth;
+      span.classList.add('ll-flash');
+    }
+  }
+
+  function renderizar(s) {
+    var novos = [];
+    Object.keys(els).forEach(function (k) {
+      if (s.nos[k]) return;
+      var el = els[k];
+      delete els[k];
+      el.style.opacity = '0';
+      setTimeout(function () { el.remove(); }, duracao());
+    });
+    Object.keys(s.nos).forEach(function (k) {
+      var el = els[k];
+      var criado = !el;
+      if (criado) {
+        el = els[k] = criarNo(Number(k));
+        novos.push(el);
+      }
+      var n = s.nos[k];
+      NO_CAMPOS.forEach(function (c) {
+        var val = n[c];
+        setValor(el.querySelector('[data-campo=' + c + ']'), val === '?' ? '?' : (c === 'info' ? String(val) : fmtEnd(val)), val === '?', !criado);
+      });
+      el.classList.toggle('novo', s.novo !== null && Number(k) === s.novo);
+    });
+    DESC_CAMPOS.forEach(function (c) {
+      setValor(descEl.querySelector('[data-campo=' + c + ']'), fmtEnd(s[c]), false, true);
+    });
+    auxEl.classList.toggle('nulo', !!s.auxNulo);
+    auxRotulo.textContent = s.auxNome || 'aux';
+    renderSaida(s.saida || []);
+    renderCodigo(s.linha);
+    atual = s;
+    posicionar(novos);
+  }
+
+  function medidas() {
+    var m = { descW: descEl.offsetWidth, descH: descEl.offsetHeight, W: 0, H: 0 };
+    Object.keys(els).forEach(function (k) {
+      m.W = Math.max(m.W, els[k].offsetWidth);
+      m.H = Math.max(m.H, els[k].offsetHeight);
+    });
+    if (!m.W) { m.W = 180; m.H = 140; }
+    return m;
+  }
+
+  function posicionarCaixa(el, slot, xSlot, y, m, pad) {
+    if (slot === null || slot === undefined) {
+      el.style.opacity = '0';
+      return;
+    }
+    var visivel = el.style.opacity === '1';
+    if (!visivel) el.classList.add('ll-sem-transicao');
+    el.style.left = (xSlot(slot) - pad) + 'px';
+    el.style.top = (y - pad) + 'px';
+    el.style.width = (m.W + 2 * pad) + 'px';
+    el.style.height = (m.H + 2 * pad) + 'px';
+    if (!visivel) {
+      void el.offsetWidth;
+      el.classList.remove('ll-sem-transicao');
+    }
+    el.style.opacity = '1';
+  }
+
+  function posicionar(novos) {
+    var s = atual;
+    var m = medidas();
+    descEl.style.left = ESQ + 'px';
+    descEl.style.top = TOPO + 'px';
+    var linhaY = TOPO + Math.max(m.descH, m.H) + 70 + FP;
+    var off = typeof s.aux === 'number' && s.aux < 0 ? -s.aux : 0;
+    var xSlot = function (i) { return ESQ + FP + (i + off) * (m.W + GAP); };
+    var xFlut = ESQ + m.descW + GAP;
+    var maxX = ESQ + m.descW;
+    var maxY = TOPO + m.descH;
+
+    Object.keys(s.nos).forEach(function (k) {
+      var el = els[k];
+      var p = s.pos[k];
+      var x = p === 'f' ? xFlut : xSlot(p);
+      var y = p === 'f' ? TOPO : linhaY;
+      if (novos.indexOf(el) !== -1) {
+        el.classList.add('ll-sem-transicao');
+        el.style.opacity = '0';
+      }
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      maxX = Math.max(maxX, x + m.W);
+      maxY = Math.max(maxY, y + m.H + FP + 70);
+    });
+    novos.forEach(function (el) {
+      void el.offsetWidth;
+      el.classList.remove('ll-sem-transicao');
+      el.style.opacity = '1';
+    });
+
+    posicionarCaixa(frameEl, s.frame, xSlot, linhaY, m, FP);
+    posicionarCaixa(fimEl, s.fimFrame, xSlot, linhaY, m, FP - 8);
+    posicionarCaixa(auxEl, s.aux, xSlot, linhaY, m, AP);
+    if (s.aux !== null) maxX = Math.max(maxX, xSlot(s.aux) + m.W + AP);
+
+    var w = maxX + 60;
+    var h = maxY + 20;
+    molde.style.width = w * zoom + 'px';
+    molde.style.height = h * zoom + 'px';
+    svg.setAttribute('width', String(w));
+    svg.setAttribute('height', String(h));
+    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+    animarSetas(duracao() + 150);
+  }
+
+  // ---------- Setas (ponteiros) ----------
+  function desenharSetas() {
+    while (setasG.firstChild) setasG.removeChild(setasG.firstChild);
+    var c = camada.getBoundingClientRect();
+    var z = zoom;
+    function rel(r) {
+      return { l: (r.left - c.left) / z, t: (r.top - c.top) / z, r: (r.right - c.left) / z, b: (r.bottom - c.top) / z, w: r.width / z, h: r.height / z };
+    }
+    Object.keys(atual.nos).forEach(function (k) {
+      if (!els[k]) return;
+      var o = rel(els[k].querySelector('.sim-caixa').getBoundingClientRect());
+      NO_PONTEIROS.forEach(function (campo) {
+        var alvo = atual.nos[k][campo];
+        if (typeof alvo !== 'number' || !els[alvo]) return;
+        var f = rel(els[k].querySelector('[data-campo=' + campo + ']').getBoundingClientRect());
+        var d = rel(els[alvo].querySelector('.sim-caixa').getBoundingClientRect());
+        var sy = f.t + f.h / 2;
+        var ry = Math.min(d.b - 8, Math.max(d.t + 8, d.t + (sy - o.t)));
+        var sx, ex, ey, c1x, c1y, c2x, c2y;
+        if (campo === 'ant') {
+          sx = o.l;
+          if (d.r < sx - 6) {
+            ex = d.r; ey = ry;
+            c1x = (sx + ex) / 2; c1y = sy;
+            c2x = (sx + ex) / 2; c2y = ey;
+          } else if (d.b < o.t) {
+            ex = d.l + d.w / 2; ey = d.b;
+            c1x = sx - 60; c1y = sy;
+            c2x = ex; c2y = d.b + 80;
+          } else {
+            ex = d.l; ey = ry;
+            c1x = sx - 60; c1y = sy;
+            c2x = ex - 60; c2y = ey;
+          }
+        } else {
+          sx = o.r;
+          if (d.l - sx > 6) {
+            ex = d.l; ey = ry;
+            c1x = (sx + ex) / 2; c1y = sy;
+            c2x = (sx + ex) / 2; c2y = ey;
+          } else if (d.b < o.t) {
+            ex = d.l + d.w / 2; ey = d.b;
+            c1x = sx + 60; c1y = sy;
+            c2x = ex; c2y = d.b + 80;
+          } else if (d.t > o.b) {
+            ex = d.l + d.w / 2; ey = d.t;
+            c1x = sx + 60; c1y = sy;
+            c2x = ex; c2y = d.t - 80;
+          } else {
+            var fundo = Math.max(o.b, d.b) + 90;
+            ex = d.l + d.w / 2; ey = d.b;
+            c1x = sx + 90; c1y = fundo;
+            c2x = ex; c2y = fundo;
+          }
+        }
+        var p = document.createElementNS(SVG_NS, 'path');
+        p.setAttribute('d', 'M' + sx + ' ' + sy + ' C' + c1x + ' ' + c1y + ' ' + c2x + ' ' + c2y + ' ' + ex + ' ' + ey);
+        p.setAttribute('class', 'sim-seta');
+        p.setAttribute('marker-end', 'url(#ll-marcador)');
+        setasG.appendChild(p);
+      });
+    });
+  }
+
+  var fimSetas = 0;
+  var rafSetas = null;
+  function animarSetas(ms) {
+    fimSetas = Math.max(fimSetas, performance.now() + ms);
+    if (rafSetas) return;
+    var tick = function () {
+      desenharSetas();
+      rafSetas = performance.now() < fimSetas ? requestAnimationFrame(tick) : null;
+    };
+    rafSetas = requestAnimationFrame(tick);
+  }
+
+  // ---------- Reprodução ----------
+  var ICONE_PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5v14l12-7z"/></svg>';
+  var ICONE_PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>';
+
+  function ultimoIdx() { return op ? op.snaps.length - 1 : 0; }
+
+  function irPara(i) {
+    op.i = i;
+    renderizar(op.snaps[i]);
+    renderUI();
+  }
+
+  function agendar() {
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      if (!tocando || !op) return;
+      if (op.i < ultimoIdx()) irPara(op.i + 1);
+      if (op.i >= ultimoIdx()) pausar();
+      else agendar();
+    }, PASSO_MS / velocidade);
+  }
+
+  function tocar() {
+    if (!op || op.i >= ultimoIdx()) return;
+    tocando = true;
+    agendar();
+    renderUI();
+  }
+
+  function pausar() {
+    tocando = false;
+    clearTimeout(timer);
+    renderUI();
+  }
+
+  function proximo() {
+    if (!op) return;
+    pausar();
+    if (op.i < ultimoIdx()) irPara(op.i + 1);
+  }
+
+  function voltar() {
+    if (!op) return;
+    pausar();
+    if (op.i > 0) irPara(op.i - 1);
+  }
+
+  function concluirTudo() {
+    if (!op) return;
+    pausar();
+    if (op.i < ultimoIdx()) irPara(ultimoIdx());
+  }
+
+  function iniciarOperacao(tipo) {
+    var v = document.getElementById('valor').value.trim();
+    if (tipo.indexOf('percorrer') !== 0 && (v === '' || !Number.isInteger(Number(v)))) {
+      setMsg('Digite um número inteiro.', true);
+      return;
+    }
+    if (op) {
+      pausar();
+      if (op.i < ultimoIdx()) irPara(ultimoIdx());
+      base = clonar(op.snaps[ultimoIdx()]);
+      base.novo = null;
+      base.aux = null;
+      base.auxNulo = false;
+    }
+    if (tipo.indexOf('percorrer') === 0) mostrarSaida(true);
+    op = { tipo: tipo, snaps: null, i: 0 };
+    abrirCodigo(tipo);
+    op.snaps = gerarPassos(tipo, Number(v));
+    setMsg('');
+    irPara(0);
+    tocar();
+  }
+
+  // ---------- Interface ----------
+  function renderUI() {
+    var fim = !op || op.i >= ultimoIdx();
+    document.getElementById('voltarBtn').disabled = !op || op.i === 0;
+    document.getElementById('proximoBtn').disabled = fim;
+    document.getElementById('concluirBtn').disabled = fim;
+    var play = document.getElementById('playBtn');
+    play.disabled = fim;
+    var rotulo = tocando ? 'Pausar' : 'Reproduzir';
+    if (play.getAttribute('data-estado') !== rotulo) {
+      play.innerHTML = tocando ? ICONE_PAUSE : ICONE_PLAY;
+      play.setAttribute('data-estado', rotulo);
+      play.title = rotulo;
+      play.setAttribute('aria-label', rotulo);
+    }
+    renderMsg();
+  }
+
+  function renderMsg() {
+    if (msgManual) return;
+    var m = document.getElementById('msg');
+    m.classList.remove('erro');
+    if (!op) {
+      m.textContent = 'Digite um valor e escolha "Inserir no início" ou "Inserir no fim".';
+    } else if (op.i === 0 || op.i >= ultimoIdx()) {
+      m.textContent = op.snaps[op.i].texto;
+    } else {
+      m.textContent = 'Passo ' + op.i + ' de ' + (ultimoIdx() - 1) + ' — ' + op.snaps[op.i].texto;
+    }
+  }
+
+  function setMsg(t, erro) {
+    msgManual = t === '' ? null : { t: t, erro: !!erro };
+    var m = document.getElementById('msg');
+    m.textContent = t;
+    m.classList.toggle('erro', !!erro);
+    if (!msgManual) renderMsg();
+  }
+
+  // ---------- Painel de código ----------
+  var codigoEl = document.getElementById('codigo');
+  var codigoPainel = document.getElementById('codigoPainel');
+  var codigoAberto = null;
+
+  function abrirCodigo(tipo) {
+    if (codigoAberto === tipo) return;
+    codigoAberto = tipo;
+    codigoEl.innerHTML = '';
+    CODIGOS[tipo].forEach(function (txt, i) {
+      var d = document.createElement('div');
+      d.className = 'll-cl';
+      var num = document.createElement('span');
+      num.className = 'n';
+      num.textContent = i + 1;
+      var c = document.createElement('span');
+      c.textContent = txt || ' ';
+      d.appendChild(num);
+      d.appendChild(c);
+      codigoEl.appendChild(d);
+    });
+    document.getElementById('codigoTitulo').textContent = CODIGOS[tipo][0].replace(/^void\s+|\s*\{$/g, '');
+  }
+
+  function renderCodigo(linha) {
+    var linhas = codigoEl.querySelectorAll('.ll-cl');
+    for (var i = 0; i < linhas.length; i++) {
+      var ativa = i + 1 === linha;
+      linhas[i].classList.toggle('ativa', ativa);
+      if (ativa) {
+        var lt = linhas[i].offsetTop;
+        if (lt < codigoEl.scrollTop || lt + linhas[i].offsetHeight > codigoEl.scrollTop + codigoEl.clientHeight) {
+          codigoEl.scrollTop = lt - codigoEl.clientHeight / 3;
+        }
+      }
+    }
+  }
+
+  function mudarFonteCodigo(delta) {
+    var atualPx = parseFloat(getComputedStyle(codigoEl).fontSize) || 16;
+    codigoPainel.style.setProperty('--codigo-fonte', Math.min(64, Math.max(10, atualPx + delta)) + 'px');
+  }
+  document.getElementById('codigoMais').addEventListener('click', function () { mudarFonteCodigo(2); });
+  document.getElementById('codigoMenos').addEventListener('click', function () { mudarFonteCodigo(-2); });
+
+  var divisor = document.getElementById('divisor');
+  function ajustarLarguraCodigo(px) {
+    var area = codigoPainel.parentNode.clientWidth;
+    var w = Math.min(area - 160, Math.max(120, px));
+    codigoPainel.style.width = w + 'px';
+    var sx = parseFloat(saidaEl.style.left);
+    if (!saidaEl.hidden && !isNaN(sx)) limitarSaida(sx, parseFloat(saidaEl.style.top) || 0);
+  }
+  divisor.addEventListener('pointerdown', function (ev) {
+    if (ev.button !== 0 && ev.pointerType === 'mouse') return;
+    var x0 = ev.clientX;
+    var w0 = codigoPainel.offsetWidth;
+    divisor.classList.add('ativo');
+    try { divisor.setPointerCapture(ev.pointerId); } catch (e) {}
+    var mover = function (e) { ajustarLarguraCodigo(w0 + e.clientX - x0); };
+    var soltar = function () {
+      divisor.classList.remove('ativo');
+      divisor.removeEventListener('pointermove', mover);
+      divisor.removeEventListener('pointerup', soltar);
+      divisor.removeEventListener('pointercancel', soltar);
+    };
+    divisor.addEventListener('pointermove', mover);
+    divisor.addEventListener('pointerup', soltar);
+    divisor.addEventListener('pointercancel', soltar);
+    ev.preventDefault();
+  });
+  divisor.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      e.stopPropagation();
+      ajustarLarguraCodigo(codigoPainel.offsetWidth + (e.key === 'ArrowRight' ? 30 : -30));
+    }
+  });
+
+  // ---------- Painel de saída ----------
+  var saidaEl = document.getElementById('saida');
+  var saidaCorpo = document.getElementById('saidaCorpo');
+  var saidaBtn = document.getElementById('saidaBtn');
+  var saidaFonte = 1.8;
+  var saidaPosicionada = false;
+
+  function renderSaida(linhas) {
+    var atuais = saidaCorpo.children;
+    var antes = atuais.length;
+    while (atuais.length > linhas.length) saidaCorpo.removeChild(saidaCorpo.lastChild);
+    for (var i = 0; i < linhas.length; i++) {
+      var d = atuais[i];
+      if (!d) {
+        d = document.createElement('div');
+        saidaCorpo.appendChild(d);
+      }
+      d.textContent = linhas[i];
+      if (i >= antes) {
+        d.classList.add('ll-flash');
+        saidaCorpo.scrollTop = saidaCorpo.scrollHeight;
+      }
+    }
+  }
+
+  function limitarSaida(x, y) {
+    var maxX = Math.max(0, palcoEl.clientWidth - saidaEl.offsetWidth);
+    var maxY = Math.max(0, palcoEl.clientHeight - saidaEl.offsetHeight);
+    saidaEl.style.left = Math.min(maxX, Math.max(0, x)) + 'px';
+    saidaEl.style.top = Math.min(maxY, Math.max(0, y)) + 'px';
+  }
+
+  function mostrarSaida(mostrar) {
+    saidaEl.hidden = !mostrar;
+    saidaBtn.setAttribute('aria-pressed', mostrar ? 'true' : 'false');
+    if (mostrar && !saidaPosicionada) {
+      saidaPosicionada = true;
+      limitarSaida(palcoEl.clientWidth - saidaEl.offsetWidth - 12, 12);
+    }
+  }
+
+  function mudarFonteSaida(delta) {
+    saidaFonte = Math.min(6, Math.max(0.8, Math.round((saidaFonte + delta) * 10) / 10));
+    saidaEl.style.setProperty('--saida-fonte', saidaFonte + 'rem');
+  }
+
+  saidaBtn.addEventListener('click', function () { mostrarSaida(saidaEl.hidden); });
+  document.getElementById('saidaFechar').addEventListener('click', function () { mostrarSaida(false); });
+  document.getElementById('saidaMais').addEventListener('click', function () { mudarFonteSaida(0.3); });
+  document.getElementById('saidaMenos').addEventListener('click', function () { mudarFonteSaida(-0.3); });
+
+  var saidaTopo = document.getElementById('saidaTopo');
+  saidaTopo.addEventListener('pointerdown', function (ev) {
+    if (ev.target.closest('button')) return;
+    if (ev.button !== 0 && ev.pointerType === 'mouse') return;
+    var dx = ev.clientX - saidaEl.offsetLeft;
+    var dy = ev.clientY - saidaEl.offsetTop;
+    try { saidaTopo.setPointerCapture(ev.pointerId); } catch (e) {}
+    var mover = function (e) { limitarSaida(e.clientX - dx, e.clientY - dy); };
+    var soltar = function () {
+      saidaTopo.removeEventListener('pointermove', mover);
+      saidaTopo.removeEventListener('pointerup', soltar);
+      saidaTopo.removeEventListener('pointercancel', soltar);
+    };
+    saidaTopo.addEventListener('pointermove', mover);
+    saidaTopo.addEventListener('pointerup', soltar);
+    saidaTopo.addEventListener('pointercancel', soltar);
+    ev.preventDefault();
+  });
+
+  // ---------- Velocidade ----------
+  var velInput = document.getElementById('velocidade');
+  function aplicarVelocidade() {
+    velocidade = Number(velInput.value) || 1;
+    palcoEl.style.setProperty('--ll-dur', duracao() + 'ms');
+    palcoEl.style.setProperty('--ll-flash', (FLASH_MS / velocidade) + 'ms');
+    document.getElementById('velocidadeValor').textContent = String(velocidade).replace('.', ',') + 'x';
+  }
+  velInput.addEventListener('input', aplicarVelocidade);
+
+  // ---------- Zoom ----------
+  var zoomValor = document.getElementById('zoomValor');
+  function setZoom(z) {
+    zoom = Math.min(3, Math.max(0.4, Math.round(z * 10) / 10));
+    camada.style.transform = 'scale(' + zoom + ')';
+    zoomValor.textContent = Math.round(zoom * 100) + '%';
+    posicionar([]);
+  }
+  document.getElementById('zoomOutBtn').addEventListener('click', function () { setZoom(zoom - 0.1); });
+  document.getElementById('zoomInBtn').addEventListener('click', function () { setZoom(zoom + 0.1); });
+  zoomValor.addEventListener('click', function () { setZoom(1); });
+  viewport.addEventListener('wheel', function (ev) {
+    if (!ev.ctrlKey) return;
+    ev.preventDefault();
+    setZoom(zoom + (ev.deltaY < 0 ? 0.1 : -0.1));
+  }, { passive: false });
+
+  var redim = null;
+  window.addEventListener('resize', function () {
+    cancelAnimationFrame(redim);
+    redim = requestAnimationFrame(function () { posicionar([]); });
+  });
+
+  // ---------- Controles ----------
+  Array.prototype.forEach.call(document.querySelectorAll('[data-op]'), function (b) {
+    b.addEventListener('click', function () { iniciarOperacao(b.getAttribute('data-op')); });
+  });
+  document.getElementById('voltarBtn').addEventListener('click', voltar);
+  document.getElementById('proximoBtn').addEventListener('click', proximo);
+  document.getElementById('concluirBtn').addEventListener('click', concluirTudo);
+  document.getElementById('playBtn').addEventListener('click', function () {
+    if (tocando) pausar();
+    else tocar();
+  });
+
+  document.getElementById('limparBtn').addEventListener('click', function () {
+    pausar();
+    op = null;
+    heapCount = 0;
+    base = vazio();
+    renderizar(base);
+    renderUI();
+    setMsg('Lista esvaziada.');
+  });
+
+  document.getElementById('valor').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      iniciarOperacao('inicio');
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.target && e.target.tagName === 'INPUT') return;
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      proximo();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      voltar();
+    } else if (e.key === ' ') {
+      e.preventDefault();
+      if (tocando) pausar();
+      else tocar();
+    }
+  });
+
+  // ---------- Modo apresentação ----------
+  new SimLista.ModoApresentacao({
+    botao: document.getElementById('apresentacaoBtn'),
+    onMudar: function (ativo) {
+      document.getElementById('apresentacaoTexto').textContent = ativo ? 'Sair (Esc)' : 'Apresentação';
+      requestAnimationFrame(function () { posicionar([]); });
+    }
+  });
+
+  aplicarVelocidade();
+  renderizar(base);
+  renderUI();
+})();
+</script>
+</body>
+</html>
