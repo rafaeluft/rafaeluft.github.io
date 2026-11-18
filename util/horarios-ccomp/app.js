@@ -40,7 +40,7 @@
   let baseLog = '';
   let conflitos = Core.detectarConflitos(estado);
   const historico = [];
-  const ui = Object.assign({ periodo: 'todos', outroDia: false, sabado: false, logVisivel: false }, lerUi(), { vista: 'horario' });
+  const ui = Object.assign({ periodo: 'todos', outroDia: false, sabado: false, vagas: false, completos: false, logVisivel: false }, lerUi(), { vista: 'horario' });
 
   const versaoAtual = () => porId(store.versoes, store.atualId);
   const modificado = () => !!versaoAtual() && JSON.stringify(estado) !== baseDados;
@@ -106,7 +106,7 @@
   }
   function salvarUi() {
     try {
-      localStorage.setItem(CHAVE_UI, JSON.stringify({ periodo: ui.periodo, outroDia: ui.outroDia, sabado: ui.sabado, logVisivel: ui.logVisivel }));
+      localStorage.setItem(CHAVE_UI, JSON.stringify({ periodo: ui.periodo, outroDia: ui.outroDia, sabado: ui.sabado, vagas: ui.vagas, completos: ui.completos, logVisivel: ui.logVisivel }));
     } catch (e) { /* preferências de tela: sem aviso */ }
   }
 
@@ -172,6 +172,12 @@
       .sort((x, y) => ptSort(disc(x.disciplinaId).curto, disc(y.disciplinaId).curto));
   }
 
+  /* rótulos conforme "Mostrar nomes completos" */
+  const rotDisc = (d) => (ui.completos ? d.nome : d.curto);
+  const rotProf = (p) => (ui.completos ? p.nome : p.curto);
+  const rotSala = (s) => (ui.completos ? s.nome : s.curto);
+  const txtVagas = (d) => d.vagas + (d.vagas === 1 ? ' vaga' : ' vagas');
+
   function detalhesAula(a) {
     const d = disc(a.disciplinaId);
     const s = a.salaId ? sala(a.salaId) : null;
@@ -180,6 +186,7 @@
     return {
       titulo: d.nome + ' (' + d.curto + ')',
       sub: d.periodo + 'º período · ' + diaDe(a.dia).nome + ', ' + t.nome.toLowerCase() + ' (' + t.horario + ')',
+      vagas: String(d.vagas),
       prof: ps.length ? ps.map((p) => p.nome).join(', ') : 'a definir',
       sala: s ? s.nome + ' (' + s.curto + ')' + (s.quantidade != null ? ' · ' + s.quantidade + ' lugares' : '') : 'a definir',
       conflitos: Core.descreverConflitos(estado, conflitos, a),
@@ -203,7 +210,7 @@
       ? '<div class="a-alerta">⚠ conflito: ' + [temProf && 'professor', temSala && 'sala'].filter(Boolean).join(' + ') + '</div>'
       : '';
     const det = detalhesAula(a);
-    const resumo = [det.titulo, det.sub, 'Professor(es): ' + det.prof, 'Sala: ' + det.sala]
+    const resumo = [det.titulo, det.sub, 'Professor(es): ' + det.prof, 'Sala: ' + det.sala, 'Vagas: ' + det.vagas]
       .concat(det.conflitos.map((x) => '⚠ ' + x.texto));
 
     const attrs = interativo
@@ -212,9 +219,10 @@
 
     return (
       '<div class="' + cls.join(' ') + '"' + attrs + '>' +
-        '<div class="a-nome">' + esc(d.curto) + '</div>' +
-        '<div class="a-sala">' + (s ? esc(s.curto) : '<span class="indef">Sala a definir</span>') + '</div>' +
-        '<div class="a-prof">' + (ps.length ? ps.map((p) => esc(p.curto)).join(' / ') : '<span class="indef">Docente a definir</span>') + '</div>' +
+        '<div class="a-nome">' + esc(rotDisc(d)) + '</div>' +
+        '<div class="a-sala">' + (s ? esc(rotSala(s)) : '<span class="indef">Sala a definir</span>') + '</div>' +
+        '<div class="a-prof">' + (ps.length ? ps.map((p) => esc(rotProf(p))).join(' / ') : '<span class="indef">Docente a definir</span>') + '</div>' +
+        (ui.vagas ? '<div class="a-vagas">' + esc(txtVagas(d)) + '</div>' : '') +
         alerta +
       '</div>'
     );
@@ -267,7 +275,7 @@
     for (let i = 0; i < ps.length; i += 2) paginas.push(ps.slice(i, i + 2));
 
     return (
-      '<div class="doc">' +
+      '<div class="doc' + (ui.vagas || ui.completos ? ' denso' : '') + '">' +
       paginas.map((par, i) =>
         '<div class="pagina">' +
           (i === 0 ? cab : '') +
@@ -468,9 +476,10 @@
     else if (temSala) cls.push('conf-sala');
     if (!a.salaId && !temProf && !temSala) cls.push('sem-sala');
     const det = detalhesAula(a);
-    const resumo = [det.titulo, det.sub, 'Professor(es): ' + det.prof].concat(det.conflitos.map((x) => '⚠ ' + x.texto));
+    const resumo = [det.titulo, det.sub, 'Professor(es): ' + det.prof, 'Vagas: ' + det.vagas].concat(det.conflitos.map((x) => '⚠ ' + x.texto));
     return '<div class="' + cls.join(' ') + '" data-aula="' + esc(a.id) + '" tabindex="0" role="button" aria-label="' + esc(resumo.join('. ')) + '">' +
-      '<div class="a-nome">' + esc(d.curto) + ' <span class="a-per">(' + d.periodo + 'º)</span></div></div>';
+      '<div class="a-nome">' + esc(rotDisc(d)) + ' <span class="a-per">(' + d.periodo + 'º)</span></div>' +
+      (ui.vagas ? '<div class="a-vagas">' + esc(txtVagas(d)) + '</div>' : '') + '</div>';
   }
 
   function htmlCartaoSala(s) {
@@ -518,7 +527,7 @@
     const d = detalhesAula(a);
     tip.innerHTML =
       '<strong>' + esc(d.titulo) + '</strong><div class="sub">' + esc(d.sub) + '</div>' +
-      '<dl><dt>Professor(es)</dt><dd>' + esc(d.prof) + '</dd><dt>Sala</dt><dd>' + esc(d.sala) + '</dd></dl>' +
+      '<dl><dt>Professor(es)</dt><dd>' + esc(d.prof) + '</dd><dt>Sala</dt><dd>' + esc(d.sala) + '</dd><dt>Vagas</dt><dd>' + esc(d.vagas) + '</dd></dl>' +
       d.conflitos.map((c) => '<div class="conf conf-' + c.tipo + '">⚠ ' + esc(c.texto) + '</div>').join('');
     tip.hidden = false;
     posicionarTip(x, y);
@@ -829,11 +838,13 @@
         { k: 'nome', rotulo: 'Nome', tipo: 'text' },
         { k: 'periodo', rotulo: 'Período', tipo: 'periodo' },
         { k: 'curto', rotulo: 'Nome curto', tipo: 'text', dica: 'É o que aparece no horário. Ex.: ED I' },
+        { k: 'vagas', rotulo: 'Vagas', tipo: 'number', padrao: Core.VAGAS_PADRAO, dica: 'Padrão: ' + Core.VAGAS_PADRAO },
       ],
       colunas: [
         { rotulo: 'Período', v: (i) => '<span class="etiqueta">' + i.periodo + 'º</span>' },
         { rotulo: 'Nome', v: (i) => esc(i.nome) },
         { rotulo: 'Nome curto', v: (i) => '<span class="etiqueta">' + esc(i.curto) + '</span>' },
+        { rotulo: 'Vagas', cls: 'num', v: (i) => i.vagas },
         { rotulo: 'Aulas', cls: 'num', v: (i) => contaAulas.disciplinas(i) },
       ],
       ordenar: (a, b) => a.periodo - b.periodo || ptSort(a.nome, b.nome),
@@ -894,6 +905,7 @@
     if (v.nome && outros.some((x) => norm(x.nome) === norm(v.nome))) erros.nome = 'Já existe um registro com esse nome.';
     if (v.curto && outros.some((x) => norm(x.curto) === norm(v.curto))) erros.curto = 'Esse nome curto já está em uso.';
     if (chave === 'disciplinas' && !(Number.isInteger(v.periodo) && v.periodo >= 1 && v.periodo <= 8)) erros.periodo = 'Escolha um período de 1 a 8.';
+    if (chave === 'disciplinas' && !(Number.isInteger(v.vagas) && v.vagas >= 0)) erros.vagas = 'Informe um número inteiro de vagas (≥ 0).';
     if (chave === 'salas' && v.quantidade !== null && !(Number.isInteger(v.quantidade) && v.quantidade >= 0)) erros.quantidade = 'Informe um inteiro ≥ 0 ou deixe em branco.';
     return erros;
   }
@@ -902,13 +914,13 @@
     const E = ENT[chave];
     const item = id ? porId(estado[chave], id) : null;
     const dlg = $('#dlgEntidade');
-    const val = (k) => (item && item[k] != null ? item[k] : '');
+    const val = (k, padrao) => (item ? (item[k] != null ? item[k] : '') : (padrao != null ? padrao : ''));
     const campos = E.campos.map((c) => {
       let ctl;
       if (c.tipo === 'periodo') {
         ctl = '<select name="periodo">' + PERIODOS.map((p) => '<option value="' + p + '"' + (Number(val('periodo')) === p || (!item && p === (Number(crudFiltro.disciplinas.periodo) || 1)) ? ' selected' : '') + '>' + p + 'º período</option>').join('') + '</select>';
       } else if (c.tipo === 'number') {
-        ctl = '<input type="number" name="' + c.k + '" min="0" step="1" value="' + esc(val(c.k)) + '">';
+        ctl = '<input type="number" name="' + c.k + '" min="0" step="1" value="' + esc(val(c.k, c.padrao)) + '">';
       } else {
         ctl = '<input type="text" name="' + c.k + '" value="' + esc(val(c.k)) + '" autocomplete="off">';
       }
@@ -924,7 +936,11 @@
     f.addEventListener('submit', (e) => {
       e.preventDefault();
       const v = { nome: f.nome.value.trim(), curto: f.curto.value.trim() };
-      if (chave === 'disciplinas') v.periodo = Number(f.periodo.value);
+      if (chave === 'disciplinas') {
+        v.periodo = Number(f.periodo.value);
+        const qv = f.vagas.value.trim();
+        v.vagas = qv === '' ? NaN : Number(qv);
+      }
       if (chave === 'salas') {
         const q = f.quantidade.value.trim();
         v.quantidade = q === '' ? null : Number(q);
@@ -1334,6 +1350,10 @@
     $('#chkOutroDia').onchange = (e) => { ui.outroDia = e.target.checked; salvarUi(); };
     $('#chkSabado').checked = !!ui.sabado;
     $('#chkSabado').onchange = (e) => { ui.sabado = e.target.checked; salvarUi(); renderHorario(); };
+    $('#chkVagas').checked = !!ui.vagas;
+    $('#chkVagas').onchange = (e) => { ui.vagas = e.target.checked; salvarUi(); renderVista(); };
+    $('#chkCompletos').checked = !!ui.completos;
+    $('#chkCompletos').onchange = (e) => { ui.completos = e.target.checked; salvarUi(); renderVista(); };
     $('#btnNovaAula').onclick = () => abrirEditorAula(ui.periodo !== 'todos' ? { periodo: Number(ui.periodo) } : {});
 
     // topo, abas

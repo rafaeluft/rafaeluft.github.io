@@ -1,0 +1,1488 @@
+{
+  "formato": "horario-ccomp",
+  "schema": 2,
+  "nome": "Horário CCOMP 2027/1",
+  "salvoEm": "2026-11-18T15:16:34.072Z",
+  "config": {
+    "titulo": "DISTRIBUIÇÃO DE HORÁRIO",
+    "subtitulo": "CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/1",
+    "coordenador": "Edeilson Milhomem da Silva",
+    "cargo": "Coordenador",
+    "unidade": "CCOMP/CUP/UFT"
+  },
+  "professores": [
+    {
+      "id": "p-george",
+      "nome": "George Brito",
+      "curto": "George B."
+    },
+    {
+      "id": "p-jackson",
+      "nome": "Jackson Gomes",
+      "curto": "Jackson G."
+    },
+    {
+      "id": "p-daniel",
+      "nome": "Daniel Martins",
+      "curto": "Daniel M."
+    },
+    {
+      "id": "p-juliana",
+      "nome": "Juliana Dutra",
+      "curto": "Juliana D."
+    },
+    {
+      "id": "p-andreas",
+      "nome": "Andreas Kneip",
+      "curto": "Andreas K."
+    },
+    {
+      "id": "p-claudomiro",
+      "nome": "Claudomiro André",
+      "curto": "Claudomiro A."
+    },
+    {
+      "id": "p-helena",
+      "nome": "Helena Apolinário",
+      "curto": "Helena A."
+    },
+    {
+      "id": "p-wosley",
+      "nome": "Wosley Arruda",
+      "curto": "Wosley A."
+    },
+    {
+      "id": "p-rafael",
+      "nome": "Rafael Lima",
+      "curto": "Rafael L."
+    },
+    {
+      "id": "p-anna",
+      "nome": "Anna Paula",
+      "curto": "Anna P."
+    },
+    {
+      "id": "p-ary",
+      "nome": "Ary Henrique",
+      "curto": "Ary H."
+    },
+    {
+      "id": "p-rogerio",
+      "nome": "Rogério Azevedo",
+      "curto": "Rogério A."
+    },
+    {
+      "id": "p-patrick",
+      "nome": "Patrick Letouzé",
+      "curto": "Patrick L."
+    },
+    {
+      "id": "p-tiago",
+      "nome": "Tiago Almeida",
+      "curto": "Tiago A."
+    },
+    {
+      "id": "p-edeilson",
+      "nome": "Edeilson Milhomem",
+      "curto": "Edeilson M."
+    },
+    {
+      "id": "p-alexandre",
+      "nome": "Alexandre Rossini",
+      "curto": "Alexandre R."
+    },
+    {
+      "id": "p-warley",
+      "nome": "Warley Gramacho",
+      "curto": "Warley G."
+    },
+    {
+      "id": "p-glenda",
+      "nome": "Glenda Botelho",
+      "curto": "Glenda B."
+    },
+    {
+      "id": "p-thiago",
+      "nome": "Thiago Magalhães",
+      "curto": "Thiago M."
+    }
+  ],
+  "salas": [
+    {
+      "id": "s-b3-104",
+      "nome": "Bloco 3, Sala 104",
+      "curto": "B3-104",
+      "quantidade": null
+    },
+    {
+      "id": "s-b3-108",
+      "nome": "Bloco 3, Sala 108",
+      "curto": "B3-108",
+      "quantidade": null
+    },
+    {
+      "id": "s-b3-109",
+      "nome": "Bloco 3, Sala 109",
+      "curto": "B3-109",
+      "quantidade": null
+    },
+    {
+      "id": "s-b3-110",
+      "nome": "Bloco 3, Sala 110",
+      "curto": "B3-110",
+      "quantidade": null
+    },
+    {
+      "id": "s-b3-207",
+      "nome": "Bloco 3, Sala 207",
+      "curto": "B3-207",
+      "quantidade": null
+    },
+    {
+      "id": "s-b3-208",
+      "nome": "Bloco 3, Sala 208",
+      "curto": "B3-208",
+      "quantidade": null
+    },
+    {
+      "id": "s-bj-110",
+      "nome": "Bloco J, Sala 110",
+      "curto": "BJ-110",
+      "quantidade": null
+    },
+    {
+      "id": "s-bj-111",
+      "nome": "Bloco J, Sala 111",
+      "curto": "BJ-111",
+      "quantidade": null
+    },
+    {
+      "id": "s-7a59q2nndk",
+      "nome": "Bloco J, Sala 312",
+      "curto": "BJ-312",
+      "quantidade": null
+    }
+  ],
+  "disciplinas": [
+    {
+      "id": "d-empreend",
+      "nome": "Empreendedorismo e Inovação",
+      "periodo": 1,
+      "curto": "Empreend.",
+      "vagas": 40
+    },
+    {
+      "id": "d-icc",
+      "nome": "Introdução à Ciência da Computação",
+      "periodo": 1,
+      "curto": "ICC",
+      "vagas": 40
+    },
+    {
+      "id": "d-ipe",
+      "nome": "Introdução à Prática Extensionista",
+      "periodo": 1,
+      "curto": "IPE",
+      "vagas": 40
+    },
+    {
+      "id": "d-lp-a",
+      "nome": "Lógica de Programação - A",
+      "periodo": 1,
+      "curto": "LP-A",
+      "vagas": 40
+    },
+    {
+      "id": "d-lp-b",
+      "nome": "Lógica de Programação - B",
+      "periodo": 1,
+      "curto": "LP-B",
+      "vagas": 40
+    },
+    {
+      "id": "d-lm-a",
+      "nome": "Lógica Matemática - A",
+      "periodo": 1,
+      "curto": "LM-A",
+      "vagas": 40
+    },
+    {
+      "id": "d-lm-b",
+      "nome": "Lógica Matemática - B",
+      "periodo": 1,
+      "curto": "LM-B",
+      "vagas": 40
+    },
+    {
+      "id": "d-prob",
+      "nome": "Probabilidade e Estatística",
+      "periodo": 2,
+      "curto": "Prob. Est.",
+      "vagas": 40
+    },
+    {
+      "id": "d-calc1",
+      "nome": "Cálculo Diferencial e Integral I",
+      "periodo": 2,
+      "curto": "Cálculo I",
+      "vagas": 40
+    },
+    {
+      "id": "d-metod",
+      "nome": "Metodologia Científica",
+      "periodo": 2,
+      "curto": "Met. Cient.",
+      "vagas": 40
+    },
+    {
+      "id": "d-poo",
+      "nome": "Programação Orientada a Objetos",
+      "periodo": 2,
+      "curto": "POO",
+      "vagas": 40
+    },
+    {
+      "id": "d-ed1",
+      "nome": "Estrutura de Dados I",
+      "periodo": 2,
+      "curto": "ED I",
+      "vagas": 40
+    },
+    {
+      "id": "d-pe1",
+      "nome": "Práticas Extensionistas I",
+      "periodo": 2,
+      "curto": "PE I",
+      "vagas": 40
+    },
+    {
+      "id": "d-pe2",
+      "nome": "Práticas Extensionistas II (3 créditos)",
+      "periodo": 3,
+      "curto": "PE II",
+      "vagas": 40
+    },
+    {
+      "id": "d-matdisc",
+      "nome": "Matemática Discreta",
+      "periodo": 3,
+      "curto": "Mat. Discreta",
+      "vagas": 40
+    },
+    {
+      "id": "d-ihc",
+      "nome": "Interface Homem Computador",
+      "periodo": 3,
+      "curto": "IHC",
+      "vagas": 40
+    },
+    {
+      "id": "d-calc2",
+      "nome": "Cálculo Diferencial e Integral II",
+      "periodo": 3,
+      "curto": "Cálculo II",
+      "vagas": 40
+    },
+    {
+      "id": "d-ed2",
+      "nome": "Estrutura de Dados II",
+      "periodo": 3,
+      "curto": "ED II",
+      "vagas": 40
+    },
+    {
+      "id": "d-bd",
+      "nome": "Banco de Dados",
+      "periodo": 3,
+      "curto": "BD",
+      "vagas": 40
+    },
+    {
+      "id": "d-calcnum",
+      "nome": "Cálculo Numérico",
+      "periodo": 4,
+      "curto": "Calc. Num.",
+      "vagas": 40
+    },
+    {
+      "id": "d-gaal",
+      "nome": "Geometria Analítica e Álgebra Linear",
+      "periodo": 4,
+      "curto": "GAAL",
+      "vagas": 40
+    },
+    {
+      "id": "d-engsoft",
+      "nome": "Engenharia de Software",
+      "periodo": 4,
+      "curto": "Eng. Soft.",
+      "vagas": 40
+    },
+    {
+      "id": "d-sistdig",
+      "nome": "Sistemas Digitais",
+      "periodo": 4,
+      "curto": "Sist. Dig.",
+      "vagas": 40
+    },
+    {
+      "id": "d-pe3",
+      "nome": "Práticas Extensionistas III",
+      "periodo": 4,
+      "curto": "PE III",
+      "vagas": 40
+    },
+    {
+      "id": "d-grafos",
+      "nome": "Teoria dos Grafos",
+      "periodo": 4,
+      "curto": "T. Grafos",
+      "vagas": 40
+    },
+    {
+      "id": "d-redes",
+      "nome": "Redes de Computadores",
+      "periodo": 5,
+      "curto": "R. de Computadores",
+      "vagas": 40
+    },
+    {
+      "id": "d-projsist",
+      "nome": "Projeto de Sistemas",
+      "periodo": 5,
+      "curto": "Proj. Sist.",
+      "vagas": 40
+    },
+    {
+      "id": "d-lfa",
+      "nome": "Linguagens Formais e Autômatos",
+      "periodo": 5,
+      "curto": "LFA",
+      "vagas": 40
+    },
+    {
+      "id": "d-orgcomp",
+      "nome": "Organização de Computadores",
+      "periodo": 5,
+      "curto": "Org. Comp.",
+      "vagas": 40
+    },
+    {
+      "id": "d-webmobile",
+      "nome": "Desenvolvimento WebMobile",
+      "periodo": 5,
+      "curto": "WebMobile",
+      "vagas": 40
+    },
+    {
+      "id": "d-compgraf",
+      "nome": "Computação Gráfica",
+      "periodo": 5,
+      "curto": "Comp. Gráf.",
+      "vagas": 40
+    },
+    {
+      "id": "d-pesqop",
+      "nome": "Pesquisa Operacional",
+      "periodo": 6,
+      "curto": "Pesq. Op.",
+      "vagas": 40
+    },
+    {
+      "id": "d-paa",
+      "nome": "Projeto Análise de Algoritmos",
+      "periodo": 6,
+      "curto": "PAA",
+      "vagas": 40
+    },
+    {
+      "id": "d-procimg",
+      "nome": "Processamento de Imagem",
+      "periodo": 6,
+      "curto": "Proc. Imagem",
+      "vagas": 40
+    },
+    {
+      "id": "d-ia",
+      "nome": "Inteligência Artificial",
+      "periodo": 6,
+      "curto": "IA",
+      "vagas": 40
+    },
+    {
+      "id": "d-teocomp",
+      "nome": "Teoria da Computação",
+      "periodo": 6,
+      "curto": "Teoria Comp.",
+      "vagas": 40
+    },
+    {
+      "id": "d-estagio",
+      "nome": "Estágio Supervisionado",
+      "periodo": 6,
+      "curto": "Estágio",
+      "vagas": 40
+    },
+    {
+      "id": "d-pg1",
+      "nome": "Projeto de Graduação I",
+      "periodo": 7,
+      "curto": "PG I",
+      "vagas": 40
+    },
+    {
+      "id": "d-aade",
+      "nome": "Aceleradores e Arquiteturas de Domínio Específico",
+      "periodo": 7,
+      "curto": "AADE",
+      "vagas": 40
+    },
+    {
+      "id": "d-sistdistr",
+      "nome": "Sistemas Distribuídos",
+      "periodo": 7,
+      "curto": "Sist. Distr.",
+      "vagas": 40
+    },
+    {
+      "id": "d-compil",
+      "nome": "Compiladores",
+      "periodo": 7,
+      "curto": "Compiladores",
+      "vagas": 40
+    },
+    {
+      "id": "d-segaud",
+      "nome": "Segurança e Auditoria de Sistemas",
+      "periodo": 7,
+      "curto": "Seg. Audit.",
+      "vagas": 40
+    },
+    {
+      "id": "d-so",
+      "nome": "Sistemas Operacionais",
+      "periodo": 7,
+      "curto": "SO",
+      "vagas": 40
+    },
+    {
+      "id": "d-pg2",
+      "nome": "Projeto de Graduação II",
+      "periodo": 8,
+      "curto": "PG II",
+      "vagas": 40
+    },
+    {
+      "id": "d-gestproj",
+      "nome": "Gestão de Projetos e Serviços",
+      "periodo": 8,
+      "curto": "Gest. Proj.",
+      "vagas": 40
+    },
+    {
+      "id": "d-ggd",
+      "nome": "Gestão e Governança de Dados",
+      "periodo": 8,
+      "curto": "GGD",
+      "vagas": 40
+    },
+    {
+      "id": "d-heur",
+      "nome": "Heurísticas e Metaheurísticas",
+      "periodo": 8,
+      "curto": "Heurísticas",
+      "vagas": 40
+    }
+  ],
+  "aulas": [
+    {
+      "id": "a-01",
+      "disciplinaId": "d-empreend",
+      "professorIds": [
+        "p-george"
+      ],
+      "salaId": "s-b3-208",
+      "dia": "ter",
+      "turno": "manha"
+    },
+    {
+      "id": "a-02",
+      "disciplinaId": "d-icc",
+      "professorIds": [
+        "p-jackson"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "seg",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-03",
+      "disciplinaId": "d-ipe",
+      "professorIds": [
+        "p-daniel"
+      ],
+      "salaId": "s-b3-104",
+      "dia": "ter",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-04",
+      "disciplinaId": "d-lp-a",
+      "professorIds": [
+        "p-juliana"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "qua",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-05",
+      "disciplinaId": "d-lp-a",
+      "professorIds": [
+        "p-juliana"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "sex",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-06",
+      "disciplinaId": "d-lp-b",
+      "professorIds": [
+        "p-daniel"
+      ],
+      "salaId": "s-b3-104",
+      "dia": "qua",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-07",
+      "disciplinaId": "d-lp-b",
+      "professorIds": [
+        "p-daniel"
+      ],
+      "salaId": "s-b3-108",
+      "dia": "sex",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-08",
+      "disciplinaId": "d-lm-a",
+      "professorIds": [
+        "p-andreas"
+      ],
+      "salaId": "s-b3-208",
+      "dia": "qui",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-09",
+      "disciplinaId": "d-lm-b",
+      "professorIds": [
+        "p-andreas"
+      ],
+      "salaId": "s-b3-208",
+      "dia": "ter",
+      "turno": "noite"
+    },
+    {
+      "id": "a-10",
+      "disciplinaId": "d-prob",
+      "professorIds": [
+        "p-claudomiro"
+      ],
+      "salaId": "s-b3-208",
+      "dia": "seg",
+      "turno": "manha"
+    },
+    {
+      "id": "a-11",
+      "disciplinaId": "d-calc1",
+      "professorIds": [
+        "p-helena"
+      ],
+      "salaId": "s-bj-111",
+      "dia": "ter",
+      "turno": "manha"
+    },
+    {
+      "id": "a-12",
+      "disciplinaId": "d-metod",
+      "professorIds": [
+        "p-andreas"
+      ],
+      "salaId": "s-bj-111",
+      "dia": "qua",
+      "turno": "manha"
+    },
+    {
+      "id": "a-13",
+      "disciplinaId": "d-poo",
+      "professorIds": [
+        "p-wosley"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "qui",
+      "turno": "manha"
+    },
+    {
+      "id": "a-14",
+      "disciplinaId": "d-ed1",
+      "professorIds": [
+        "p-rafael"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "sex",
+      "turno": "manha"
+    },
+    {
+      "id": "a-15",
+      "disciplinaId": "d-pe1",
+      "professorIds": [
+        "p-anna"
+      ],
+      "salaId": "s-b3-208",
+      "dia": "qua",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-16",
+      "disciplinaId": "d-pe2",
+      "professorIds": [
+        "p-ary"
+      ],
+      "salaId": "s-b3-108",
+      "dia": "ter",
+      "turno": "manha"
+    },
+    {
+      "id": "a-17",
+      "disciplinaId": "d-pe2",
+      "professorIds": [
+        "p-ary"
+      ],
+      "salaId": "s-b3-108",
+      "dia": "qui",
+      "turno": "manha"
+    },
+    {
+      "id": "a-18",
+      "disciplinaId": "d-matdisc",
+      "professorIds": [
+        "p-george"
+      ],
+      "salaId": "s-b3-208",
+      "dia": "seg",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-19",
+      "disciplinaId": "d-ihc",
+      "professorIds": [
+        "p-anna"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "ter",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-20",
+      "disciplinaId": "d-calc2",
+      "professorIds": [
+        "p-rogerio"
+      ],
+      "salaId": "s-bj-111",
+      "dia": "qua",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-21",
+      "disciplinaId": "d-ed2",
+      "professorIds": [
+        "p-rafael"
+      ],
+      "salaId": "s-b3-207",
+      "dia": "qui",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-22",
+      "disciplinaId": "d-bd",
+      "professorIds": [
+        "p-ary"
+      ],
+      "salaId": "s-bj-110",
+      "dia": "sex",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-23",
+      "disciplinaId": "d-calcnum",
+      "professorIds": [
+        "p-rogerio"
+      ],
+      "salaId": "s-b3-207",
+      "dia": "ter",
+      "turno": "manha"
+    },
+    {
+      "id": "a-24",
+      "disciplinaId": "d-gaal",
+      "professorIds": [
+        "p-helena"
+      ],
+      "salaId": "s-7a59q2nndk",
+      "dia": "qua",
+      "turno": "manha"
+    },
+    {
+      "id": "a-25",
+      "disciplinaId": "d-engsoft",
+      "professorIds": [
+        "p-jackson"
+      ],
+      "salaId": "s-b3-104",
+      "dia": "qui",
+      "turno": "manha"
+    },
+    {
+      "id": "a-26",
+      "disciplinaId": "d-sistdig",
+      "professorIds": [
+        "p-tiago"
+      ],
+      "salaId": "s-b3-208",
+      "dia": "sex",
+      "turno": "manha"
+    },
+    {
+      "id": "a-27",
+      "disciplinaId": "d-pe3",
+      "professorIds": [
+        "p-patrick"
+      ],
+      "salaId": "s-b3-207",
+      "dia": "seg",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-28",
+      "disciplinaId": "d-grafos",
+      "professorIds": [
+        "p-daniel"
+      ],
+      "salaId": "s-b3-109",
+      "dia": "qui",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-29",
+      "disciplinaId": "d-redes",
+      "professorIds": [
+        "p-anna"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "ter",
+      "turno": "manha"
+    },
+    {
+      "id": "a-30",
+      "disciplinaId": "d-projsist",
+      "professorIds": [
+        "p-edeilson"
+      ],
+      "salaId": "s-b3-104",
+      "dia": "sex",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-31",
+      "disciplinaId": "d-lfa",
+      "professorIds": [
+        "p-alexandre"
+      ],
+      "salaId": "s-bj-111",
+      "dia": "ter",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-32",
+      "disciplinaId": "d-orgcomp",
+      "professorIds": [
+        "p-tiago"
+      ],
+      "salaId": "s-b3-109",
+      "dia": "qua",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-33",
+      "disciplinaId": "d-webmobile",
+      "professorIds": [
+        "p-jackson"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "qui",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-34",
+      "disciplinaId": "d-compgraf",
+      "professorIds": [
+        "p-wosley"
+      ],
+      "salaId": "s-b3-108",
+      "dia": "seg",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-35",
+      "disciplinaId": "d-pesqop",
+      "professorIds": [
+        "p-warley"
+      ],
+      "salaId": "s-b3-109",
+      "dia": "ter",
+      "turno": "manha"
+    },
+    {
+      "id": "a-36",
+      "disciplinaId": "d-paa",
+      "professorIds": [
+        "p-warley"
+      ],
+      "salaId": "s-b3-109",
+      "dia": "qua",
+      "turno": "manha"
+    },
+    {
+      "id": "a-37",
+      "disciplinaId": "d-procimg",
+      "professorIds": [
+        "p-glenda"
+      ],
+      "salaId": "s-b3-109",
+      "dia": "qui",
+      "turno": "manha"
+    },
+    {
+      "id": "a-38",
+      "disciplinaId": "d-ia",
+      "professorIds": [
+        "p-glenda"
+      ],
+      "salaId": "s-b3-108",
+      "dia": "sex",
+      "turno": "manha"
+    },
+    {
+      "id": "a-39",
+      "disciplinaId": "d-teocomp",
+      "professorIds": [
+        "p-patrick"
+      ],
+      "salaId": "s-b3-208",
+      "dia": "ter",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-40",
+      "disciplinaId": "d-estagio",
+      "professorIds": [
+        "p-edeilson",
+        "p-warley"
+      ],
+      "salaId": "s-b3-108",
+      "dia": "qui",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-41",
+      "disciplinaId": "d-pg1",
+      "professorIds": [
+        "p-tiago",
+        "p-rafael"
+      ],
+      "salaId": "s-b3-208",
+      "dia": "sab",
+      "turno": "manha"
+    },
+    {
+      "id": "a-42",
+      "disciplinaId": "d-aade",
+      "professorIds": [
+        "p-tiago"
+      ],
+      "salaId": "s-b3-207",
+      "dia": "ter",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-43",
+      "disciplinaId": "d-sistdistr",
+      "professorIds": [
+        "p-thiago"
+      ],
+      "salaId": "s-bj-110",
+      "dia": "qua",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-44",
+      "disciplinaId": "d-compil",
+      "professorIds": [
+        "p-alexandre"
+      ],
+      "salaId": "s-b3-208",
+      "dia": "sex",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-45",
+      "disciplinaId": "d-segaud",
+      "professorIds": [
+        "p-thiago"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "seg",
+      "turno": "noite"
+    },
+    {
+      "id": "a-46",
+      "disciplinaId": "d-so",
+      "professorIds": [
+        "p-thiago"
+      ],
+      "salaId": "s-b3-109",
+      "dia": "qua",
+      "turno": "noite"
+    },
+    {
+      "id": "a-47",
+      "disciplinaId": "d-pg2",
+      "professorIds": [
+        "p-glenda"
+      ],
+      "salaId": "s-b3-104",
+      "dia": "seg",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-48",
+      "disciplinaId": "d-gestproj",
+      "professorIds": [
+        "p-patrick"
+      ],
+      "salaId": "s-b3-207",
+      "dia": "qua",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-49",
+      "disciplinaId": "d-ggd",
+      "professorIds": [
+        "p-ary"
+      ],
+      "salaId": "s-bj-111",
+      "dia": "qui",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-50",
+      "disciplinaId": "d-heur",
+      "professorIds": [
+        "p-rafael"
+      ],
+      "salaId": "s-b3-109",
+      "dia": "sex",
+      "turno": "tarde"
+    }
+  ],
+  "log": [
+    {
+      "ts": "2026-11-18T11:22:53.594Z",
+      "tipo": "versao",
+      "texto": "Horário criado a partir do PDF «Ponto 7 - Distribuição de Horários CCOMP 2027-1» (47 disciplinas, 19 professores, 8 salas, 50 aulas)."
+    },
+    {
+      "ts": "2026-11-18T11:49:00.530Z",
+      "tipo": "versao",
+      "texto": "Horário carregado do arquivo «horario-ccomp-2027-1.json»."
+    },
+    {
+      "ts": "2026-11-18T11:49:28.487Z",
+      "tipo": "titulo",
+      "texto": "Subtítulo alterado de “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/1” para “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/2”."
+    },
+    {
+      "ts": "2026-11-18T11:49:32.087Z",
+      "tipo": "titulo",
+      "texto": "Subtítulo alterado de “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/2” para “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/1”."
+    },
+    {
+      "ts": "2026-11-18T11:50:02.931Z",
+      "tipo": "horario",
+      "texto": "Disciplina «Empreend.» passou do horário Terça, manhã para Quarta, manhã."
+    },
+    {
+      "ts": "2026-11-18T11:50:20.598Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    },
+    {
+      "ts": "2026-11-18T11:50:27.928Z",
+      "tipo": "horario",
+      "texto": "Disciplina «Empreend.» passou do horário Quarta, manhã para Terça, manhã."
+    },
+    {
+      "ts": "2026-11-18T11:51:08.655Z",
+      "tipo": "horario",
+      "texto": "↶ Desfeito — Disciplina «Empreend.» passou do horário Terça, manhã para Quarta, manhã."
+    },
+    {
+      "ts": "2026-11-18T11:51:10.093Z",
+      "tipo": "horario",
+      "texto": "↶ Desfeito — Disciplina «Empreend.» passou do horário Quarta, manhã para Terça, manhã."
+    },
+    {
+      "ts": "2026-11-18T11:51:11.895Z",
+      "tipo": "titulo",
+      "texto": "↶ Desfeito — Subtítulo alterado de “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/1” para “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/2”."
+    },
+    {
+      "ts": "2026-11-18T11:51:12.687Z",
+      "tipo": "titulo",
+      "texto": "↶ Desfeito — Subtítulo alterado de “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/2” para “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/1”."
+    },
+    {
+      "ts": "2026-11-18T12:31:53.973Z",
+      "tipo": "versao",
+      "texto": "Horário carregado do arquivo «horario-ccomp-2027-1-vs2026-11-18.json»."
+    },
+    {
+      "ts": "2026-11-18T12:32:25.924Z",
+      "tipo": "horario",
+      "texto": "Disciplina «Compiladores» passou do horário Quinta, tarde para Sexta, tarde."
+    },
+    {
+      "ts": "2026-11-18T12:32:36.215Z",
+      "tipo": "horario",
+      "texto": "Disciplina «Teoria Comp.» passou do horário Quinta, tarde para Terça, tarde."
+    },
+    {
+      "ts": "2026-11-18T12:32:43.047Z",
+      "tipo": "professor",
+      "texto": "Disciplina «Teoria Comp.» (Terça, tarde) sem docente definido, agora passou para «Patrick L.»"
+    },
+    {
+      "ts": "2026-11-18T12:32:54.352Z",
+      "tipo": "horario",
+      "texto": "Disciplina «Estágio» passou do horário Sexta, tarde para Quinta, tarde."
+    },
+    {
+      "ts": "2026-11-18T12:33:01.639Z",
+      "tipo": "horario",
+      "texto": "Disciplina «Proj. Sist.» passou do horário Segunda, tarde para Sexta, tarde."
+    },
+    {
+      "ts": "2026-11-18T12:33:03.384Z",
+      "tipo": "horario",
+      "texto": "Disciplina «Comp. Gráf.» passou do horário Sexta, tarde para Segunda, tarde."
+    },
+    {
+      "ts": "2026-11-18T12:33:15.030Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Proj. Sist.» (Sexta, tarde) passou da sala «B3-109» para a sala «B3-104»."
+    },
+    {
+      "ts": "2026-11-18T12:33:23.166Z",
+      "tipo": "sala",
+      "texto": "Disciplina «LP-B» (Sexta, tarde) passou da sala «B3-104» para a sala «B3-108»."
+    },
+    {
+      "ts": "2026-11-18T12:33:29.465Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    },
+    {
+      "ts": "2026-11-18T13:50:12.118Z",
+      "tipo": "versao",
+      "texto": "Horário carregado do arquivo «horario-ccomp-2027-1-vs2026-11-18).json»."
+    },
+    {
+      "ts": "2026-11-18T14:05:14.666Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Cálculo I» (Terça, manhã) passou da sala «B3-208» para a sala «BJ-111»."
+    },
+    {
+      "ts": "2026-11-18T14:08:52.771Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    },
+    {
+      "ts": "2026-11-18T14:22:41.433Z",
+      "tipo": "cadastro",
+      "texto": "Sala «BJ-312» (Bloco J, Sala 312) cadastrada."
+    },
+    {
+      "ts": "2026-11-18T14:23:25.146Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    },
+    {
+      "ts": "2026-11-18T14:28:14.562Z",
+      "tipo": "sala",
+      "texto": "Disciplina «GAAL» (Quarta, manhã) passou da sala «BJ-110» para a sala «BJ-312»."
+    },
+    {
+      "ts": "2026-11-18T14:28:23.546Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    },
+    {
+      "ts": "2026-11-18T14:30:55.321Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Calc. Num.» (Terça, manhã) passou da sala «BJ-111» para a sala «B3-207»."
+    },
+    {
+      "ts": "2026-11-18T14:33:57.305Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Eng. Soft.» (Quinta, manhã) passou da sala «B3-110» para a sala «B3-104»."
+    },
+    {
+      "ts": "2026-11-18T14:34:16.874Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    },
+    {
+      "ts": "2026-11-18T14:34:40.978Z",
+      "tipo": "cadastro",
+      "texto": "Nome curto da disciplina alterado de «Grafos» para «T. Grafos»."
+    },
+    {
+      "ts": "2026-11-18T14:34:45.050Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    },
+    {
+      "ts": "2026-11-18T14:36:30.906Z",
+      "tipo": "sala",
+      "texto": "Disciplina «PE I» (Quarta, tarde) passou da sala «B3-109» para a sala «B3-208»."
+    },
+    {
+      "ts": "2026-11-18T14:37:09.424Z",
+      "tipo": "sala",
+      "texto": "Disciplina «PE II» (Terça, manhã) passou da sala «B3-110» para a sala «B3-208»."
+    },
+    {
+      "ts": "2026-11-18T14:38:28.362Z",
+      "tipo": "sala",
+      "texto": "Disciplina «PE II» (Terça, manhã) passou da sala «B3-208» para a sala «B3-207»."
+    },
+    {
+      "ts": "2026-11-18T14:39:02.873Z",
+      "tipo": "sala",
+      "texto": "Disciplina «PE II» (Terça, manhã) passou da sala «B3-207» para a sala «B3-108»."
+    },
+    {
+      "ts": "2026-11-18T14:39:18.977Z",
+      "tipo": "sala",
+      "texto": "Disciplina «PE II» (Quinta, manhã) passou da sala «B3-110» para a sala «B3-108»."
+    },
+    {
+      "ts": "2026-11-18T14:39:33.993Z",
+      "tipo": "sala",
+      "texto": "Disciplina «PE II» (Quinta, manhã) passou da sala «B3-108» para a sala «B3-109»."
+    },
+    {
+      "ts": "2026-11-18T14:39:45.009Z",
+      "tipo": "sala",
+      "texto": "Disciplina «PE II» (Terça, manhã) passou da sala «B3-108» para a sala «B3-109»."
+    },
+    {
+      "ts": "2026-11-18T14:40:03.433Z",
+      "tipo": "sala",
+      "texto": "Disciplina «PE II» (Terça, manhã) passou da sala «B3-109» para a sala «B3-108»."
+    },
+    {
+      "ts": "2026-11-18T14:40:13.658Z",
+      "tipo": "sala",
+      "texto": "Disciplina «PE II» (Quinta, manhã) passou da sala «B3-109» para a sala «B3-108»."
+    },
+    {
+      "ts": "2026-11-18T14:40:49.561Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Proc. Imagem» (Quinta, manhã) passou da sala «B3-108» para a sala «B3-109»."
+    },
+    {
+      "ts": "2026-11-18T14:40:58.131Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    },
+    {
+      "ts": "2026-11-18T14:43:11.089Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Mat. Discreta» (Segunda, tarde) passou de sala a definir para a sala «B3-208»."
+    },
+    {
+      "ts": "2026-11-18T14:43:38.924Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    },
+    {
+      "ts": "2026-11-18T14:44:23.337Z",
+      "tipo": "sala",
+      "texto": "Disciplina «T. Grafos» (Quinta, tarde) passou de sala a definir para a sala «BJ-110»."
+    },
+    {
+      "ts": "2026-11-18T14:44:42.713Z",
+      "tipo": "sala",
+      "texto": "Disciplina «T. Grafos» (Quinta, tarde) passou da sala «BJ-110» para a sala «B3-110»."
+    },
+    {
+      "ts": "2026-11-18T14:44:59.561Z",
+      "tipo": "sala",
+      "texto": "Disciplina «T. Grafos» (Quinta, tarde) passou da sala «B3-110» para a sala «B3-104»."
+    },
+    {
+      "ts": "2026-11-18T14:45:23.137Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Teoria Comp.» (Terça, tarde) passou de sala a definir para a sala «B3-208»."
+    },
+    {
+      "ts": "2026-11-18T14:45:34.673Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Teoria Comp.» (Terça, tarde) passou da sala «B3-208» para a sala «B3-207»."
+    },
+    {
+      "ts": "2026-11-18T14:45:46.553Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Teoria Comp.» (Terça, tarde) passou da sala «B3-207» para a sala «B3-208»."
+    },
+    {
+      "ts": "2026-11-18T14:46:15.297Z",
+      "tipo": "sala",
+      "texto": "Disciplina «IPE» (Terça, tarde) passou da sala «B3-208» para a sala «B3-110»."
+    },
+    {
+      "ts": "2026-11-18T14:46:25.249Z",
+      "tipo": "sala",
+      "texto": "Disciplina «IPE» (Terça, tarde) passou da sala «B3-110» para a sala «B3-104»."
+    },
+    {
+      "ts": "2026-11-18T14:46:31.548Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    },
+    {
+      "ts": "2026-11-18T14:47:06.969Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Estágio» (Quinta, tarde) passou de sala a definir para a sala «B3-108»."
+    },
+    {
+      "ts": "2026-11-18T14:47:32.968Z",
+      "tipo": "sala",
+      "texto": "Disciplina «AADE» (Terça, tarde) passou de sala a definir para a sala «B3-208»."
+    },
+    {
+      "ts": "2026-11-18T14:47:46.705Z",
+      "tipo": "sala",
+      "texto": "Disciplina «AADE» (Terça, tarde) passou da sala «B3-208» para a sala «B3-207»."
+    },
+    {
+      "ts": "2026-11-18T14:48:53.465Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Sist. Dig.» (Sexta, manhã) passou da sala «B3-109» para a sala «B3-208»."
+    },
+    {
+      "ts": "2026-11-18T14:48:58.396Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    },
+    {
+      "ts": "2026-11-18T14:50:48.641Z",
+      "tipo": "sala",
+      "texto": "Disciplina «LFA» (Terça, tarde) passou da sala «B3-207» para a sala «BJ-111»."
+    },
+    {
+      "ts": "2026-11-18T14:52:18.289Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Compiladores» (Sexta, tarde) passou de sala a definir para a sala «B3-208»."
+    },
+    {
+      "ts": "2026-11-18T14:52:31.489Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Sist. Distr.» (Quarta, tarde) passou de sala a definir para a sala «BJ-110»."
+    },
+    {
+      "ts": "2026-11-18T14:52:41.253Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    },
+    {
+      "ts": "2026-11-18T14:53:04.657Z",
+      "tipo": "sala",
+      "texto": "Disciplina «PG II» (Segunda, tarde) passou de sala a definir para a sala «B3-208»."
+    },
+    {
+      "ts": "2026-11-18T14:53:14.921Z",
+      "tipo": "sala",
+      "texto": "Disciplina «PG II» (Segunda, tarde) passou da sala «B3-208» para a sala «B3-207»."
+    },
+    {
+      "ts": "2026-11-18T14:53:31.202Z",
+      "tipo": "sala",
+      "texto": "Disciplina «PG II» (Segunda, tarde) passou da sala «B3-207» para a sala «B3-104»."
+    },
+    {
+      "ts": "2026-11-18T14:53:45.345Z",
+      "tipo": "sala",
+      "texto": "Disciplina «GGD» (Quinta, tarde) passou de sala a definir para a sala «B3-104»."
+    },
+    {
+      "ts": "2026-11-18T14:54:09.714Z",
+      "tipo": "sala",
+      "texto": "Disciplina «T. Grafos» (Quinta, tarde) passou da sala «B3-104» para a sala «B3-108»."
+    },
+    {
+      "ts": "2026-11-18T14:54:17.193Z",
+      "tipo": "sala",
+      "texto": "Disciplina «T. Grafos» (Quinta, tarde) passou da sala «B3-108» para a sala «B3-109»."
+    },
+    {
+      "ts": "2026-11-18T14:54:30.588Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    },
+    {
+      "ts": "2026-11-18T14:55:48.218Z",
+      "tipo": "sala",
+      "texto": "Disciplina «ED II» (Quinta, tarde) passou de sala a definir para a sala «BJ-110»."
+    },
+    {
+      "ts": "2026-11-18T14:56:02.498Z",
+      "tipo": "sala",
+      "texto": "Disciplina «ED II» (Quinta, tarde) passou da sala «BJ-110» para a sala «B3-110»."
+    },
+    {
+      "ts": "2026-11-18T14:56:44.035Z",
+      "tipo": "sala",
+      "texto": "Disciplina «ED II» (Quinta, tarde) passou da sala «B3-110» para a sala «B3-208»."
+    },
+    {
+      "ts": "2026-11-18T14:56:57.521Z",
+      "tipo": "sala",
+      "texto": "Disciplina «ED II» (Quinta, tarde) passou da sala «B3-208» para a sala «B3-207»."
+    },
+    {
+      "ts": "2026-11-18T14:57:46.066Z",
+      "tipo": "sala",
+      "texto": "Disciplina «ED II» (Quinta, tarde) passou da sala «B3-207» para a sala «B3-104»."
+    },
+    {
+      "ts": "2026-11-18T14:57:53.993Z",
+      "tipo": "sala",
+      "texto": "Disciplina «ED II» (Quinta, tarde) passou da sala «B3-104» para a sala «B3-108»."
+    },
+    {
+      "ts": "2026-11-18T14:58:00.585Z",
+      "tipo": "sala",
+      "texto": "Disciplina «ED II» (Quinta, tarde) passou da sala «B3-108» para a sala «B3-109»."
+    },
+    {
+      "ts": "2026-11-18T14:58:16.497Z",
+      "tipo": "sala",
+      "texto": "Disciplina «ED II» (Quinta, tarde) passou da sala «B3-109» para a sala «BJ-110»."
+    },
+    {
+      "ts": "2026-11-18T14:59:22.954Z",
+      "tipo": "sala",
+      "texto": "Disciplina «ED II» (Quinta, tarde) passou da sala «BJ-110» para a sala «B3-208»."
+    },
+    {
+      "ts": "2026-11-18T14:59:28.073Z",
+      "tipo": "sala",
+      "texto": "Disciplina «ED II» (Quinta, tarde) passou da sala «B3-208» para a sala «B3-207»."
+    },
+    {
+      "ts": "2026-11-18T15:01:17.634Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Heurísticas» (Sexta, tarde) passou de sala a definir para a sala «BJ-110»."
+    },
+    {
+      "ts": "2026-11-18T15:01:23.194Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Heurísticas» (Sexta, tarde) passou da sala «BJ-110» para a sala «B3-208»."
+    },
+    {
+      "ts": "2026-11-18T15:01:29.074Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Heurísticas» (Sexta, tarde) passou da sala «B3-208» para a sala «B3-207»."
+    },
+    {
+      "ts": "2026-11-18T15:01:42.625Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Heurísticas» (Sexta, tarde) passou da sala «B3-207» para a sala «BJ-110»."
+    },
+    {
+      "ts": "2026-11-18T15:01:53.707Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    },
+    {
+      "ts": "2026-11-18T15:08:26.289Z",
+      "tipo": "sala",
+      "texto": "Disciplina «GGD» (Quinta, tarde) passou da sala «B3-104» para a sala «B3-208»."
+    },
+    {
+      "ts": "2026-11-18T15:09:00.554Z",
+      "tipo": "sala",
+      "texto": "Disciplina «GGD» (Quinta, tarde) passou da sala «B3-208» para a sala «B3-207»."
+    },
+    {
+      "ts": "2026-11-18T15:09:09.218Z",
+      "tipo": "sala",
+      "texto": "Disciplina «GGD» (Quinta, tarde) passou da sala «B3-207» para a sala «B3-208»."
+    },
+    {
+      "ts": "2026-11-18T15:09:18.361Z",
+      "tipo": "sala",
+      "texto": "Disciplina «GGD» (Quinta, tarde) passou da sala «B3-208» para a sala «BJ-111»."
+    },
+    {
+      "ts": "2026-11-18T15:09:25.548Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    },
+    {
+      "ts": "2026-11-18T15:09:45.354Z",
+      "tipo": "sala",
+      "texto": "Disciplina «BD» (Sexta, tarde) passou da sala «B3-109» para a sala «BJ-110»."
+    },
+    {
+      "ts": "2026-11-18T15:10:44.107Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Heurísticas» (Sexta, tarde) passou da sala «BJ-110» para a sala «B3-108»."
+    },
+    {
+      "ts": "2026-11-18T15:10:53.857Z",
+      "tipo": "sala",
+      "texto": "Disciplina «Heurísticas» (Sexta, tarde) passou da sala «B3-108» para a sala «B3-109»."
+    },
+    {
+      "ts": "2026-11-18T15:11:03.387Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    },
+    {
+      "ts": "2026-11-18T15:16:03.578Z",
+      "tipo": "cadastro",
+      "texto": "Nome curto da disciplina alterado de «Redes» para «R. de Computadores»."
+    },
+    {
+      "ts": "2026-11-18T15:16:08.472Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    }
+  ]
+}

@@ -22,6 +22,7 @@
   .aula { border: 1px solid #c9d6dd; border-left: 4px solid #0b75a0; background: #f2f8fb; border-radius: 4px; padding: 3px 6px; margin: 0 0 4px; line-height: 1.25; overflow-wrap: anywhere; }
   .aula:last-of-type { margin-bottom: 0; }
   .aula .a-nome { font-weight: 700; }
+  .aula .a-vagas { font-size: 12px; color: #3f4d55; }
   .aula .indef { color: #5d6b73; font-style: italic; }
   .aula .a-alerta { font-size: .82em; font-weight: 700; margin-top: 2px; }
   .aula.conf-sala { background: #ffa03a; border-color: #b86200; border-left-color: #b86200; }
@@ -44,6 +45,13 @@
     .periodo { break-inside: avoid; margin-bottom: 7mm; }
     .grade td.celula { height: 14mm; padding: 1mm; }
     .aula { margin-bottom: 1mm; padding: 0.6mm 1.4mm; }
+    /* com vagas / nomes completos os blocos ficam maiores: compacta para manter 2 períodos por página */
+    .doc.denso { font-size: 7pt; }
+    .doc.denso .aula .a-vagas { font-size: 6.5pt; }
+    .doc.denso .doc-cab { margin-bottom: 2mm; font-size: 9pt; }
+    .doc.denso .periodo { margin-bottom: 3mm; }
+    .doc.denso .grade td.celula { height: 9mm; padding: .6mm; }
+    .doc.denso .aula { margin-bottom: .6mm; padding: .3mm 1.2mm; line-height: 1.15; }
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
 </style>
@@ -106,7 +114,7 @@
         <button class="btn btn-primario" id="btnBoasCarregar" type="button">⬆ Carregar arquivo de horário…</button>
         <button class="btn" id="btnBoasVazio" type="button">Começar com um horário vazio</button>
       </div>
-      <p class="boas-arquivo">Arquivo do horário: <a id="linkHorarioBase" href="data/horario-ccomp-2027-1-vs2026-11-18.json" target="_blank" rel="noopener">horario-ccomp-2027-1-vs2026-11-18.json</a><br><span class="mudo">Está na subpasta <code>data</code>. Use-o em “Carregar arquivo de horário…” (ou arraste-o para esta página).</span></p>
+      <p class="boas-arquivo">Arquivo do horário: <a id="linkHorarioBase" href="data/horario-ccomp-2027-1Final.json" target="_blank" rel="noopener">horario-ccomp-2027-1Final.json</a><br><span class="mudo">Está na subpasta <code>data</code>. Use-o em “Carregar arquivo de horário…” (ou arraste-o para esta página).</span></p>
       <p class="mudo">Os horários ficam gravados neste navegador (<code>local.data</code>). Use “Salvar em arquivo” para guardar cópias ou levar para outro computador.</p>
     </div>
   </section>
@@ -121,6 +129,12 @@
       </label>
       <label class="chave">
         <input type="checkbox" id="chkSabado"> Mostrar sábado
+      </label>
+      <label class="chave" title="Mostra, em cada aula, a quantidade de vagas da disciplina">
+        <input type="checkbox" id="chkVagas"> Mostrar quantidade de vagas
+      </label>
+      <label class="chave" title="Mostra os nomes completos (disciplina, professor e sala) no lugar dos nomes curtos">
+        <input type="checkbox" id="chkCompletos"> Mostrar nomes completos
       </label>
       <button class="btn" id="btnNovaAula" type="button">+ Nova aula</button>
       <span class="legenda">

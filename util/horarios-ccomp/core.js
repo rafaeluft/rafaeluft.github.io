@@ -21,6 +21,7 @@
   ];
 
   const PERIODOS = [1, 2, 3, 4, 5, 6, 7, 8];
+  const VAGAS_PADRAO = 40; // vagas de cada disciplina quando não informado
 
   const clonar = (x) => JSON.parse(JSON.stringify(x));
 
@@ -178,7 +179,13 @@
       .filter((s) => s.nome && s.curto);
 
     const disciplinas = unicos(arr(raw.disciplinas), 'd')
-      .map((d) => ({ id: d.id, nome: txt(d.nome), periodo: Math.round(Number(d.periodo)), curto: txt(d.curto) }))
+      .map((d) => {
+        const v = d.vagas === '' || d.vagas == null ? NaN : Number(d.vagas);
+        return {
+          id: d.id, nome: txt(d.nome), periodo: Math.round(Number(d.periodo)), curto: txt(d.curto),
+          vagas: Number.isFinite(v) && v >= 0 ? Math.round(v) : VAGAS_PADRAO,
+        };
+      })
       .filter((d) => d.nome && d.curto && d.periodo >= 1 && d.periodo <= 8);
 
     const idsP = new Set(professores.map((p) => p.id));
@@ -334,6 +341,7 @@
         if (o.nome !== d.nome) add('cadastro', 'Disciplina ' + q(d.curto) + ': nome alterado de “' + o.nome + '” para “' + d.nome + '”.');
         if (o.curto !== d.curto) add('cadastro', 'Nome curto da disciplina alterado de ' + q(o.curto) + ' para ' + q(d.curto) + '.');
         if (o.periodo !== d.periodo) add('cadastro', 'Disciplina ' + q(d.curto) + ' passou do ' + o.periodo + 'º para o ' + d.periodo + 'º período.');
+        if (o.vagas !== d.vagas) add('cadastro', 'Vagas da disciplina ' + q(d.curto) + ' alteradas de ' + o.vagas + ' para ' + d.vagas + '.');
       }
     }
     const discRemovidas = new Set();
@@ -390,7 +398,7 @@
   }
 
   const api = {
-    DIAS, TURNOS, PERIODOS,
+    DIAS, TURNOS, PERIODOS, VAGAS_PADRAO,
     clonar, novoId, porId, nomeDia, nomeTurno,
     periodoDaAula, detectarConflitos, descreverConflitos, rotuloAula,
     podeMover, normalizarEstado, estadoVazio,
