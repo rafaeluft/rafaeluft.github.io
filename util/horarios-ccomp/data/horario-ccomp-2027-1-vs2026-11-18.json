@@ -2,7 +2,7 @@
   "formato": "horario-ccomp",
   "schema": 2,
   "nome": "Horário CCOMP 2027/1",
-  "salvoEm": "2026-11-18T12:33:31.037Z",
+  "salvoEm": "2026-11-18T12:20:18.145Z",
   "config": {
     "titulo": "DISTRIBUIÇÃO DE HORÁRIO",
     "subtitulo": "CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/1",
@@ -508,7 +508,7 @@
       "professorIds": [
         "p-daniel"
       ],
-      "salaId": "s-b3-108",
+      "salaId": "s-b3-104",
       "dia": "sex",
       "turno": "tarde"
     },
@@ -738,8 +738,8 @@
       "professorIds": [
         "p-edeilson"
       ],
-      "salaId": "s-b3-104",
-      "dia": "sex",
+      "salaId": "s-b3-109",
+      "dia": "seg",
       "turno": "tarde"
     },
     {
@@ -779,7 +779,7 @@
         "p-wosley"
       ],
       "salaId": "s-b3-108",
-      "dia": "seg",
+      "dia": "sex",
       "turno": "tarde"
     },
     {
@@ -825,11 +825,9 @@
     {
       "id": "a-39",
       "disciplinaId": "d-teocomp",
-      "professorIds": [
-        "p-patrick"
-      ],
+      "professorIds": [],
       "salaId": null,
-      "dia": "ter",
+      "dia": "qui",
       "turno": "tarde"
     },
     {
@@ -840,7 +838,7 @@
         "p-warley"
       ],
       "salaId": null,
-      "dia": "qui",
+      "dia": "sex",
       "turno": "tarde"
     },
     {
@@ -881,7 +879,7 @@
         "p-alexandre"
       ],
       "salaId": null,
-      "dia": "sex",
+      "dia": "qui",
       "turno": "tarde"
     },
     {
@@ -1000,56 +998,6 @@
       "ts": "2026-11-18T11:51:12.687Z",
       "tipo": "titulo",
       "texto": "↶ Desfeito — Subtítulo alterado de “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/2” para “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/1”."
-    },
-    {
-      "ts": "2026-11-18T12:31:53.973Z",
-      "tipo": "versao",
-      "texto": "Horário carregado do arquivo «horario-ccomp-2027-1-vs2026-11-18.json»."
-    },
-    {
-      "ts": "2026-11-18T12:32:25.924Z",
-      "tipo": "horario",
-      "texto": "Disciplina «Compiladores» passou do horário Quinta, tarde para Sexta, tarde."
-    },
-    {
-      "ts": "2026-11-18T12:32:36.215Z",
-      "tipo": "horario",
-      "texto": "Disciplina «Teoria Comp.» passou do horário Quinta, tarde para Terça, tarde."
-    },
-    {
-      "ts": "2026-11-18T12:32:43.047Z",
-      "tipo": "professor",
-      "texto": "Disciplina «Teoria Comp.» (Terça, tarde) sem docente definido, agora passou para «Patrick L.»"
-    },
-    {
-      "ts": "2026-11-18T12:32:54.352Z",
-      "tipo": "horario",
-      "texto": "Disciplina «Estágio» passou do horário Sexta, tarde para Quinta, tarde."
-    },
-    {
-      "ts": "2026-11-18T12:33:01.639Z",
-      "tipo": "horario",
-      "texto": "Disciplina «Proj. Sist.» passou do horário Segunda, tarde para Sexta, tarde."
-    },
-    {
-      "ts": "2026-11-18T12:33:03.384Z",
-      "tipo": "horario",
-      "texto": "Disciplina «Comp. Gráf.» passou do horário Sexta, tarde para Segunda, tarde."
-    },
-    {
-      "ts": "2026-11-18T12:33:15.030Z",
-      "tipo": "sala",
-      "texto": "Disciplina «Proj. Sist.» (Sexta, tarde) passou da sala «B3-109» para a sala «B3-104»."
-    },
-    {
-      "ts": "2026-11-18T12:33:23.166Z",
-      "tipo": "sala",
-      "texto": "Disciplina «LP-B» (Sexta, tarde) passou da sala «B3-104» para a sala «B3-108»."
-    },
-    {
-      "ts": "2026-11-18T12:33:29.465Z",
-      "tipo": "versao",
-      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
     }
   ]
 }

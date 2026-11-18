@@ -313,6 +313,7 @@
   function renderVista() {
     if (!store.versoes.length) return;
     if (ui.vista === 'horario') renderHorario();
+    else if (ui.vista === 'distribuicao') renderDistribuicao();
     else renderCrud(ui.vista);
   }
 
@@ -447,6 +448,68 @@
     el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
 
+  /* ------------------------------------- distribuição de salas (por sala) */
+  function aulasDaSala(salaId, dia, turno) {
+    return estado.aulas
+      .filter((a) => (a.salaId || null) === salaId && a.dia === dia && a.turno === turno)
+      .sort((x, y) => disc(x.disciplinaId).periodo - disc(y.disciplinaId).periodo ||
+        ptSort(disc(x.disciplinaId).curto, disc(y.disciplinaId).curto));
+  }
+
+  /* bloco da disciplina com o período no nome: «POO (2º)» */
+  function htmlAulaSala(a) {
+    const d = disc(a.disciplinaId);
+    const c = conflitos.porAula[a.id];
+    const temProf = !!(c && c.professor.length);
+    const temSala = !!(c && c.sala);
+    const cls = ['aula'];
+    if (temProf && temSala) cls.push('conf-ambos');
+    else if (temProf) cls.push('conf-prof');
+    else if (temSala) cls.push('conf-sala');
+    if (!a.salaId && !temProf && !temSala) cls.push('sem-sala');
+    const det = detalhesAula(a);
+    const resumo = [det.titulo, det.sub, 'Professor(es): ' + det.prof].concat(det.conflitos.map((x) => '⚠ ' + x.texto));
+    return '<div class="' + cls.join(' ') + '" data-aula="' + esc(a.id) + '" tabindex="0" role="button" aria-label="' + esc(resumo.join('. ')) + '">' +
+      '<div class="a-nome">' + esc(d.curto) + ' <span class="a-per">(' + d.periodo + 'º)</span></div></div>';
+  }
+
+  function htmlCartaoSala(s) {
+    const salaId = s ? s.id : null;
+    const minhas = estado.aulas.filter((a) => (a.salaId || null) === salaId);
+    const temSabado = minhas.some((a) => a.dia === 'sab');
+    const dias = DIAS.filter((d) => d.id !== 'sab' || ui.sabado || temSabado);
+    const nConf = minhas.filter((a) => { const c = conflitos.porAula[a.id]; return c && c.sala; }).length;
+    const linhas = TURNOS.map((t) =>
+      '<tr><td class="turno">' + esc(t.nome) + '<br><small>' + esc(t.horario) + '</small></td>' +
+      dias.map((d) => '<td class="celula">' + aulasDaSala(salaId, d.id, t.id).map(htmlAulaSala).join('') + '</td>').join('') + '</tr>'
+    ).join('');
+    const titulo = s ? esc(s.nome) + ' <span class="mudo">(' + esc(s.curto) + ')</span>' : 'Sem sala definida';
+    const meta = [
+      s && s.quantidade != null ? s.quantidade + ' lugares' : '',
+      minhas.length + (minhas.length === 1 ? ' aula' : ' aulas'),
+      nConf ? '<span class="dist-conf">⚠ ' + nConf + (nConf === 1 ? ' aula em conflito' : ' aulas em conflito') + '</span>' : '',
+    ].filter(Boolean).join(' · ');
+    return '<article class="dist-sala' + (s ? '' : ' dist-sem') + '" data-sala="' + esc(salaId || '') + '">' +
+      '<header><h3>' + titulo + '</h3><div class="dist-meta">' + meta + '</div></header>' +
+      (minhas.length || s
+        ? '<table class="grade"><thead><tr><th class="dia">Turno</th>' + dias.map((d) => '<th class="dia">' + d.nome + '</th>').join('') + '</tr></thead><tbody>' + linhas + '</tbody></table>'
+        : '') +
+      (s && !minhas.length ? '<p class="dist-vazia">Nenhuma aula alocada nesta sala.</p>' : '') +
+      '</article>';
+  }
+
+  function renderDistribuicao() {
+    const el = $('#vista-distribuicao');
+    const salas = estado.salas.slice().sort((a, b) => ptSort(a.nome, b.nome));
+    const semSala = estado.aulas.some((a) => !a.salaId);
+    el.innerHTML =
+      '<div class="crud-cab"><h2>Distribuição de salas <span class="mudo">(' + salas.length + ')</span></h2>' +
+        '<span class="mudo dist-dica">O número entre parênteses é o período da disciplina. Clique numa disciplina para editá-la.</span></div>' +
+      (salas.length || semSala
+        ? '<div class="dist-lista">' + salas.map(htmlCartaoSala).join('') + (semSala ? htmlCartaoSala(null) : '') + '</div>'
+        : '<p class="dist-vazia">Nenhuma sala cadastrada. Cadastre salas na aba “Salas”.</p>');
+  }
+
   /* ---------------------------------------------------------------- tooltip */
   const tip = $('#tooltip');
   function mostrarTip(el, x, y) {
@@ -500,6 +563,36 @@
     if (el) { esconderTip(); abrirEditorAula({ id: el.dataset.aula }); }
   });
   docEl.addEventListener('keydown', (e) => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('aula')) {
+      e.preventDefault();
+      esconderTip();
+      abrirEditorAula({ id: e.target.dataset.aula });
+    }
+  });
+
+  const distEl = $('#vista-distribuicao');
+  distEl.addEventListener('mouseover', (e) => {
+    const el = e.target.closest('.aula');
+    if (el) mostrarTip(el, e.clientX, e.clientY);
+  });
+  distEl.addEventListener('mousemove', (e) => { if (!tip.hidden) posicionarTip(e.clientX, e.clientY); });
+  distEl.addEventListener('mouseout', (e) => {
+    const el = e.target.closest('.aula');
+    if (!el || (e.relatedTarget && el.contains(e.relatedTarget))) return;
+    esconderTip();
+  });
+  distEl.addEventListener('focusin', (e) => {
+    const el = e.target.closest && e.target.closest('.aula');
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    mostrarTip(el, r.left + 12, r.bottom - 4);
+  });
+  distEl.addEventListener('focusout', esconderTip);
+  distEl.addEventListener('click', (e) => {
+    const el = e.target.closest('.aula');
+    if (el) { esconderTip(); abrirEditorAula({ id: el.dataset.aula }); }
+  });
+  distEl.addEventListener('keydown', (e) => {
     if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('aula')) {
       e.preventDefault();
       esconderTip();
