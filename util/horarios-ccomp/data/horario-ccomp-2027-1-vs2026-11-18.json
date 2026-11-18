@@ -1,0 +1,1003 @@
+{
+  "formato": "horario-ccomp",
+  "schema": 2,
+  "nome": "Horário CCOMP 2027/1",
+  "salvoEm": "2026-11-18T12:20:18.145Z",
+  "config": {
+    "titulo": "DISTRIBUIÇÃO DE HORÁRIO",
+    "subtitulo": "CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/1",
+    "coordenador": "Edeilson Milhomem da Silva",
+    "cargo": "Coordenador",
+    "unidade": "CCOMP/CUP/UFT"
+  },
+  "professores": [
+    {
+      "id": "p-george",
+      "nome": "George Brito",
+      "curto": "George B."
+    },
+    {
+      "id": "p-jackson",
+      "nome": "Jackson Gomes",
+      "curto": "Jackson G."
+    },
+    {
+      "id": "p-daniel",
+      "nome": "Daniel Martins",
+      "curto": "Daniel M."
+    },
+    {
+      "id": "p-juliana",
+      "nome": "Juliana Dutra",
+      "curto": "Juliana D."
+    },
+    {
+      "id": "p-andreas",
+      "nome": "Andreas Kneip",
+      "curto": "Andreas K."
+    },
+    {
+      "id": "p-claudomiro",
+      "nome": "Claudomiro André",
+      "curto": "Claudomiro A."
+    },
+    {
+      "id": "p-helena",
+      "nome": "Helena Apolinário",
+      "curto": "Helena A."
+    },
+    {
+      "id": "p-wosley",
+      "nome": "Wosley Arruda",
+      "curto": "Wosley A."
+    },
+    {
+      "id": "p-rafael",
+      "nome": "Rafael Lima",
+      "curto": "Rafael L."
+    },
+    {
+      "id": "p-anna",
+      "nome": "Anna Paula",
+      "curto": "Anna P."
+    },
+    {
+      "id": "p-ary",
+      "nome": "Ary Henrique",
+      "curto": "Ary H."
+    },
+    {
+      "id": "p-rogerio",
+      "nome": "Rogério Azevedo",
+      "curto": "Rogério A."
+    },
+    {
+      "id": "p-patrick",
+      "nome": "Patrick Letouzé",
+      "curto": "Patrick L."
+    },
+    {
+      "id": "p-tiago",
+      "nome": "Tiago Almeida",
+      "curto": "Tiago A."
+    },
+    {
+      "id": "p-edeilson",
+      "nome": "Edeilson Milhomem",
+      "curto": "Edeilson M."
+    },
+    {
+      "id": "p-alexandre",
+      "nome": "Alexandre Rossini",
+      "curto": "Alexandre R."
+    },
+    {
+      "id": "p-warley",
+      "nome": "Warley Gramacho",
+      "curto": "Warley G."
+    },
+    {
+      "id": "p-glenda",
+      "nome": "Glenda Botelho",
+      "curto": "Glenda B."
+    },
+    {
+      "id": "p-thiago",
+      "nome": "Thiago Magalhães",
+      "curto": "Thiago M."
+    }
+  ],
+  "salas": [
+    {
+      "id": "s-b3-104",
+      "nome": "Bloco 3, Sala 104",
+      "curto": "B3-104",
+      "quantidade": null
+    },
+    {
+      "id": "s-b3-108",
+      "nome": "Bloco 3, Sala 108",
+      "curto": "B3-108",
+      "quantidade": null
+    },
+    {
+      "id": "s-b3-109",
+      "nome": "Bloco 3, Sala 109",
+      "curto": "B3-109",
+      "quantidade": null
+    },
+    {
+      "id": "s-b3-110",
+      "nome": "Bloco 3, Sala 110",
+      "curto": "B3-110",
+      "quantidade": null
+    },
+    {
+      "id": "s-b3-207",
+      "nome": "Bloco 3, Sala 207",
+      "curto": "B3-207",
+      "quantidade": null
+    },
+    {
+      "id": "s-b3-208",
+      "nome": "Bloco 3, Sala 208",
+      "curto": "B3-208",
+      "quantidade": null
+    },
+    {
+      "id": "s-bj-110",
+      "nome": "Bloco J, Sala 110",
+      "curto": "BJ-110",
+      "quantidade": null
+    },
+    {
+      "id": "s-bj-111",
+      "nome": "Bloco J, Sala 111",
+      "curto": "BJ-111",
+      "quantidade": null
+    }
+  ],
+  "disciplinas": [
+    {
+      "id": "d-empreend",
+      "nome": "Empreendedorismo e Inovação",
+      "periodo": 1,
+      "curto": "Empreend."
+    },
+    {
+      "id": "d-icc",
+      "nome": "Introdução à Ciência da Computação",
+      "periodo": 1,
+      "curto": "ICC"
+    },
+    {
+      "id": "d-ipe",
+      "nome": "Introdução à Prática Extensionista",
+      "periodo": 1,
+      "curto": "IPE"
+    },
+    {
+      "id": "d-lp-a",
+      "nome": "Lógica de Programação - A",
+      "periodo": 1,
+      "curto": "LP-A"
+    },
+    {
+      "id": "d-lp-b",
+      "nome": "Lógica de Programação - B",
+      "periodo": 1,
+      "curto": "LP-B"
+    },
+    {
+      "id": "d-lm-a",
+      "nome": "Lógica Matemática - A",
+      "periodo": 1,
+      "curto": "LM-A"
+    },
+    {
+      "id": "d-lm-b",
+      "nome": "Lógica Matemática - B",
+      "periodo": 1,
+      "curto": "LM-B"
+    },
+    {
+      "id": "d-prob",
+      "nome": "Probabilidade e Estatística",
+      "periodo": 2,
+      "curto": "Prob. Est."
+    },
+    {
+      "id": "d-calc1",
+      "nome": "Cálculo Diferencial e Integral I",
+      "periodo": 2,
+      "curto": "Cálculo I"
+    },
+    {
+      "id": "d-metod",
+      "nome": "Metodologia Científica",
+      "periodo": 2,
+      "curto": "Met. Cient."
+    },
+    {
+      "id": "d-poo",
+      "nome": "Programação Orientada a Objetos",
+      "periodo": 2,
+      "curto": "POO"
+    },
+    {
+      "id": "d-ed1",
+      "nome": "Estrutura de Dados I",
+      "periodo": 2,
+      "curto": "ED I"
+    },
+    {
+      "id": "d-pe1",
+      "nome": "Práticas Extensionistas I",
+      "periodo": 2,
+      "curto": "PE I"
+    },
+    {
+      "id": "d-pe2",
+      "nome": "Práticas Extensionistas II (3 créditos)",
+      "periodo": 3,
+      "curto": "PE II"
+    },
+    {
+      "id": "d-matdisc",
+      "nome": "Matemática Discreta",
+      "periodo": 3,
+      "curto": "Mat. Discreta"
+    },
+    {
+      "id": "d-ihc",
+      "nome": "Interface Homem Computador",
+      "periodo": 3,
+      "curto": "IHC"
+    },
+    {
+      "id": "d-calc2",
+      "nome": "Cálculo Diferencial e Integral II",
+      "periodo": 3,
+      "curto": "Cálculo II"
+    },
+    {
+      "id": "d-ed2",
+      "nome": "Estrutura de Dados II",
+      "periodo": 3,
+      "curto": "ED II"
+    },
+    {
+      "id": "d-bd",
+      "nome": "Banco de Dados",
+      "periodo": 3,
+      "curto": "BD"
+    },
+    {
+      "id": "d-calcnum",
+      "nome": "Cálculo Numérico",
+      "periodo": 4,
+      "curto": "Calc. Num."
+    },
+    {
+      "id": "d-gaal",
+      "nome": "Geometria Analítica e Álgebra Linear",
+      "periodo": 4,
+      "curto": "GAAL"
+    },
+    {
+      "id": "d-engsoft",
+      "nome": "Engenharia de Software",
+      "periodo": 4,
+      "curto": "Eng. Soft."
+    },
+    {
+      "id": "d-sistdig",
+      "nome": "Sistemas Digitais",
+      "periodo": 4,
+      "curto": "Sist. Dig."
+    },
+    {
+      "id": "d-pe3",
+      "nome": "Práticas Extensionistas III",
+      "periodo": 4,
+      "curto": "PE III"
+    },
+    {
+      "id": "d-grafos",
+      "nome": "Teoria dos Grafos",
+      "periodo": 4,
+      "curto": "Grafos"
+    },
+    {
+      "id": "d-redes",
+      "nome": "Redes de Computadores",
+      "periodo": 5,
+      "curto": "Redes"
+    },
+    {
+      "id": "d-projsist",
+      "nome": "Projeto de Sistemas",
+      "periodo": 5,
+      "curto": "Proj. Sist."
+    },
+    {
+      "id": "d-lfa",
+      "nome": "Linguagens Formais e Autômatos",
+      "periodo": 5,
+      "curto": "LFA"
+    },
+    {
+      "id": "d-orgcomp",
+      "nome": "Organização de Computadores",
+      "periodo": 5,
+      "curto": "Org. Comp."
+    },
+    {
+      "id": "d-webmobile",
+      "nome": "Desenvolvimento WebMobile",
+      "periodo": 5,
+      "curto": "WebMobile"
+    },
+    {
+      "id": "d-compgraf",
+      "nome": "Computação Gráfica",
+      "periodo": 5,
+      "curto": "Comp. Gráf."
+    },
+    {
+      "id": "d-pesqop",
+      "nome": "Pesquisa Operacional",
+      "periodo": 6,
+      "curto": "Pesq. Op."
+    },
+    {
+      "id": "d-paa",
+      "nome": "Projeto Análise de Algoritmos",
+      "periodo": 6,
+      "curto": "PAA"
+    },
+    {
+      "id": "d-procimg",
+      "nome": "Processamento de Imagem",
+      "periodo": 6,
+      "curto": "Proc. Imagem"
+    },
+    {
+      "id": "d-ia",
+      "nome": "Inteligência Artificial",
+      "periodo": 6,
+      "curto": "IA"
+    },
+    {
+      "id": "d-teocomp",
+      "nome": "Teoria da Computação",
+      "periodo": 6,
+      "curto": "Teoria Comp."
+    },
+    {
+      "id": "d-estagio",
+      "nome": "Estágio Supervisionado",
+      "periodo": 6,
+      "curto": "Estágio"
+    },
+    {
+      "id": "d-pg1",
+      "nome": "Projeto de Graduação I",
+      "periodo": 7,
+      "curto": "PG I"
+    },
+    {
+      "id": "d-aade",
+      "nome": "Aceleradores e Arquiteturas de Domínio Específico",
+      "periodo": 7,
+      "curto": "AADE"
+    },
+    {
+      "id": "d-sistdistr",
+      "nome": "Sistemas Distribuídos",
+      "periodo": 7,
+      "curto": "Sist. Distr."
+    },
+    {
+      "id": "d-compil",
+      "nome": "Compiladores",
+      "periodo": 7,
+      "curto": "Compiladores"
+    },
+    {
+      "id": "d-segaud",
+      "nome": "Segurança e Auditoria de Sistemas",
+      "periodo": 7,
+      "curto": "Seg. Audit."
+    },
+    {
+      "id": "d-so",
+      "nome": "Sistemas Operacionais",
+      "periodo": 7,
+      "curto": "SO"
+    },
+    {
+      "id": "d-pg2",
+      "nome": "Projeto de Graduação II",
+      "periodo": 8,
+      "curto": "PG II"
+    },
+    {
+      "id": "d-gestproj",
+      "nome": "Gestão de Projetos e Serviços",
+      "periodo": 8,
+      "curto": "Gest. Proj."
+    },
+    {
+      "id": "d-ggd",
+      "nome": "Gestão e Governança de Dados",
+      "periodo": 8,
+      "curto": "GGD"
+    },
+    {
+      "id": "d-heur",
+      "nome": "Heurísticas e Metaheurísticas",
+      "periodo": 8,
+      "curto": "Heurísticas"
+    }
+  ],
+  "aulas": [
+    {
+      "id": "a-01",
+      "disciplinaId": "d-empreend",
+      "professorIds": [
+        "p-george"
+      ],
+      "salaId": "s-b3-208",
+      "dia": "ter",
+      "turno": "manha"
+    },
+    {
+      "id": "a-02",
+      "disciplinaId": "d-icc",
+      "professorIds": [
+        "p-jackson"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "seg",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-03",
+      "disciplinaId": "d-ipe",
+      "professorIds": [
+        "p-daniel"
+      ],
+      "salaId": "s-b3-208",
+      "dia": "ter",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-04",
+      "disciplinaId": "d-lp-a",
+      "professorIds": [
+        "p-juliana"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "qua",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-05",
+      "disciplinaId": "d-lp-a",
+      "professorIds": [
+        "p-juliana"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "sex",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-06",
+      "disciplinaId": "d-lp-b",
+      "professorIds": [
+        "p-daniel"
+      ],
+      "salaId": "s-b3-104",
+      "dia": "qua",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-07",
+      "disciplinaId": "d-lp-b",
+      "professorIds": [
+        "p-daniel"
+      ],
+      "salaId": "s-b3-104",
+      "dia": "sex",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-08",
+      "disciplinaId": "d-lm-a",
+      "professorIds": [
+        "p-andreas"
+      ],
+      "salaId": "s-b3-208",
+      "dia": "qui",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-09",
+      "disciplinaId": "d-lm-b",
+      "professorIds": [
+        "p-andreas"
+      ],
+      "salaId": "s-b3-208",
+      "dia": "ter",
+      "turno": "noite"
+    },
+    {
+      "id": "a-10",
+      "disciplinaId": "d-prob",
+      "professorIds": [
+        "p-claudomiro"
+      ],
+      "salaId": "s-b3-208",
+      "dia": "seg",
+      "turno": "manha"
+    },
+    {
+      "id": "a-11",
+      "disciplinaId": "d-calc1",
+      "professorIds": [
+        "p-helena"
+      ],
+      "salaId": "s-b3-208",
+      "dia": "ter",
+      "turno": "manha"
+    },
+    {
+      "id": "a-12",
+      "disciplinaId": "d-metod",
+      "professorIds": [
+        "p-andreas"
+      ],
+      "salaId": "s-bj-111",
+      "dia": "qua",
+      "turno": "manha"
+    },
+    {
+      "id": "a-13",
+      "disciplinaId": "d-poo",
+      "professorIds": [
+        "p-wosley"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "qui",
+      "turno": "manha"
+    },
+    {
+      "id": "a-14",
+      "disciplinaId": "d-ed1",
+      "professorIds": [
+        "p-rafael"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "sex",
+      "turno": "manha"
+    },
+    {
+      "id": "a-15",
+      "disciplinaId": "d-pe1",
+      "professorIds": [
+        "p-anna"
+      ],
+      "salaId": "s-b3-109",
+      "dia": "qua",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-16",
+      "disciplinaId": "d-pe2",
+      "professorIds": [
+        "p-ary"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "ter",
+      "turno": "manha"
+    },
+    {
+      "id": "a-17",
+      "disciplinaId": "d-pe2",
+      "professorIds": [
+        "p-ary"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "qui",
+      "turno": "manha"
+    },
+    {
+      "id": "a-18",
+      "disciplinaId": "d-matdisc",
+      "professorIds": [
+        "p-george"
+      ],
+      "salaId": null,
+      "dia": "seg",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-19",
+      "disciplinaId": "d-ihc",
+      "professorIds": [
+        "p-anna"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "ter",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-20",
+      "disciplinaId": "d-calc2",
+      "professorIds": [
+        "p-rogerio"
+      ],
+      "salaId": "s-bj-111",
+      "dia": "qua",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-21",
+      "disciplinaId": "d-ed2",
+      "professorIds": [
+        "p-rafael"
+      ],
+      "salaId": null,
+      "dia": "qui",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-22",
+      "disciplinaId": "d-bd",
+      "professorIds": [
+        "p-ary"
+      ],
+      "salaId": "s-b3-109",
+      "dia": "sex",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-23",
+      "disciplinaId": "d-calcnum",
+      "professorIds": [
+        "p-rogerio"
+      ],
+      "salaId": "s-bj-111",
+      "dia": "ter",
+      "turno": "manha"
+    },
+    {
+      "id": "a-24",
+      "disciplinaId": "d-gaal",
+      "professorIds": [
+        "p-helena"
+      ],
+      "salaId": "s-bj-110",
+      "dia": "qua",
+      "turno": "manha"
+    },
+    {
+      "id": "a-25",
+      "disciplinaId": "d-engsoft",
+      "professorIds": [
+        "p-jackson"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "qui",
+      "turno": "manha"
+    },
+    {
+      "id": "a-26",
+      "disciplinaId": "d-sistdig",
+      "professorIds": [
+        "p-tiago"
+      ],
+      "salaId": "s-b3-109",
+      "dia": "sex",
+      "turno": "manha"
+    },
+    {
+      "id": "a-27",
+      "disciplinaId": "d-pe3",
+      "professorIds": [
+        "p-patrick"
+      ],
+      "salaId": "s-b3-207",
+      "dia": "seg",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-28",
+      "disciplinaId": "d-grafos",
+      "professorIds": [
+        "p-daniel"
+      ],
+      "salaId": null,
+      "dia": "qui",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-29",
+      "disciplinaId": "d-redes",
+      "professorIds": [
+        "p-anna"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "ter",
+      "turno": "manha"
+    },
+    {
+      "id": "a-30",
+      "disciplinaId": "d-projsist",
+      "professorIds": [
+        "p-edeilson"
+      ],
+      "salaId": "s-b3-109",
+      "dia": "seg",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-31",
+      "disciplinaId": "d-lfa",
+      "professorIds": [
+        "p-alexandre"
+      ],
+      "salaId": "s-b3-207",
+      "dia": "ter",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-32",
+      "disciplinaId": "d-orgcomp",
+      "professorIds": [
+        "p-tiago"
+      ],
+      "salaId": "s-b3-109",
+      "dia": "qua",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-33",
+      "disciplinaId": "d-webmobile",
+      "professorIds": [
+        "p-jackson"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "qui",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-34",
+      "disciplinaId": "d-compgraf",
+      "professorIds": [
+        "p-wosley"
+      ],
+      "salaId": "s-b3-108",
+      "dia": "sex",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-35",
+      "disciplinaId": "d-pesqop",
+      "professorIds": [
+        "p-warley"
+      ],
+      "salaId": "s-b3-109",
+      "dia": "ter",
+      "turno": "manha"
+    },
+    {
+      "id": "a-36",
+      "disciplinaId": "d-paa",
+      "professorIds": [
+        "p-warley"
+      ],
+      "salaId": "s-b3-109",
+      "dia": "qua",
+      "turno": "manha"
+    },
+    {
+      "id": "a-37",
+      "disciplinaId": "d-procimg",
+      "professorIds": [
+        "p-glenda"
+      ],
+      "salaId": "s-b3-108",
+      "dia": "qui",
+      "turno": "manha"
+    },
+    {
+      "id": "a-38",
+      "disciplinaId": "d-ia",
+      "professorIds": [
+        "p-glenda"
+      ],
+      "salaId": "s-b3-108",
+      "dia": "sex",
+      "turno": "manha"
+    },
+    {
+      "id": "a-39",
+      "disciplinaId": "d-teocomp",
+      "professorIds": [],
+      "salaId": null,
+      "dia": "qui",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-40",
+      "disciplinaId": "d-estagio",
+      "professorIds": [
+        "p-edeilson",
+        "p-warley"
+      ],
+      "salaId": null,
+      "dia": "sex",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-41",
+      "disciplinaId": "d-pg1",
+      "professorIds": [
+        "p-tiago",
+        "p-rafael"
+      ],
+      "salaId": "s-b3-208",
+      "dia": "sab",
+      "turno": "manha"
+    },
+    {
+      "id": "a-42",
+      "disciplinaId": "d-aade",
+      "professorIds": [
+        "p-tiago"
+      ],
+      "salaId": null,
+      "dia": "ter",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-43",
+      "disciplinaId": "d-sistdistr",
+      "professorIds": [
+        "p-thiago"
+      ],
+      "salaId": null,
+      "dia": "qua",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-44",
+      "disciplinaId": "d-compil",
+      "professorIds": [
+        "p-alexandre"
+      ],
+      "salaId": null,
+      "dia": "qui",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-45",
+      "disciplinaId": "d-segaud",
+      "professorIds": [
+        "p-thiago"
+      ],
+      "salaId": "s-b3-110",
+      "dia": "seg",
+      "turno": "noite"
+    },
+    {
+      "id": "a-46",
+      "disciplinaId": "d-so",
+      "professorIds": [
+        "p-thiago"
+      ],
+      "salaId": "s-b3-109",
+      "dia": "qua",
+      "turno": "noite"
+    },
+    {
+      "id": "a-47",
+      "disciplinaId": "d-pg2",
+      "professorIds": [
+        "p-glenda"
+      ],
+      "salaId": null,
+      "dia": "seg",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-48",
+      "disciplinaId": "d-gestproj",
+      "professorIds": [
+        "p-patrick"
+      ],
+      "salaId": "s-b3-207",
+      "dia": "qua",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-49",
+      "disciplinaId": "d-ggd",
+      "professorIds": [
+        "p-ary"
+      ],
+      "salaId": null,
+      "dia": "qui",
+      "turno": "tarde"
+    },
+    {
+      "id": "a-50",
+      "disciplinaId": "d-heur",
+      "professorIds": [
+        "p-rafael"
+      ],
+      "salaId": null,
+      "dia": "sex",
+      "turno": "tarde"
+    }
+  ],
+  "log": [
+    {
+      "ts": "2026-11-18T11:22:53.594Z",
+      "tipo": "versao",
+      "texto": "Horário criado a partir do PDF «Ponto 7 - Distribuição de Horários CCOMP 2027-1» (47 disciplinas, 19 professores, 8 salas, 50 aulas)."
+    },
+    {
+      "ts": "2026-11-18T11:49:00.530Z",
+      "tipo": "versao",
+      "texto": "Horário carregado do arquivo «horario-ccomp-2027-1.json»."
+    },
+    {
+      "ts": "2026-11-18T11:49:28.487Z",
+      "tipo": "titulo",
+      "texto": "Subtítulo alterado de “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/1” para “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/2”."
+    },
+    {
+      "ts": "2026-11-18T11:49:32.087Z",
+      "tipo": "titulo",
+      "texto": "Subtítulo alterado de “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/2” para “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/1”."
+    },
+    {
+      "ts": "2026-11-18T11:50:02.931Z",
+      "tipo": "horario",
+      "texto": "Disciplina «Empreend.» passou do horário Terça, manhã para Quarta, manhã."
+    },
+    {
+      "ts": "2026-11-18T11:50:20.598Z",
+      "tipo": "versao",
+      "texto": "Versão «Horário CCOMP 2027/1» salva (sobrepondo o conteúdo anterior)."
+    },
+    {
+      "ts": "2026-11-18T11:50:27.928Z",
+      "tipo": "horario",
+      "texto": "Disciplina «Empreend.» passou do horário Quarta, manhã para Terça, manhã."
+    },
+    {
+      "ts": "2026-11-18T11:51:08.655Z",
+      "tipo": "horario",
+      "texto": "↶ Desfeito — Disciplina «Empreend.» passou do horário Terça, manhã para Quarta, manhã."
+    },
+    {
+      "ts": "2026-11-18T11:51:10.093Z",
+      "tipo": "horario",
+      "texto": "↶ Desfeito — Disciplina «Empreend.» passou do horário Quarta, manhã para Terça, manhã."
+    },
+    {
+      "ts": "2026-11-18T11:51:11.895Z",
+      "tipo": "titulo",
+      "texto": "↶ Desfeito — Subtítulo alterado de “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/1” para “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/2”."
+    },
+    {
+      "ts": "2026-11-18T11:51:12.687Z",
+      "tipo": "titulo",
+      "texto": "↶ Desfeito — Subtítulo alterado de “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/2” para “CURSO DE BACHARELADO EM CIÊNCIA DA COMPUTAÇÃO 2027/1”."
+    }
+  ]
+}

@@ -28,6 +28,9 @@
   .aula.conf-prof { background: #f25555; border-color: #a31515; border-left-color: #a31515; }
   .aula.conf-ambos { background: linear-gradient(135deg, #f25555 0 50%, #ffa03a 50% 100%); border-color: #a31515; border-left-color: #a31515; }
   .aula.conf-sala .indef, .aula.conf-prof .indef, .aula.conf-ambos .indef { color: #3b2a1a; }
+  /* sala a definir: tons de rosa (conflitos, quando houver, continuam prevalecendo) */
+  .aula.sem-sala { background: #fbd3e4; border-color: #d98aae; border-left-color: #c2417d; }
+  .aula.sem-sala .indef { color: #8a2c58; }
 
   .doc-rodape { text-align: center; margin-top: 34px; line-height: 1.45; font-size: 14px; }
 
@@ -102,10 +105,9 @@
         <button class="btn btn-primario" id="btnBoasCarregar" type="button">⬆ Carregar arquivo de horário…</button>
         <button class="btn" id="btnBoasVazio" type="button">Começar com um horário vazio</button>
       </div>
+      <p class="boas-arquivo">Arquivo do horário: <a id="linkHorarioBase" href="data/horario-ccomp-2027-1-vs2026-11-18.json" target="_blank" rel="noopener">horario-ccomp-2027-1-vs2026-11-18.json</a><br><span class="mudo">Está na subpasta <code>data</code>. Use-o em “Carregar arquivo de horário…” (ou arraste-o para esta página).</span></p>
       <p class="mudo">Os horários ficam gravados neste navegador (<code>local.data</code>). Use “Salvar em arquivo” para guardar cópias ou levar para outro computador.</p>
-    <a href="./data/horario-ccomp-2027-1.json" target="_blank">Link para um exemplo preenchido 2027/01</a>
     </div>
-
   </section>
 
   <section id="vista-horario" class="vista ativa">
@@ -123,6 +125,7 @@
       <span class="legenda">
         <i class="lg lg-sala"></i> conflito de sala
         <i class="lg lg-prof"></i> conflito de professor
+        <i class="lg lg-semsala"></i> sala a definir
       </span>
     </div>
     <p class="dica">Arraste um bloco para outro turno (manhã, tarde ou noite). Clique num bloco para editar; passe o mouse para ver detalhes e conflitos. O título e o subtítulo também podem ser editados direto no documento.</p>

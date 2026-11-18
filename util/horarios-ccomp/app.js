@@ -198,6 +198,7 @@
     if (temProf && temSala) cls.push('conf-ambos');
     else if (temProf) cls.push('conf-prof');
     else if (temSala) cls.push('conf-sala');
+    if (!s && !temProf && !temSala) cls.push('sem-sala');
     const alerta = temProf || temSala
       ? '<div class="a-alerta">⚠ conflito: ' + [temProf && 'professor', temSala && 'sala'].filter(Boolean).join(' + ') + '</div>'
       : '';
