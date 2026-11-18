@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Horários CCOMP</title>
+<link rel="stylesheet" href="styles.css">
+
+<!-- Estilo do DOCUMENTO (grade do horário). Fica inline de propósito: a exportação
+     para HTML copia este bloco para dentro do arquivo gerado. -->
+<style id="css-documento">
+  .doc { font-family: Arial, Helvetica, sans-serif; color: #111; font-size: 13px; }
+  .doc-cab { text-align: center; margin: 0 0 14px; line-height: 1.4; font-size: 14px; }
+  .periodo { margin: 0 0 22px; }
+  .grade { width: 100%; border-collapse: collapse; table-layout: fixed; background: #fff; }
+  .grade th, .grade td { border: 1px solid #1b1b1b; padding: 0; }
+  .grade .per-titulo { background: #0b75a0; color: #fff; font-weight: 400; font-size: 13px; padding: 2px 4px; text-align: center; }
+  .grade th.dia { background: #0b75a0; color: #fff; font-weight: 400; font-size: 14px; padding: 3px 4px; }
+  .grade td.turno { background: #0b75a0; color: #fff; font-size: 13px; text-align: center; }
+  .grade td.celula { vertical-align: top; padding: 4px; height: 74px; }
+
+  .aula { border: 1px solid #c9d6dd; border-left: 4px solid #0b75a0; background: #f2f8fb; border-radius: 4px; padding: 3px 6px; margin: 0 0 4px; line-height: 1.25; overflow-wrap: anywhere; }
+  .aula:last-of-type { margin-bottom: 0; }
+  .aula .a-nome { font-weight: 700; }
+  .aula .indef { color: #5d6b73; font-style: italic; }
+  .aula .a-alerta { font-size: .82em; font-weight: 700; margin-top: 2px; }
+  .aula.conf-sala { background: #ffa03a; border-color: #b86200; border-left-color: #b86200; }
+  .aula.conf-prof { background: #f25555; border-color: #a31515; border-left-color: #a31515; }
+  .aula.conf-ambos { background: linear-gradient(135deg, #f25555 0 50%, #ffa03a 50% 100%); border-color: #a31515; border-left-color: #a31515; }
+  .aula.conf-sala .indef, .aula.conf-prof .indef, .aula.conf-ambos .indef { color: #3b2a1a; }
+
+  .doc-rodape { text-align: center; margin-top: 34px; line-height: 1.45; font-size: 14px; }
+
+  @page { size: A4 landscape; margin: 8mm 10mm; }
+  @media print {
+    .doc { font-size: 9pt; }
+    .doc-cab, .doc-rodape { font-size: 10pt; }
+    .doc-cab { margin-bottom: 4mm; }
+    .pagina { break-after: page; }
+    .pagina:last-child { break-after: auto; }
+    .periodo { break-inside: avoid; margin-bottom: 7mm; }
+    .grade td.celula { height: 14mm; padding: 1mm; }
+    .aula { margin-bottom: 1mm; padding: 0.6mm 1.4mm; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="marca">
+    <span class="marca-icone" aria-hidden="true">▦</span>
+    <div>
+      <div class="marca-titulo">Horários CCOMP</div>
+      <div class="marca-sub" id="subtituloTopo"></div>
+    </div>
+  </div>
+
+  <div class="topo-acoes">
+    <button class="btn" id="btnConflitos" type="button" title="Ver lista de conflitos"></button>
+    <button class="btn" id="btnDesfazer" type="button" title="Desfazer (Ctrl+Z)" disabled>↶ Desfazer</button>
+    <button class="btn btn-primario" id="btnImprimir" type="button" title="Abre a impressão; escolha “Salvar como PDF”">🖨 Imprimir / PDF</button>
+    <button class="btn" id="btnExportarHtml" type="button">⇩ Exportar HTML</button>
+    <details class="menu" id="menuMais">
+      <summary class="btn">Mais ▾</summary>
+      <div class="menu-lista">
+        <button type="button" data-acao="versoes">Gerenciar versões…</button>
+        <button type="button" data-acao="config">Cabeçalho do documento (coordenador, cargo…)…</button>
+      </div>
+    </details>
+    <input type="file" id="arquivoJson" accept=".json,application/json" hidden>
+  </div>
+</header>
+
+<div class="barra-versao" id="barraVersao">
+  <label class="campo-inline">Versão
+    <select id="selVersao" aria-label="Versão exibida"></select>
+  </label>
+  <span class="ind-mod" id="indModificado" hidden>● Alterações não salvas</span>
+  <button class="btn btn-primario" id="btnSalvarVersao" type="button" title="Salvar as alterações na versão atual (ou numa nova)">Salvar versão</button>
+  <button class="btn" id="btnSalvarComo" type="button" title="Cria uma nova versão com o que está na tela">Salvar como nova…</button>
+  <button class="btn btn-peq" id="btnDescartar" type="button" hidden>Descartar alterações</button>
+  <span class="espaco"></span>
+  <button class="btn" id="btnSalvarArquivo" type="button" title="Baixa a versão exibida como arquivo .json">⬇ Salvar em arquivo</button>
+  <button class="btn" id="btnCarregarArquivo" type="button" title="Carrega um horário de um arquivo .json como nova versão">⬆ Carregar arquivo…</button>
+</div>
+
+<nav class="abas" role="tablist" aria-label="Seções">
+  <button role="tab" data-vista="horario" class="ativa">Horário</button>
+  <button role="tab" data-vista="professores">Professores</button>
+  <button role="tab" data-vista="salas">Salas</button>
+  <button role="tab" data-vista="disciplinas">Disciplinas</button>
+  <span class="status-salvo" id="statusSalvo" role="status"></span>
+</nav>
+
+<main>
+  <section id="boasVindas" class="boas" hidden>
+    <div class="boas-card">
+      <h2>Nenhum horário carregado</h2>
+      <p>Carregue um arquivo de horário (<code>.json</code>) para começar. Você também pode arrastar o arquivo e soltá-lo em qualquer lugar desta página.</p>
+      <div class="boas-acoes">
+        <button class="btn btn-primario" id="btnBoasCarregar" type="button">⬆ Carregar arquivo de horário…</button>
+        <button class="btn" id="btnBoasVazio" type="button">Começar com um horário vazio</button>
+      </div>
+      <p class="mudo">Os horários ficam gravados neste navegador (<code>local.data</code>). Use “Salvar em arquivo” para guardar cópias ou levar para outro computador.</p>
+    <a href="./data/horario-ccomp-2027-1.json" target="_blank">Link para um exemplo preenchido 2027/01</a>
+    </div>
+
+  </section>
+
+  <section id="vista-horario" class="vista ativa">
+    <div class="barra-ferramentas">
+      <label class="campo-inline">Período
+        <select id="filtroPeriodo"></select>
+      </label>
+      <label class="chave" title="Por padrão uma aula só muda de turno (manhã/tarde/noite) no mesmo dia">
+        <input type="checkbox" id="chkOutroDia"> Permitir mover para outro dia
+      </label>
+      <label class="chave">
+        <input type="checkbox" id="chkSabado"> Mostrar sábado
+      </label>
+      <button class="btn" id="btnNovaAula" type="button">+ Nova aula</button>
+      <span class="legenda">
+        <i class="lg lg-sala"></i> conflito de sala
+        <i class="lg lg-prof"></i> conflito de professor
+      </span>
+    </div>
+    <p class="dica">Arraste um bloco para outro turno (manhã, tarde ou noite). Clique num bloco para editar; passe o mouse para ver detalhes e conflitos. O título e o subtítulo também podem ser editados direto no documento.</p>
+    <div id="documento"></div>
+
+    <div class="log-barra">
+      <button class="btn" id="btnLog" type="button" aria-expanded="false" aria-controls="painelLog"></button>
+    </div>
+    <div id="painelLog" class="painel-log" hidden>
+      <div class="log-cab">
+        <strong id="logTitulo">Log de alterações</strong>
+        <button class="btn btn-peq" id="btnBaixarLog" type="button">⬇ Baixar log (.txt)</button>
+      </div>
+      <ol id="logLista" class="log-lista"></ol>
+    </div>
+  </section>
+
+  <section id="vista-professores" class="vista"></section>
+  <section id="vista-salas" class="vista"></section>
+  <section id="vista-disciplinas" class="vista"></section>
+</main>
+
+<!-- Diálogos -->
+<dialog id="dlgAula"></dialog>
+<dialog id="dlgEntidade"></dialog>
+<dialog id="dlgConfirma"></dialog>
+<dialog id="dlgConflitos"></dialog>
+<dialog id="dlgConfig"></dialog>
+<dialog id="dlgTexto"></dialog>
+<dialog id="dlgVersoes" class="largo"></dialog>
+
+<div id="tooltip" role="tooltip" hidden></div>
+<div id="toasts" aria-live="polite"></div>
+
+<script src="core.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
